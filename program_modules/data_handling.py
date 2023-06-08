@@ -160,7 +160,7 @@ def load_Inventory():
     Function to check if inventory exists, if it does then load the Inventory dictionary data.
 
     '''
-    if not os.path.exists("Inventory.xlsx"):
+    if not os.path.exists("Saved_Lists/Inventory.xlsx"):
         return 'Inventory missing...'
     else:
         # loading the Inventory dictionary data
@@ -178,7 +178,7 @@ def get_inventory(check_load=True):
         check_load: DO NOT CHANGE, NEEDS FOR SET UP.
     '''
     if check_load == False:  # only runs one for set up
-        inventory = pd.read_excel('Inventory.xlsx', sheet_name=None)
+        inventory = pd.read_excel('Saved_Lists/Inventory.xlsx', sheet_name=None)
         for section in inventory:
             Inventory[section].add_item(inventory[section])
         check_load = True

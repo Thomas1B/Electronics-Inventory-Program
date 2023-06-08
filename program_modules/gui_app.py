@@ -196,8 +196,8 @@ class MainWindow(QMainWindow):
         Function to open the inventory
         '''
         self.sub_header.setText('')
-        if os.path.exists("Inventory.xlsx"):
-            self.sheet_open = "Inventory.xlsx"
+        if os.path.exists("Saved_Lists/Inventory.xlsx"):
+            self.sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(inventory_to_dataframe())
             self.show_btns([
