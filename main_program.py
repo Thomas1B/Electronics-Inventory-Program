@@ -8,7 +8,7 @@ The "gui_app" and "data_handling" modules can be found in the "program_modules" 
 
 from PyQt5.QtWidgets import QApplication
 from program_modules.app import MainWindow
-from program_modules.data_handing import load_Inventory
+from program_modules.data_handling import load_Inventory
 import sys
 
 

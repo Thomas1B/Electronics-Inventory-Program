@@ -1,2 +1,2 @@
 from .app import MainWindow
-from .data_handing import load_Inventory
+from .data_handling import load_Inventory
