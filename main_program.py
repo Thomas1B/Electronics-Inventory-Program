@@ -13,9 +13,9 @@ from data_handing import (Category,
                           sort_order)
 
 
-class UI(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
-        super(UI, self).__init__()
+        super(MainWindow, self).__init__()
 
         self.sheet_open = False  # variable to keep keep if a table is opened.
 
@@ -409,5 +409,5 @@ if __name__ == "__main__":
     # runnning program
     load_Inventory()
     app = QApplication(sys.argv)
-    UIWindow = UI()
+    window1 = MainWindow()
     app.exec_()
