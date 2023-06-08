@@ -186,6 +186,15 @@ def get_inventory(check_load=True):
     return Inventory
 
 
+def inventory_to_dataframe(inv=Inventory):
+    '''
+    Function to convert the inventory into a dataframe.
+    '''
+    items = pd.concat([inv[cat].get_items()
+                      for cat in inv]).reset_index(drop=True)
+    return items
+
+
 def sort_order(order):
     '''
     Function to sort a given order.
@@ -287,15 +296,6 @@ def get_new_ordersheet(filename):
         order = order[labels].reset_index(drop=True)  # reindexing dataframe
         order = sort_order(order)
         return order
-
-
-def inventory_to_dataframe(inv=Inventory):
-    '''
-    Function to convert the inventory into a dataframe.
-    '''
-    items = pd.concat([inv[cat].get_items()
-                      for cat in inv]).reset_index(drop=True)
-    return items
 
 
 def add_order_to_Inventory(filename, get_user=False):
