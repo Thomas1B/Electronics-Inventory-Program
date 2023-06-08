@@ -1,5 +1,5 @@
 '''
-Class and Functions to handle the datasheets.
+Script to handle the datasheets.
 
 '''
 
