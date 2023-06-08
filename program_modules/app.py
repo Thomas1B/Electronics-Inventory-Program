@@ -9,7 +9,7 @@ import sys
 import os
 import pandas as pd
 
-from data_handing import (Category,
+from .data_handing import (Category,
                           load_Inventory,
                           get_new_ordersheet,
                           add_order_to_Inventory,
