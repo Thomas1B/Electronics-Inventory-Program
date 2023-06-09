@@ -240,15 +240,24 @@ class MainWindow(QMainWindow):
         self.sub_header.setText('')
         if len(os.listdir("Saved_Lists/New Orders")) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening New Order', 'New Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self, 'Opening New Order', 'Saved_Lists/New Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split('.')[-1]
             self.sheet_open = filename
-            if filename:
+            if (filetype in ['csv', 'xlsx']):
                 order_name = filename.split('/')[-1]
 
                 if filetype == 'xlsx':
+                    '''
+                    only need check for '.xlsx' files, since program the program has a condition to remove the subtotal line from new order sheets.
+
+                    This may change at some time...
+                    '''
                     user = QtWidgets.QMessageBox.question(
-                        self, 'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+                        self,
+                        'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
+                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                        QtWidgets.QMessageBox.No
+                    )
                     if user == QtWidgets.QMessageBox.No:
                         return
 
@@ -275,10 +284,20 @@ class MainWindow(QMainWindow):
                     self.fill_table(
                         [section for section in new_order if not section.empty][0])
                 else:
-                    header = 'Cannot open files from that location!'
+                    header = 'OLD PRINT STUFF(open new order function)\n "Cannot open files from that location!'
                     text = 'New order files must be in the "New_Orders" folder.\n'
                     text += 'Move the file and try again...'
                     self.popup_nofiles(header=header, text=text)
+            else:
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('Wrong File Type')
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+                msg.setText('Cannot open that file type!')
+                text = "You can only open '.csv' and '.xlsx' files"
+                msg.setInformativeText(f'{text}')
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
+
 
         else:
             header = 'No order files to open!'
