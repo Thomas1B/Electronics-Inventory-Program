@@ -10,11 +10,11 @@ import os
 import pandas as pd
 
 from .data_handling import (Category,
-                          load_Inventory,
-                          get_new_ordersheet,
-                          add_order_to_Inventory,
-                          inventory_to_dataframe,
-                          sort_order)
+                            load_Inventory,
+                            get_new_ordersheet,
+                            add_order_to_Inventory,
+                            inventory_to_dataframe,
+                            sort_order)
 
 
 class MainWindow(QMainWindow):
@@ -281,7 +281,9 @@ class MainWindow(QMainWindow):
                     self.popup_nofiles(header=header, text=text)
 
         else:
-            self.popup_nofiles(text='There are no orders to open...')
+            header = 'No order files to open!'
+            text = 'Make sure that new orders are in the "New Orders" folder.'
+            self.popup_nofiles(header=header, text=text)
 
     def open_project_lists(self):
         '''
@@ -352,8 +354,12 @@ class MainWindow(QMainWindow):
         if filename:
             add_order_to_Inventory(f'New_Orders/{filename}.csv')
 
-            user = QtWidgets.QMessageBox.question(self, 'Saving New Inventory', 'Would you like to save the new inventory?',
-                                                  QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.Yes)
+            user = QtWidgets.QMessageBox.question(
+                self,
+                'Saving New Inventory',
+                'Would you like to save the new inventory?',
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                QtWidgets.QMessageBox.Yes)
             if user == QtWidgets.QMessageBox.Yes:
                 self.save_list()
 
