@@ -238,7 +238,7 @@ class MainWindow(QMainWindow):
         Function to open an order
         '''
         self.sub_header.setText('')
-        if len(os.listdir("New Orders")) > 0:
+        if len(os.listdir("Saved_Lists/New Orders")) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self, 'Opening New Order', 'New Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split('.')[-1]
@@ -287,9 +287,9 @@ class MainWindow(QMainWindow):
         '''
         Function to open project lists.
         '''
-        if len(os.listdir("Project_Lists")) > 0:
+        if len(os.listdir("Saved_Lists/Projects")) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Project List', 'Project_Lists', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split('.')[-1]
             if filename:
                 order_name = filename.split('/')[-1]
