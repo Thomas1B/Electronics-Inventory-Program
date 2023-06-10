@@ -272,9 +272,9 @@ class MainWindow(QMainWindow):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
         filetype = filename.split('.')[-1]
-        self.sheet_open_filename = filename
         if filetype:
             if filetype in ['csv', 'xlsx']:
+                self.sheet_open_filename = filename
                 order_name = filename.split('/')[-1]
 
                 if filetype == 'xlsx':
@@ -296,6 +296,7 @@ class MainWindow(QMainWindow):
                 if new_order:
                     text = f'Looking at a new order: {order_name}'
                     self.header.setText(text)
+                    self.show_btns([self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
                     self.fill_table(
                         [section for section in new_order if not section.empty][0])
