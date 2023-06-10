@@ -24,7 +24,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.sheet_open_filename = False  # variable to keep keep if a table is opened.
+        # variable to keep keep if a table is opened.
+        self.sheet_open_filename = False
 
         # Loading .ui file
         uic.loadUi('gui_app.ui', self)
@@ -367,18 +368,16 @@ class MainWindow(QMainWindow):
             header="Testing Save function", text='Need to finish function.')
 
     def add_to_inventory(self):
-        filename = self.header.text().split(" ")[-1]
-        if filename:
-            add_order_to_Inventory(f'New_Orders/{filename}.csv')
+        add_order_to_Inventory(self.sheet_open_filename)
 
-            user = QtWidgets.QMessageBox.question(
-                self,
-                'Saving New Inventory',
-                'Would you like to save the new inventory?',
-                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                QtWidgets.QMessageBox.Yes)
-            if user == QtWidgets.QMessageBox.Yes:
-                self.save_list()
+        user = QtWidgets.QMessageBox.question(
+            self,
+            'Saving New Inventory',
+            'Would you like to save the new inventory?',
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.Yes)
+        if user == QtWidgets.QMessageBox.Yes:
+            self.save_list()
 
     def show_sorted_section(self, section):
 
