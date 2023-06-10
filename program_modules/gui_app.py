@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.sheet_open = False  # variable to keep keep if a table is opened.
+        self.sheet_open_filename = False  # variable to keep keep if a table is opened.
 
         # Loading .ui file
         uic.loadUi('gui_app.ui', self)
@@ -200,7 +200,7 @@ class MainWindow(QMainWindow):
         '''
         self.sub_header.setText('')
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
-            self.sheet_open = "Saved_Lists/Inventory.xlsx"
+            self.sheet_open_filename = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(inventory_to_dataframe())
             self.show_btns([
@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
         filetype = filename.split('.')[-1]
-        self.sheet_open = filename
+        self.sheet_open_filename = filename
         if filetype:
             if filetype in ['csv', 'xlsx']:
                 order_name = filename.split('/')[-1]
@@ -383,10 +383,10 @@ class MainWindow(QMainWindow):
     def show_sorted_section(self, section):
 
         data = self.get_table_data()
-        if 'inventory' in self.header.text().lower().split(' '):
+        if 'inventory' in self.header.text().lower():
             data = inventory_to_dataframe()
-        elif 'new orders' in self.sheet_open.lower():
-            data = get_new_ordersheet(self.sheet_open)
+        elif 'new order' in self.header.text().lower():
+            data = get_new_ordersheet(self.sheet_open_filename)
 
         if type(data) == pd.DataFrame:
             data = sort_order(data)
