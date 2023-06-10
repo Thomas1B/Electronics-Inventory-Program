@@ -279,7 +279,7 @@ class MainWindow(QMainWindow):
 
                 if filetype == 'xlsx':
                     '''
-                    only need check for '.xlsx' files, since program the program has a condition to remove the subtotal line from new order sheets.
+                    only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
 
                     This may change at some time...
                     '''
