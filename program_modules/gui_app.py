@@ -290,7 +290,7 @@ class MainWindow(QMainWindow):
                         QtWidgets.QMessageBox.No
                     )
                     if user == QtWidgets.QMessageBox.No:
-                        return
+                        pass
 
                 new_order = get_new_ordersheet(filename)
                 if new_order:
