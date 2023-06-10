@@ -154,6 +154,38 @@ class MainWindow(QMainWindow):
         for btn in buttons:
             btn.hide()
 
+    def hide_sorting_btn(self):
+        self.hide_btns([
+            self.btn_resistors,
+            self.btn_capacitors,
+            self.btn_inductors,
+            self.btn_transistors,
+            self.btn_diodes,
+            self.btn_ics,
+            self.btn_leds,
+            self.btn_buttons,
+            self.btn_connectors,
+            self.btn_displays,
+            self.btn_modules,
+            self.btn_other
+        ])
+
+    def show_sorting_btn(self):
+        self.show_btns([
+            self.btn_resistors,
+            self.btn_capacitors,
+            self.btn_inductors,
+            self.btn_transistors,
+            self.btn_diodes,
+            self.btn_ics,
+            self.btn_leds,
+            self.btn_buttons,
+            self.btn_connectors,
+            self.btn_displays,
+            self.btn_modules,
+            self.btn_other
+        ])
+
     def popup_nofiles(self, header="", text=""):
         '''
         Function to display a pop up warning user there are no files to open
@@ -345,7 +377,7 @@ class MainWindow(QMainWindow):
                 ])
             else:
                 self.wrong_filetyle_msg()
-                
+
         else:
             header = 'There are no past orders!\n\n'
             self.hide_btns([
