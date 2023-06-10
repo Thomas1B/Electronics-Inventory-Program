@@ -9,6 +9,9 @@ import sys
 import os
 import pandas as pd
 
+import os
+
+
 from .data_handling import (Category,
                             load_Inventory,
                             get_new_ordersheet,
@@ -238,65 +241,66 @@ class MainWindow(QMainWindow):
         Function to open an order
         '''
         self.sub_header.setText('')
-        if len(os.listdir("Saved_Lists/New Orders")) > 0:
-            filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening New Order', 'Saved_Lists/New Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
-            filetype = filename.split('.')[-1]
-            self.sheet_open = filename
-            if filetype:
-                if filetype in ['csv', 'xlsx']:
-                    order_name = filename.split('/')[-1]
+        # if len(os.listdir("Saved_Lists/New Orders")) > 0:
+        downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, 'Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
+        filetype = filename.split('.')[-1]
+        self.sheet_open = filename
+        if filetype:
+            if filetype in ['csv', 'xlsx']:
+                order_name = filename.split('/')[-1]
 
-                    if filetype == 'xlsx':
-                        '''
-                        only need check for '.xlsx' files, since program the program has a condition to remove the subtotal line from new order sheets.
+                if filetype == 'xlsx':
+                    '''
+                    only need check for '.xlsx' files, since program the program has a condition to remove the subtotal line from new order sheets.
 
-                        This may change at some time...
-                        '''
-                        user = QtWidgets.QMessageBox.question(
-                            self,
-                            'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
-                            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                            QtWidgets.QMessageBox.No
-                        )
-                        if user == QtWidgets.QMessageBox.No:
-                            return
+                    This may change at some time...
+                    '''
+                    user = QtWidgets.QMessageBox.question(
+                        self,
+                        'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
+                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                        QtWidgets.QMessageBox.No
+                    )
+                    if user == QtWidgets.QMessageBox.No:
+                        return
 
-                    new_order = get_new_ordersheet(filename)
-                    if new_order:
-                        text = f'Looking at a new order: {order_name}'
-                        self.header.setText(text)
-                        self.show_btns([
-                            self.btn_save_list,
-                            self.btn_add_to_inventory,
-                            self.btn_resistors,
-                            self.btn_capacitors,
-                            self.btn_inductors,
-                            self.btn_transistors,
-                            self.btn_diodes,
-                            self.btn_ics,
-                            self.btn_leds,
-                            self.btn_buttons,
-                            self.btn_connectors,
-                            self.btn_displays,
-                            self.btn_modules,
-                            self.btn_other
-                        ])
-                        self.fill_table(
-                            [section for section in new_order if not section.empty][0])
-                else:
-                    msg = QtWidgets.QMessageBox()
-                    msg.setWindowTitle('Wrong File Type')
-                    msg.setIcon(QtWidgets.QMessageBox.Critical)
-                    msg.setText('Cannot open that file type!')
-                    text = "You can only open '.csv' and '.xlsx' files"
-                    msg.setInformativeText(f'{text}')
-                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    _ = msg.exec_()
-        else:
-            header = 'No order files to open!'
-            text = 'Make sure that new orders are in the "New Orders" folder.'
-            self.popup_nofiles(header=header, text=text)
+                new_order = get_new_ordersheet(filename)
+                if new_order:
+                    text = f'Looking at a new order: {order_name}'
+                    self.header.setText(text)
+                    self.show_btns([
+                        self.btn_save_list,
+                        self.btn_add_to_inventory,
+                        self.btn_resistors,
+                        self.btn_capacitors,
+                        self.btn_inductors,
+                        self.btn_transistors,
+                        self.btn_diodes,
+                        self.btn_ics,
+                        self.btn_leds,
+                        self.btn_buttons,
+                        self.btn_connectors,
+                        self.btn_displays,
+                        self.btn_modules,
+                        self.btn_other
+                    ])
+                    self.fill_table(
+                        [section for section in new_order if not section.empty][0])
+            else:
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('Wrong File Type')
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+                msg.setText('Cannot open that file type!')
+                text = "You can only open '.csv' and '.xlsx' files"
+                msg.setInformativeText(f'{text}')
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
+        # else:
+        #     header = 'No order files to open!'
+        #     text = 'Make sure that new orders are in the "New Orders" folder.'
+        #     self.popup_nofiles(header=header, text=text)
 
     def open_project_lists(self):
         '''
