@@ -1,6 +1,7 @@
 '''
 Script to handle the datasheets.
 
+This script uses the pandas module to handle the data.
 '''
 
 import pandas as pd
@@ -35,21 +36,31 @@ class Category:
         '''
         return self.category
 
-    def add_item(self, item):
+    def add_item(self, items):
         '''
-        Function to add_item to category.
-        'item' can be a dataframe, list of series, or a single series of item(s).
+        Function to add items to category.
+        'items' can be a dataframe, list of Series, or a single Serie of item(s).
         '''
 
-        if type(item) == pd.Series:
-            self.items = pd.concat(
-                [self.items, pd.DataFrame(item).T]).reset_index(drop=True)
-        elif type(item) == list:
-            self.items = pd.concat(
-                [self.items, pd.DataFrame(item)]).reset_index(drop=True)
-        elif type(item) == pd.DataFrame:
-            self.items = pd.concat([self.items, item]).reset_index(drop=True)
+        # checking if 'items' is a Series, list or a dataframe.
+        if type(items) == pd.Series:
+            self.items = pd.concat([
+                self.items,
+                pd.DataFrame(items).T
+            ]).reset_index(drop=True)
+        elif type(items) == list:
+            self.items = pd.concat([
+                self.items,
+                pd.DataFrame(items)
+            ]).reset_index(drop=True)
+        elif type(items) == pd.DataFrame:
+            self.items = pd.concat([
+                self.items,
+                items
+            ]).reset_index(drop=True)
 
+        # Changing the datatype of 'Quantity' and 'Unit Price'.
+        # (Fixes bugs in later code)
         self.get_items()['Quantity'] = self.get_items()[
             'Quantity'].astype(float)
         self.get_items()['Unit Price'] = self.get_items()[
@@ -57,10 +68,10 @@ class Category:
 
     def remove_duplicates(self, update_info=True):
         '''
-        Function to remove duplicates and updates the quantity.
+        Function to remove duplicates and can update the quantities and unit prices of items.
 
         Parameters:
-            update_quantity - bool, default true: if "False" doesn't update quantity.
+            update_quantity - bool, default True: if "False" doesn't update quantities and unit prices.
 
         Made using ChatGPT.
         '''
@@ -82,14 +93,17 @@ class Category:
 
     def save_toexcel(self, writer=None):
         '''
-        Function to save the Category as a excel file.
+        Function to save the Category as a excel file, can be saved
+        in a spreadsheet of multiple sheets.
 
-        only pass 'writer' when saving in a group of other sheets.
+        Parameters:
+            writer - pd.ExcelWriter default none: 
+                     only pass 'writer' when saving in a group of other sheets.
         '''
         if writer:
             self.items.to_excel(writer, sheet_name=self.category, index=False)
         else:
-            with pd.ExcelWriter(f'Saved_Files{self.category}.xlsx') as writer:
+            with pd.ExcelWriter(f'Saved_Files/{self.category}.xlsx') as writer:
                 self.items.to_excel(
                     writer, sheet_name=self.category, index=False)
 
@@ -103,42 +117,39 @@ class Category:
         if group:
             return self.get_items()
         else:
-            csv = self.get_items().to_csv(
+            _ = self.get_items().to_csv(
                 f'Saved Filed/{self.get_category()}.csv')
 
     def get_sorted_quantity(self, ascending=True):
         '''
-        Function to return a dataframe sorted by quantity, by increasing or dreceasing.
+        Function to return the category sorted by quantity, by increasing or dreceasing quantities.
 
-        Parameters: acsending - bool (default true)
+        Parameters: acsending - bool (default True): True - increaing quantity, False decreasing quantity.
         '''
         return self.items.sort_values('Quantity', ascending=ascending).reset_index(drop=True)
 
     def get_sorted_price(self, ascending=True):
         '''
-        Function to return a dataframe sorted by unit price, by increasing or dreceasing.
+        Function to return the category sorted by unit price, by increasing or dreceasing unit prices.
 
-        Parameters: acsending - bool (default true)
+        Parameters: acsending - bool (default True): True - increasing price, False - decreasing price.
         '''
         return self.items.sort_values('Unit Price', ascending=ascending).reset_index(drop=True)
 
     def get_sorted_part_num(self):
         '''
-        Function to return a dataframe sorted by part number, by increasing or dreceasing.
-
-        Parameters: acsending - bool (default true)
+        Function to return a dataframe sorted by part number.
         '''
         return self.items.sort_values('Part Number').reset_index(drop=True)
 
     def get_sorted_man_num(self):
         '''
-        Function to return a dataframe sorted by manufacturer part number, by increasing or dreceasing.
-
-        Parameters: acsending - bool (default true)
+        Function to return a dataframe sorted by manufacturer part number.
         '''
         return self.items.sort_values('Manufacturer Part Number').reset_index(drop=True)
 
 
+# Dictionary of categories for the inventory.
 Inventory = {
     'Resistors': Category("Resistors"),
     'Capacitors': Category("Capacitors"),
@@ -158,7 +169,6 @@ Inventory = {
 def load_Inventory():
     '''
     Function to check if inventory exists, if it does then load the Inventory dictionary data.
-
     '''
     if not os.path.exists("Saved_Lists/Inventory.xlsx"):
         return 'Inventory missing...'
@@ -178,7 +188,8 @@ def get_inventory(check_load=True):
         check_load: DO NOT CHANGE, NEEDS FOR SET UP.
     '''
     if check_load == False:  # only runs one for set up
-        inventory = pd.read_excel('Saved_Lists/Inventory.xlsx', sheet_name=None)
+        inventory = pd.read_excel(
+            'Saved_Lists/Inventory.xlsx', sheet_name=None)
         for section in inventory:
             Inventory[section].add_item(inventory[section])
         check_load = True
@@ -189,6 +200,8 @@ def get_inventory(check_load=True):
 def inventory_to_dataframe(inv=Inventory):
     '''
     Function to convert the inventory into a dataframe.
+
+    note: can take other dictionaries of category classes.    
     '''
     items = pd.concat([inv[cat].get_items()
                       for cat in inv]).reset_index(drop=True)
@@ -197,7 +210,8 @@ def inventory_to_dataframe(inv=Inventory):
 
 def sort_order(order):
     '''
-    Function to sort a given order.
+    Function to sort an order (or any dataframe) into categories based on the item description.
+    (i.e: Resistors, Capacitors, etc...)
 
     Parameter
         order: dataframe.
@@ -207,8 +221,9 @@ def sort_order(order):
 
     '''
     Conditions for each catergory:
+     (doesn't matter if uppercase or not)
 
-        Some strings in the condition are redudant, they may be change later...
+        Some strings in the conditions are redudant, they may be change later...
     '''
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
@@ -236,6 +251,8 @@ def sort_order(order):
     other = []
     modules = []
 
+    # sorting the order into categories by checking if any words from
+    # the conditions are in the item description.
     for i, line in enumerate(order['Description']):
         line = line.lower().split()
 
@@ -264,9 +281,10 @@ def sort_order(order):
         else:
             other.append(order.iloc[i])
 
+    # temporary list
     sections = [resistors, capacitors, inductors, transistors, diodes,
                 ics, connectors, displays, buttons, leds, modules, other]
-
+    # returning list of dataframe for each category.
     return [pd.DataFrame(section) for section in sections]
 
 
