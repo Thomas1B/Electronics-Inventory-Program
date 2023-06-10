@@ -2,7 +2,7 @@
 
 This program is used to keep track of electronics parts, order sheets, projects, and other things.
 
-**Note:** This program was written on using windows operating systems so there may be some bugs.
+**Note:** This program was written using windows operating systems so there may be some bugs.
 
 The program is written in Python, utilizing pandas for data handling and PyQt5 for the user interface.
 
