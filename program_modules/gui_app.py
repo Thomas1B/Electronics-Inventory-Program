@@ -155,6 +155,9 @@ class MainWindow(QMainWindow):
             btn.hide()
 
     def hide_sorting_btns(self):
+        '''
+        Function to hide sorting buttons
+        '''
         self.hide_btns([
             self.btn_resistors,
             self.btn_capacitors,
@@ -171,6 +174,9 @@ class MainWindow(QMainWindow):
         ])
 
     def show_sorting_btns(self):
+        '''
+        Function to show sorting buttons
+        '''
         self.show_btns([
             self.btn_resistors,
             self.btn_capacitors,
