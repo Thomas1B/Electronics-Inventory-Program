@@ -154,7 +154,7 @@ class MainWindow(QMainWindow):
         for btn in buttons:
             btn.hide()
 
-    def hide_sorting_btn(self):
+    def hide_sorting_btns(self):
         self.hide_btns([
             self.btn_resistors,
             self.btn_capacitors,
@@ -170,7 +170,7 @@ class MainWindow(QMainWindow):
             self.btn_other
         ])
 
-    def show_sorting_btn(self):
+    def show_sorting_btns(self):
         self.show_btns([
             self.btn_resistors,
             self.btn_capacitors,
@@ -249,37 +249,11 @@ class MainWindow(QMainWindow):
             self.sheet_open_filename = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(inventory_to_dataframe())
-            self.show_btns([
-                self.btn_resistors,
-                self.btn_capacitors,
-                self.btn_inductors,
-                self.btn_transistors,
-                self.btn_diodes,
-                self.btn_ics,
-                self.btn_leds,
-                self.btn_buttons,
-                self.btn_connectors,
-                self.btn_displays,
-                self.btn_modules,
-                self.btn_other
-            ])
+            self.show_sorting_btns()
         else:
             text = 'There is no inventory file!\n\n'
             text += 'Check for a file called "Inventory.xlsx"\n'
-            self.hide_btns([
-                self.btn_resistors,
-                self.btn_capacitors,
-                self.btn_inductors,
-                self.btn_transistors,
-                self.btn_diodes,
-                self.btn_ics,
-                self.btn_leds,
-                self.btn_buttons,
-                self.btn_connectors,
-                self.btn_displays,
-                self.btn_modules,
-                self.btn_other
-            ])
+            self.hide_sorting_btns()
             self.popup_nofiles(text=text)
 
     def open_new_order(self):
@@ -316,33 +290,11 @@ class MainWindow(QMainWindow):
                 if new_order:
                     text = f'Looking at a new order: {order_name}'
                     self.header.setText(text)
-                    self.show_btns([
-                        self.btn_save_list,
-                        self.btn_add_to_inventory,
-                        self.btn_resistors,
-                        self.btn_capacitors,
-                        self.btn_inductors,
-                        self.btn_transistors,
-                        self.btn_diodes,
-                        self.btn_ics,
-                        self.btn_leds,
-                        self.btn_buttons,
-                        self.btn_connectors,
-                        self.btn_displays,
-                        self.btn_modules,
-                        self.btn_other
-                    ])
+                    self.show_sorting_btns()
                     self.fill_table(
                         [section for section in new_order if not section.empty][0])
             else:
-                msg = QtWidgets.QMessageBox()
-                msg.setWindowTitle('Wrong File Type')
-                msg.setIcon(QtWidgets.QMessageBox.Critical)
-                msg.setText('Cannot open that file type!')
-                text = "You can only open '.csv' and '.xlsx' files"
-                msg.setInformativeText(f'{text}')
-                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                _ = msg.exec_()
+                self.wrong_filetyle_msg()
         # else:
         #     header = 'No order files to open!'
         #     text = 'Make sure that new orders are in the "New Orders" folder.'
@@ -361,20 +313,7 @@ class MainWindow(QMainWindow):
                 self.sheet_open_filename = filename
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_new_ordersheet(filename))
-                self.show_btns([
-                    self.btn_resistors,
-                    self.btn_capacitors,
-                    self.btn_inductors,
-                    self.btn_transistors,
-                    self.btn_diodes,
-                    self.btn_ics,
-                    self.btn_leds,
-                    self.btn_buttons,
-                    self.btn_connectors,
-                    self.btn_displays,
-                    self.btn_modules,
-                    self.btn_other
-                ])
+                self.show_sorting_btns()
             else:
                 self.wrong_filetyle_msg()
 
@@ -408,7 +347,7 @@ class MainWindow(QMainWindow):
                 order_name = filename.split('/')[-1]
                 if filetype == 'xlsx':
                     self.popup_nofiles(
-                        text="No feature to open excel files yet...")
+                        header="No feature to open excel files yet...")
                 else:
                     text = f'Project: {order_name.split(".")}'
                     self.header.setText(text)
@@ -416,45 +355,15 @@ class MainWindow(QMainWindow):
                         f'Project_Lists/{order_name}')
                     if new_order:
                         self.fill_table(new_order)
-                        self.show_btns([
-                            self.btn_save_list,
-                            self.btn_add_to_inventory,
-                            self.btn_resistors,
-                            self.btn_capacitors,
-                            self.btn_inductors,
-                            self.btn_transistors,
-                            self.btn_diodes,
-                            self.btn_ics,
-                            self.btn_leds,
-                            self.btn_buttons,
-                            self.btn_connectors,
-                            self.btn_displays,
-                            self.btn_modules,
-                            self.btn_other
-                        ])
+                        self.show_sorting_btns()
                     else:
                         header = 'Cannot open files from that location!'
                         text = 'Project files must be in the "Project_Lists" folder.\n'
                         text += 'Move the file and try again...'
-                        self.hide_btns([
-                            self.btn_save_list,
-                            self.btn_add_to_inventory,
-                            self.btn_resistors,
-                            self.btn_capacitors,
-                            self.btn_inductors,
-                            self.btn_transistors,
-                            self.btn_diodes,
-                            self.btn_ics,
-                            self.btn_leds,
-                            self.btn_buttons,
-                            self.btn_connectors,
-                            self.btn_displays,
-                            self.btn_modules,
-                            self.btn_other
-                        ])
+                        self.hide_sorting_btns()
                         self.popup_nofiles(header=header, text=text)
         else:
-            self.popup_nofiles(text='There are no projects to open...')
+            self.popup_nofiles(header='There are no projects to open...')
 
     def save_list(self):
         self.popup_nofiles(
