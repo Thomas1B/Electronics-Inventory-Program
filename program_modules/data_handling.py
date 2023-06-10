@@ -303,14 +303,14 @@ def get_new_ordersheet(filename):
         order = ''
         if filetype == 'csv':
             order = pd.read_csv(filename)
-            order = order.drop(labels_drop, axis=1)  # dropping unwanted labels
-            order = order.drop(len(order)-1, axis=0)  # dropping subtotal line
+            # dropping subtotal line
+            order = order = order.drop(order.index[-1], axis=0)
 
         elif filetype == 'xlsx':
             order = pd.read_excel(filename)
-            order = order.drop(labels_drop, axis=1)  # dropping unwanted labels
         else:
-            return
+            pass
+        order = order.drop(labels_drop, axis=1)  # dropping unwanted labels
         order = order[labels].reset_index(drop=True)  # reindexing dataframe
         order = sort_order(order)
         return order
