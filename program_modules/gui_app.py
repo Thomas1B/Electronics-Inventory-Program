@@ -58,6 +58,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_save_list')
         self.btn_add_to_inventory = self.findChild(
             QtWidgets.QPushButton, 'btn_add_to_inventory')
+        self.btn_open_past_order = self.findChild(
+            QtWidgets.QPushButton, 'btn_open_past_order')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -90,6 +92,7 @@ class MainWindow(QMainWindow):
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
         self.btn_save_list.clicked.connect(self.save_list)
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
+        self.btn_open_past_order.clicked.connect(self.open_past_order)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -163,6 +166,16 @@ class MainWindow(QMainWindow):
         msg.setWindowTitle('Missing Files')
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setText(header)
+        msg.setInformativeText(f'{text}')
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
+
+    def wrong_filetyle_msg(self):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle('Wrong File Type')
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setText('Cannot open that file type!')
+        text = "You can only open '.csv' and '.xlsx' files"
         msg.setInformativeText(f'{text}')
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
@@ -302,6 +315,54 @@ class MainWindow(QMainWindow):
         #     header = 'No order files to open!'
         #     text = 'Make sure that new orders are in the "New Orders" folder.'
         #     self.popup_nofiles(header=header, text=text)
+
+    def open_past_order(self):
+        '''
+        Function to open a past order
+        '''
+        self.sub_header.setText('')
+        if len(os.listdir('Saved_Lists/Past Orders')) > 0:
+            filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
+            filetype = filename.split(".")[-1]
+            if filetype in ['csv', 'xlsx']:
+                self.sheet_open_filename = filename
+                self.header.setText(f'Past Order: {filetype}')
+                self.fill_table(get_new_ordersheet(filename))
+                self.show_btns([
+                    self.btn_resistors,
+                    self.btn_capacitors,
+                    self.btn_inductors,
+                    self.btn_transistors,
+                    self.btn_diodes,
+                    self.btn_ics,
+                    self.btn_leds,
+                    self.btn_buttons,
+                    self.btn_connectors,
+                    self.btn_displays,
+                    self.btn_modules,
+                    self.btn_other
+                ])
+            else:
+                self.wrong_filetyle_msg()
+                
+        else:
+            header = 'There are no past orders!\n\n'
+            self.hide_btns([
+                self.btn_resistors,
+                self.btn_capacitors,
+                self.btn_inductors,
+                self.btn_transistors,
+                self.btn_diodes,
+                self.btn_ics,
+                self.btn_leds,
+                self.btn_buttons,
+                self.btn_connectors,
+                self.btn_displays,
+                self.btn_modules,
+                self.btn_other
+            ])
+            self.popup_nofiles(header=header)
 
     def open_project_lists(self):
         '''
