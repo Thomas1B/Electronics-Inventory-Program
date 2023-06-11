@@ -199,7 +199,7 @@ def get_inventory(check_load=True):
     if check_load == False:  # only runs one for set up
         inventory = pd.read_excel(
             'Saved_Lists/Inventory.xlsx', sheet_name=None)
-        for section in inventory:
+        for section in inventory.keys():
             Inventory[section].add_item(inventory[section])
         check_load = True
 
@@ -227,7 +227,7 @@ def dataframe_to_dict(dataframes=[]):
     new_dict = {}
     keys = get_category_types()
     for dataframe, key in zip(dataframes, keys):
-        new_dict{key: dataframe}
+        new_dict[key] =  dataframe
     return new_dict
 
 
