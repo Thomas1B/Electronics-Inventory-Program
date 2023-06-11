@@ -161,8 +161,8 @@ Inventory = {
     'Displays': Category('Displays'),
     "Buttons": Category('Buttons'),
     'LEDs': Category('LEDs'),
-    'Other': Category("Other"),
     'Modules': Category('Modules'),
+    'Other': Category("Other"),
 }
 
 
@@ -332,8 +332,9 @@ def add_order_to_Inventory(filename, get_user=False):
     orders = get_ordersheet(filename)
 
     for order, section in zip(orders, Inventory):
-        Inventory[section].add_item(order)
-        Inventory[section].remove_duplicates()
+        if len(order) > 0:
+            Inventory[section].add_item(order)
+            Inventory[section].remove_duplicates()
 
 
 if __name__ == "__main__":
