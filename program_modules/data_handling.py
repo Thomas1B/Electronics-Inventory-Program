@@ -288,30 +288,38 @@ def sort_order(order):
     return [pd.DataFrame(section) for section in sections]
 
 
-def get_new_ordersheet(filename):
+def get_new_ordersheet(filepath):
     '''
-    Function to read in a NEW order sheet (csv) and sorts it into categories.
+    Function to read in an ordersheet using pandas.
 
-    Returns list of dataframe for each category.
+    Drops columns: 'Index', 'Backorder', 'Extended Price' from the dataframes 
+    and the subtotal line ONLY from the csv file.
 
+    Parameters:
+        filepath - str: filepath to the othersheet.
 
-    *** Need to add part for reading excel
+    Returns:
+        a list of dataframes for each category, (see sort_order()).
     '''
-    if os.path.isfile(filename):
-        filetype = filename.split(".")[-1]
+    if os.path.isfile(filepath):
+        filetype = filepath.split(".")[-1]
 
         order = ''
         if filetype == 'csv':
-            order = pd.read_csv(filename)
+            order = pd.read_csv(filepath)
             # dropping subtotal line
-            order = order = order.drop(order.index[-1], axis=0)
+            order = order.drop(order.index[-1], axis=0)
 
         elif filetype == 'xlsx':
-            order = pd.read_excel(filename)
+            # subtotal line needs to be removed from the xlsx manual.
+            # Need to fix this...
+
+            order = pd.read_excel(filepath)
         else:
             pass
         order = order.drop(labels_drop, axis=1)  # dropping unwanted labels
         order = order[labels].reset_index(drop=True)  # reindexing dataframe
+        # sorting the order into categories of product types.
         order = sort_order(order)
         return order
 
