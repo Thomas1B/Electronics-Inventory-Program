@@ -60,6 +60,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_add_to_inventory')
         self.btn_open_past_order = self.findChild(
             QtWidgets.QPushButton, 'btn_open_past_order')
+        self.btn_save_to_projects = self.findChild(
+            QtWidgets.QPushButton, 'btn_save_to_projects')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -90,9 +92,9 @@ class MainWindow(QMainWindow):
         self.btn_open_inventory.clicked.connect(self.open_inventory)
         self.btn_open_new_order.clicked.connect(self.open_new_order)
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
-        self.btn_save_list.clicked.connect(self.save_list)
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_open_past_order.clicked.connect(self.open_past_order)
+        # self.btn_save_to_projects.clicked.connect(lambda: self.save_list('save_to_projects'))
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -122,6 +124,7 @@ class MainWindow(QMainWindow):
         self.hide_btns([
             self.btn_save_list,
             self.btn_add_to_inventory,
+            self.btn_save_to_projects
         ])
         self.hide_sorting_btns()
 
@@ -290,6 +293,10 @@ class MainWindow(QMainWindow):
                 if new_order:
                     text = f'Looking at new order: {order_name}'
                     self.header.setText(text)
+                    self.btn_save_list.setText('Save Order')
+                    self.btn_save_list.clicked.connect(
+                        lambda: self.save_list('save_order')
+                    )
                     self.show_btns(
                         [self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
@@ -309,12 +316,16 @@ class MainWindow(QMainWindow):
         self.sub_header.setText('')
         if len(os.listdir('Saved_Lists/Past Orders')) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split(".")[-1]
             if filetype in ['csv', 'xlsx']:
                 self.is_sheet_open = filename
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_ordersheet(filename))
+                self.btn_save_list.setText('Save Project')
+                self.btn_save_list.clicked.connect(
+                    lambda: self.save_list('save_project')
+                )
                 self.show_sorting_btns()
             elif filetype == '':
                 self.wrong_filetyle_msg()
@@ -336,25 +347,17 @@ class MainWindow(QMainWindow):
             filetype = filename.split('.')[-1]
             if filename:
                 order_name = filename.split('/')[-1]
-                if filetype == 'xlsx':
-                    self.popup_nofiles(
-                        header="No feature to open excel files yet...")
-                else:
-                    text = f'Project: {order_name.split(".")}'
-                    self.header.setText(text)
-                    new_order = get_ordersheet(
-                        f'Project_Lists/{order_name}')
-                    if new_order:
-                        self.fill_table(new_order)
-                        self.show_sorting_btns()
-                    else:
-                        header = 'Cannot open files from that location!'
-                        text = 'Project files must be in the "Project_Lists" folder.\n'
-                        text += 'Move the file and try again...'
-                        self.hide_sorting_btns()
-                        self.popup_nofiles(header=header, text=text)
+                text = f'Project: {order_name.split(".")}'
+                self.header.setText(text)
+                new_order = get_ordersheet(
+                    f'Project_Lists/{order_name}')
+                if new_order:
+                    self.fill_table(new_order)
+                    self.show_sorting_btns()
+            else:
+                pass
         else:
-            self.popup_nofiles(header='There are no projects to open...')
+            self.popup_nofiles(header='There are no projects to open!')
 
     def save_list(self, called_from=None):
         '''
@@ -372,7 +375,7 @@ class MainWindow(QMainWindow):
                 for sheet, cat in zip(new_inventory, Inventory.keys()):
                     sheet.to_excel(writer, sheet_name=cat)
 
-        elif 'new order' in self.header.text():
+        elif called_from == 'save_order':
             downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
             filename = self.is_sheet_open.split('/')[-1]
 
@@ -415,11 +418,11 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
-        elif 'project' in self.header.text():
+        elif called_from == 'save_new_project':
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving Project')
             msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText("Saving projects feature is woring yet")
+            msg.setText("Saving projects feature is not working yet")
             _ = msg.exec()
 
     def add_to_inventory(self):
