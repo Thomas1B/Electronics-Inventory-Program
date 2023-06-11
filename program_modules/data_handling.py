@@ -288,7 +288,7 @@ def sort_order(order):
     return [pd.DataFrame(section) for section in sections]
 
 
-def get_new_ordersheet(filepath):
+def get_ordersheet(filepath):
     '''
     Function to read in an ordersheet using pandas.
 
@@ -329,7 +329,7 @@ def add_order_to_Inventory(filename, get_user=False):
     Function to add a new order to the inventory
     '''
 
-    orders = get_new_ordersheet(filename)
+    orders = get_ordersheet(filename)
 
     for order, section in zip(orders, Inventory):
         Inventory[section].add_item(order)

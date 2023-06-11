@@ -14,7 +14,7 @@ import os
 
 from .data_handling import (Category,
                             load_Inventory,
-                            get_new_ordersheet,
+                            get_ordersheet,
                             add_order_to_Inventory,
                             inventory_to_dataframe,
                             sort_order)
@@ -292,7 +292,7 @@ class MainWindow(QMainWindow):
                     if user == QtWidgets.QMessageBox.No:
                         pass
 
-                new_order = get_new_ordersheet(filename)
+                new_order = get_ordersheet(filename)
                 if new_order:
                     text = f'Looking at a new order: {order_name}'
                     self.header.setText(text)
@@ -319,7 +319,7 @@ class MainWindow(QMainWindow):
             if filetype in ['csv', 'xlsx']:
                 self.sheet_open_filename = filename
                 self.header.setText(f'Past Order: {filetype}')
-                self.fill_table(get_new_ordersheet(filename))
+                self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
             else:
                 self.wrong_filetyle_msg()
@@ -358,7 +358,7 @@ class MainWindow(QMainWindow):
                 else:
                     text = f'Project: {order_name.split(".")}'
                     self.header.setText(text)
-                    new_order = get_new_ordersheet(
+                    new_order = get_ordersheet(
                         f'Project_Lists/{order_name}')
                     if new_order:
                         self.fill_table(new_order)
@@ -394,7 +394,7 @@ class MainWindow(QMainWindow):
         if 'inventory' in self.header.text().lower():
             data = inventory_to_dataframe()
         elif 'new order' in self.header.text().lower():
-            data = get_new_ordersheet(self.sheet_open_filename)
+            data = get_ordersheet(self.sheet_open_filename)
 
         if type(data) == pd.DataFrame:
             data = sort_order(data)
