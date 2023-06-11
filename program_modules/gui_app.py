@@ -124,19 +124,8 @@ class MainWindow(QMainWindow):
         self.hide_btns([
             self.btn_save_list,
             self.btn_add_to_inventory,
-            self.btn_resistors,
-            self.btn_capacitors,
-            self.btn_inductors,
-            self.btn_transistors,
-            self.btn_diodes,
-            self.btn_ics,
-            self.btn_leds,
-            self.btn_buttons,
-            self.btn_connectors,
-            self.btn_displays,
-            self.btn_modules,
-            self.btn_other
         ])
+        self.hide_sorting_btns()
 
         self.show()  # needs to here in order to work
 
@@ -325,21 +314,8 @@ class MainWindow(QMainWindow):
                 self.wrong_filetyle_msg()
 
         else:
+            self.hide_sorting_btns()
             header = 'There are no past orders!\n\n'
-            self.hide_btns([
-                self.btn_resistors,
-                self.btn_capacitors,
-                self.btn_inductors,
-                self.btn_transistors,
-                self.btn_diodes,
-                self.btn_ics,
-                self.btn_leds,
-                self.btn_buttons,
-                self.btn_connectors,
-                self.btn_displays,
-                self.btn_modules,
-                self.btn_other
-            ])
             self.popup_nofiles(header=header)
 
     def open_project_lists(self):
