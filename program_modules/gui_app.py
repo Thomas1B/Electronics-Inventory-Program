@@ -283,7 +283,7 @@ class MainWindow(QMainWindow):
 
                 new_order = get_ordersheet(filename)
                 if new_order:
-                    text = f'Looking at a new order: {order_name}'
+                    text = f'Looking at new order: {order_name}'
                     self.header.setText(text)
                     self.show_btns([self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
