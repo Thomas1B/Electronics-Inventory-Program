@@ -322,10 +322,6 @@ class MainWindow(QMainWindow):
                 self.is_sheet_open = filename
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_ordersheet(filename))
-                self.btn_save_list.setText('Save Project')
-                self.btn_save_list.clicked.connect(
-                    lambda: self.save_list('save_project')
-                )
                 self.show_sorting_btns()
             elif filetype == '':
                 self.wrong_filetyle_msg()
@@ -353,6 +349,10 @@ class MainWindow(QMainWindow):
                     project = get_ordersheet(filename)
                     self.fill_table(project)
                     self.show_sorting_btns()
+                    self.btn_save_list.setText('Save Project')
+                    self.btn_save_list.clicked.connect(
+                        lambda: self.save_list('save_project')
+                    )
                 else:
                     self.wrong_filetyle_msg()
             else:
@@ -377,19 +377,19 @@ class MainWindow(QMainWindow):
             msg.setIcon(QtWidgets.QMessageBox.Question)
             text = 'Would you like save the order to the "Past Orders" folder or elsewhere?'
             msg.setText(text)
+            msg.setInformativeText(
+                "Note: Orders should be added the inventory first.")
             msg.setStandardButtons(
                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Cancel)
             msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
             user = msg.exec_()
 
-            downloads_path = os.path.expanduser(
-                "~" + os.path.sep + "Downloads")
             filename = self.is_sheet_open.split('/')[-1]
 
             if user == QtWidgets.QMessageBox.Yes:  # user want to save to "Past Order" Folder
-                destination = 'Saved_Lists/Past Orders'
-                shutil.copy2(downloads_path, destination)
-                if os.path.exists(destination+f'/{filename}'):
+                destination_folder = 'Saved_Lists/Past Orders'
+                shutil.copy2(self.is_sheet_open, destination_folder)
+                if os.path.exists(destination_folder+f'/{filename}'):
                     # displays successfully save popup
                     msg = QtWidgets.QMessageBox()
                     msg.setWindowTitle('Filed Saved Successfully')
@@ -408,9 +408,29 @@ class MainWindow(QMainWindow):
                     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     _ = msg.exec_()
             elif user == QtWidgets.QMessageBox.Save:  # user want to save to elsewhere.
-                filename, _ = QtWidgets.QFileDialog.getSaveFileName(
-                    self, "Saving New Order", "", "(*.csv;; *.xlsx)")
-                shutil.copy2(downloads_path, filename)
+                destination_folder = QtWidgets.QFileDialog.getExistingDirectory(
+                    self, 'Select Destination Folder')
+                if destination_folder:  # user picks a location.
+                    location = f'{destination_folder}/{filename}'
+                    shutil.copy2(self.is_sheet_open, location)
+                    if os.path.exists(destination_folder+f'/{filename}'):
+                        # displays successfully save popup
+                        msg = QtWidgets.QMessageBox()
+                        msg.setWindowTitle('Filed Saved Successfully')
+                        msg.setIcon(QtWidgets.QMessageBox.Information)
+                        msg.setText(
+                            'The new order was successfully saved.')
+                        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                        _ = msg.exec_()
+                    else:
+                        # displays unsuccessfully save popup
+                        msg = QtWidgets.QMessageBox()
+                        msg.setWindowTitle('Unsuccessfully saved!')
+                        msg.setIcon(QtWidgets.QMessageBox.Critical)
+                        msg.setText(
+                            'The new order was unsuccessfully copied to "Past Orders".')
+                        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                        _ = msg.exec_()
             else:
                 pass
 
@@ -423,7 +443,7 @@ class MainWindow(QMainWindow):
                 for sheet, cat in zip(new_inventory, Inventory.keys()):
                     sheet.to_excel(writer, sheet_name=cat)
 
-        elif called_from == 'save_new_project': # new project is being saved.
+        elif called_from == 'save_new_project':  # new project is being saved.
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving Project')
             msg.setIcon(QtWidgets.QMessageBox.Critical)
