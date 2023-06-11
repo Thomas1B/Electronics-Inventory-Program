@@ -408,6 +408,13 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
+        elif 'project' in self.header.text():
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Saving Project')
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.setText("Saving projects feature is woring yet")
+            _ = msg.exec()
+
     def add_to_inventory(self):
         print(self.is_sheet_open)
         add_order_to_Inventory(self.is_sheet_open)
