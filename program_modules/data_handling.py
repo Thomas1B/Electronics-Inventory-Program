@@ -206,13 +206,13 @@ def get_inventory(check_load=True):
     return Inventory
 
 
-def dict_to_dataframe(dictt=Inventory):
+def dict_to_dataframe(dictionary=Inventory):
     '''
     Function to convert a dictionary into a dataframe.
 
     '''
-    items = pd.concat([dictt[cat].get_items()
-                      for cat in dictt]).reset_index(drop=True)
+    items = pd.concat([dictionary[cat].get_items()
+                      for cat in dictionary]).reset_index(drop=True)
     return items
 
 
@@ -227,7 +227,7 @@ def dataframe_to_dict(dataframes=[]):
     new_dict = {}
     keys = get_category_types()
     for dataframe, key in zip(dataframes, keys):
-        new_dict[key] =  dataframe
+        new_dict[key] = dataframe
     return new_dict
 
 
@@ -240,13 +240,6 @@ def sort_order(order):
         order: dataframe.
 
     Return list of dataframe for each category.
-    '''
-
-    '''
-    Conditions for each catergory:
-     (doesn't matter if uppercase or not)
-
-        Some strings in the conditions are redudant, they may be change later...
     '''
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
@@ -261,18 +254,16 @@ def sort_order(order):
     buttons_conds = ['button', 'switch', 'tact']
 
     # empty lists for parts to be added.
-    resistors = []
-    capacitors = []
-    inductors = []
-    transistors = []
-    diodes = []
-    ics = []
-    connectors = []
-    displays = []
-    buttons = []
-    leds = []
-    other = []
-    modules = []
+    # if adding new sections, dont forget to add
+    resistors, capacitors, inductors = [], [], []
+    transistors, diodes, ics = [], [], []
+    leds, connectors, buttons = [], [], []
+    displays, modules, other = [], [], []
+
+    # THIS NEEDS TO BE IN THE SAME ORDER AS THE CATEGORY CLASS!
+    # Otherwise when showing a category it will display an unintended one.
+    sections = [resistors, capacitors, inductors, transistors, diodes,
+                ics, connectors, displays, buttons, leds, modules, other]
 
     # sorting the order into categories by checking if any words from
     # the conditions are in the item description.
@@ -304,9 +295,6 @@ def sort_order(order):
         else:
             other.append(order.iloc[i])
 
-    # temporary list
-    sections = [resistors, capacitors, inductors, transistors, diodes,
-                ics, connectors, displays, buttons, leds, modules, other]
     # returning list of dataframe for each category.
     return [pd.DataFrame(section) for section in sections]
 
@@ -354,7 +342,7 @@ def add_order_to_Inventory(filename, get_user=False):
 
     orders = get_ordersheet(filename)
 
-    for order, section in zip(orders, Inventory):
+    for order, section in zip(orders, Inventory.keys()):
         if len(order) > 0:
             Inventory[section].add_item(order)
             Inventory[section].remove_duplicates()
