@@ -19,7 +19,6 @@ from .data_handling import (Inventory,
                             sort_order)
 
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
