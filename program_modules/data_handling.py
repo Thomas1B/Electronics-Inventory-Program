@@ -206,7 +206,7 @@ def get_inventory(check_load=True):
     return Inventory
 
 
-def dict_to_dataframe(dictionary=Inventory):
+def dict_to_dataframe(dictionary):
     '''
     Function to convert a dictionary into a dataframe.
 
