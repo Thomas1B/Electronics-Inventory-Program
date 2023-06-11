@@ -5,11 +5,10 @@ Script to run PyQt app functions and classes.
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+import pandas as pd
 import sys
 import os
-import pandas as pd
-
-import os
+import shutil
 
 
 from .data_handling import (Category,
@@ -119,8 +118,6 @@ class MainWindow(QMainWindow):
             lambda: self.show_sorted_section('Other'))
 
         # testing
-        self.btn_test = self.findChild(QtWidgets.QPushButton, 'btn_test')
-        self.btn_test.clicked.connect(self.get_table_data)
 
         self.hide_btns([
             self.btn_save_list,
@@ -293,7 +290,8 @@ class MainWindow(QMainWindow):
                 if new_order:
                     text = f'Looking at new order: {order_name}'
                     self.header.setText(text)
-                    self.show_btns([self.btn_save_list, self.btn_add_to_inventory])
+                    self.show_btns(
+                        [self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
                     self.fill_table(
                         [section for section in new_order if not section.empty][0])
@@ -318,8 +316,10 @@ class MainWindow(QMainWindow):
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
-            else:
+            elif filetype == '':
                 self.wrong_filetyle_msg()
+            else:
+                pass
 
         else:
             self.hide_sorting_btns()
@@ -357,8 +357,51 @@ class MainWindow(QMainWindow):
             self.popup_nofiles(header='There are no projects to open...')
 
     def save_list(self):
-        self.popup_nofiles(
-            header="Testing Save function", text='Need to finish function.')
+
+        if 'new order' in self.header.text():
+            downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
+            filename = self.is_sheet_open.split('/')[-1]
+
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Saving New Order')
+            msg.setIcon(QtWidgets.QMessageBox.Question)
+            text = 'Would you like save the order to the "Past Orders" folder or elsewhere?'
+            msg.setText(text)
+            msg.setStandardButtons(
+                QtWidgets.QMessageBox.Yes |
+                QtWidgets.QMessageBox.Save |
+                QtWidgets.QMessageBox.Cancel)
+            msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            user = msg.exec_()
+
+            downloads_path = os.path.expanduser(f"~/Downloads/{filename}")
+            if user == QtWidgets.QMessageBox.Yes:
+                destination = 'Saved_Lists/Past Orders'
+                shutil.copy2(downloads_path, destination)
+                if os.path.exists(destination+f'/{filename}'):
+                    msg = QtWidgets.QMessageBox()
+                    msg.setWindowTitle('Successfully Copied!')
+                    msg.setIcon(QtWidgets.QMessageBox.Information)
+                    msg.setText(
+                        'The new order was successfully copied to "Past Orders".')
+                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    _ = msg.exec_()
+                else:
+                    msg = QtWidgets.QMessageBox()
+                    msg.setWindowTitle('Unsuccessfully Copied!')
+                    msg.setIcon(QtWidgets.QMessageBox.Critical)
+                    msg.setText(
+                        'The new order was unsuccessfully copied to "Past Orders".')
+                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    _ = msg.exec_()
+            elif user == QtWidgets.QMessageBox.Save:
+                filename, _ = QtWidgets.QFileDialog.getSaveFileName(
+                    self, "Saving New Order", "", "(*.csv;; *.xlsx)")
+                shutil.copy2(downloads_path, filename)
+            else:
+                pass
+
+        
 
     def add_to_inventory(self):
         add_order_to_Inventory(self.is_sheet_open)
