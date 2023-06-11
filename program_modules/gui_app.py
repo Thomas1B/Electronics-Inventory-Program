@@ -369,57 +369,61 @@ class MainWindow(QMainWindow):
                                 used for some of the following if statements.
         '''
 
-        if called_from == 'add_to_inventory':
-            new_inventory = self.get_table_data()
-            new_inventory = sort_order(new_inventory)
-            with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
-                for sheet, cat in zip(new_inventory, Inventory.keys()):
-                    sheet.to_excel(writer, sheet_name=cat)
+        if called_from == 'save_order':  # if new order is being saved.
 
-        elif called_from == 'save_order':
-            downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
-            filename = self.is_sheet_open.split('/')[-1]
-
+            # popup to ask user if they where they want to save the order.
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving New Order')
             msg.setIcon(QtWidgets.QMessageBox.Question)
             text = 'Would you like save the order to the "Past Orders" folder or elsewhere?'
             msg.setText(text)
             msg.setStandardButtons(
-                QtWidgets.QMessageBox.Yes |
-                QtWidgets.QMessageBox.Save |
-                QtWidgets.QMessageBox.Cancel)
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Cancel)
             msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
             user = msg.exec_()
 
-            downloads_path = os.path.expanduser(f"~/Downloads/{filename}")
-            if user == QtWidgets.QMessageBox.Yes:
+            downloads_path = os.path.expanduser(
+                "~" + os.path.sep + "Downloads")
+            filename = self.is_sheet_open.split('/')[-1]
+
+            if user == QtWidgets.QMessageBox.Yes:  # user want to save to "Past Order" Folder
                 destination = 'Saved_Lists/Past Orders'
                 shutil.copy2(downloads_path, destination)
                 if os.path.exists(destination+f'/{filename}'):
+                    # displays successfully save popup
                     msg = QtWidgets.QMessageBox()
-                    msg.setWindowTitle('Successfully Copied!')
+                    msg.setWindowTitle('Filed Saved Successfully')
                     msg.setIcon(QtWidgets.QMessageBox.Information)
                     msg.setText(
-                        'The new order was successfully copied to "Past Orders".')
+                        'The new order was successfully saved.')
                     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     _ = msg.exec_()
                 else:
+                    # displays unsuccessfully save popup
                     msg = QtWidgets.QMessageBox()
-                    msg.setWindowTitle('Unsuccessfully Copied!')
+                    msg.setWindowTitle('Unsuccessfully saved!')
                     msg.setIcon(QtWidgets.QMessageBox.Critical)
                     msg.setText(
                         'The new order was unsuccessfully copied to "Past Orders".')
                     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     _ = msg.exec_()
-            elif user == QtWidgets.QMessageBox.Save:
+            elif user == QtWidgets.QMessageBox.Save:  # user want to save to elsewhere.
                 filename, _ = QtWidgets.QFileDialog.getSaveFileName(
                     self, "Saving New Order", "", "(*.csv;; *.xlsx)")
                 shutil.copy2(downloads_path, filename)
             else:
                 pass
 
-        elif called_from == 'save_new_project':
+        # automatically called when an order is added to the inventory.
+        elif called_from == 'add_to_inventory':
+            new_inventory = self.get_table_data()
+            new_inventory = sort_order(new_inventory)
+            with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
+                # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
+                for sheet, cat in zip(new_inventory, Inventory.keys()):
+                    sheet.to_excel(writer, sheet_name=cat)
+
+        elif called_from == 'save_new_project': # new project is being saved.
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving Project')
             msg.setIcon(QtWidgets.QMessageBox.Critical)
