@@ -19,6 +19,7 @@ from .data_handling import (Inventory,
                             sort_order)
 
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -369,8 +370,8 @@ class MainWindow(QMainWindow):
             new_inventory = self.get_table_data()
             new_inventory = sort_order(new_inventory)
             with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
-                for sheet, cat in zip(new_inventory, Inventory):
-                    sheet.to_excel(writer, sheet_name=f'{cat}')
+                for sheet, cat in zip(new_inventory, Inventory.keys()):
+                    sheet.to_excel(writer, sheet_name=cat)
 
         elif 'new order' in self.header.text():
             downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
@@ -423,7 +424,8 @@ class MainWindow(QMainWindow):
             _ = msg.exec()
 
     def add_to_inventory(self):
-        add_order_to_Inventory(self.is_sheet_open) # using function from data_handling.py
+        # using function from data_handling.py
+        add_order_to_Inventory(self.is_sheet_open)
 
         # popup to ask user if wants to save the "new" inventory.
         user = QtWidgets.QMessageBox.question(
