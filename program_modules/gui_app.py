@@ -24,8 +24,9 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        # variable to keep keep if a table is opened.
-        self.sheet_open_filename = False
+        # variable to keep track if a table is opened.
+        # Used for getting openning sorted parts
+        self.is_sheet_open = False
 
         # Loading .ui file
         uic.loadUi('gui_app.ui', self)
@@ -128,6 +129,13 @@ class MainWindow(QMainWindow):
         self.hide_sorting_btns()
 
         self.show()  # needs to here in order to work
+
+    def get_is_sheet_open(self):
+        # Variable to keep keep if a table is opened.
+
+        # Returns a filepath to the ordersheet that was last opened.
+
+        return self.is_sheet_open
 
     def show_btns(self, buttons):
         '''
@@ -241,7 +249,7 @@ class MainWindow(QMainWindow):
         '''
         self.sub_header.setText('')
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
-            self.sheet_open_filename = "Saved_Lists/Inventory.xlsx"
+            self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(inventory_to_dataframe())
             self.show_sorting_btns()
@@ -263,7 +271,7 @@ class MainWindow(QMainWindow):
         filetype = filename.split('.')[-1]
         if filetype:
             if filetype in ['csv', 'xlsx']:
-                self.sheet_open_filename = filename
+                self.is_sheet_open = filename
                 order_name = filename.split('/')[-1]
 
                 if filetype == 'xlsx':
@@ -306,7 +314,7 @@ class MainWindow(QMainWindow):
                 self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'All Files(*);; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split(".")[-1]
             if filetype in ['csv', 'xlsx']:
-                self.sheet_open_filename = filename
+                self.is_sheet_open = filename
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
@@ -353,7 +361,7 @@ class MainWindow(QMainWindow):
             header="Testing Save function", text='Need to finish function.')
 
     def add_to_inventory(self):
-        add_order_to_Inventory(self.sheet_open_filename)
+        add_order_to_Inventory(self.is_sheet_open)
 
         user = QtWidgets.QMessageBox.question(
             self,
@@ -370,7 +378,7 @@ class MainWindow(QMainWindow):
         if 'inventory' in self.header.text().lower():
             data = inventory_to_dataframe()
         elif 'new order' in self.header.text().lower():
-            data = get_ordersheet(self.sheet_open_filename)
+            data = get_ordersheet(self.is_sheet_open)
 
         if type(data) == pd.DataFrame:
             data = sort_order(data)
