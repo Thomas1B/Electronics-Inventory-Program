@@ -357,6 +357,13 @@ class MainWindow(QMainWindow):
             self.popup_nofiles(header='There are no projects to open...')
 
     def save_list(self, called_from=None):
+        '''
+        Function to save a list.
+
+        Parameters:
+            called_from = str: dummy to see where the function was called from,
+                                used for some of the following if statements.
+        '''
 
         if called_from == 'add_to_inventory':
             new_inventory = self.get_table_data()
@@ -416,9 +423,9 @@ class MainWindow(QMainWindow):
             _ = msg.exec()
 
     def add_to_inventory(self):
-        print(self.is_sheet_open)
-        add_order_to_Inventory(self.is_sheet_open)
+        add_order_to_Inventory(self.is_sheet_open) # using function from data_handling.py
 
+        # popup to ask user if wants to save the "new" inventory.
         user = QtWidgets.QMessageBox.question(
             self,
             'Saving New Inventory',
@@ -429,6 +436,12 @@ class MainWindow(QMainWindow):
             self.save_list(called_from='add_to_inventory')
 
     def show_sorted_section(self, section):
+        '''
+        Function to show the sorted sections
+
+        Parameter:
+            section - str: name of category to display.
+        '''
 
         data = self.get_table_data()
         if 'inventory' in self.header.text().lower():
@@ -461,7 +474,7 @@ class MainWindow(QMainWindow):
 
     def get_table_data(self):
         '''
-        return current table data into a dataframe.
+        returns current table data into a dataframe.
         '''
         rows = self.table.rowCount()
         cols = self.table.columnCount()
