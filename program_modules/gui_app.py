@@ -11,7 +11,7 @@ import os
 import shutil
 
 
-from .data_handling import (Category,
+from .data_handling import (Inventory,
                             load_Inventory,
                             get_ordersheet,
                             add_order_to_Inventory,
@@ -356,9 +356,16 @@ class MainWindow(QMainWindow):
         else:
             self.popup_nofiles(header='There are no projects to open...')
 
-    def save_list(self):
+    def save_list(self, called_from=None):
 
-        if 'new order' in self.header.text():
+        if called_from == 'add_to_inventory':
+            new_inventory = self.get_table_data()
+            new_inventory = sort_order(new_inventory)
+            with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
+                for sheet, cat in zip(new_inventory, Inventory):
+                    sheet.to_excel(writer, sheet_name=f'{cat}')
+
+        elif 'new order' in self.header.text():
             downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
             filename = self.is_sheet_open.split('/')[-1]
 
@@ -401,9 +408,8 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
-        
-
     def add_to_inventory(self):
+        print(self.is_sheet_open)
         add_order_to_Inventory(self.is_sheet_open)
 
         user = QtWidgets.QMessageBox.question(
@@ -413,7 +419,7 @@ class MainWindow(QMainWindow):
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
             QtWidgets.QMessageBox.Yes)
         if user == QtWidgets.QMessageBox.Yes:
-            self.save_list()
+            self.save_list(called_from='add_to_inventory')
 
     def show_sorted_section(self, section):
 
