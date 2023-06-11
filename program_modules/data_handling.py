@@ -328,8 +328,13 @@ def get_ordersheet(filepath):
             order = pd.read_excel(filepath)
         else:
             pass
-        order = order.drop(labels_drop, axis=1)  # dropping unwanted labels
-        order = order[labels].reset_index(drop=True)  # reindexing dataframe
+
+        # condition for when getting a order that has this labels dropped already.
+        if all(col in order.columns for col in labels_drop):
+            # dropping unwanted labels
+            order.drop(labels_drop, axis=1, inplace=True)
+        order[labels].reset_index(
+            drop=True, inplace=True)  # reindexing dataframe
         # sorting the order into categories of product types.
         order = sort_order(order)
         return order
