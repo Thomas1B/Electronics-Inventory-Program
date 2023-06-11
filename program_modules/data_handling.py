@@ -197,14 +197,13 @@ def get_inventory(check_load=True):
     return Inventory
 
 
-def inventory_to_dataframe(inv=Inventory):
+def dict_to_dataframe(dictt=Inventory):
     '''
-    Function to convert the inventory into a dataframe.
+    Function to convert a dictionary into a dataframe.
 
-    note: can take other dictionaries of category classes.    
     '''
-    items = pd.concat([inv[cat].get_items()
-                      for cat in inv]).reset_index(drop=True)
+    items = pd.concat([dictt[cat].get_items()
+                      for cat in dictt]).reset_index(drop=True)
     return items
 
 

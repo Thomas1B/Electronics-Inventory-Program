@@ -15,7 +15,7 @@ from .data_handling import (Inventory,
                             load_Inventory,
                             get_ordersheet,
                             add_order_to_Inventory,
-                            inventory_to_dataframe,
+                            dict_to_dataframe,
                             sort_order)
 
 
@@ -249,7 +249,7 @@ class MainWindow(QMainWindow):
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
-            self.fill_table(inventory_to_dataframe())
+            self.fill_table(dict_to_dataframe())
             self.show_sorting_btns()
         else:
             text = 'There is no inventory file!\n\n'
@@ -447,7 +447,7 @@ class MainWindow(QMainWindow):
 
         data = self.get_table_data()
         if 'inventory' in self.header.text().lower():
-            data = inventory_to_dataframe()
+            data = dict_to_dataframe()
         elif 'new order' in self.header.text().lower():
             data = get_ordersheet(self.is_sheet_open)
 
