@@ -60,8 +60,6 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_add_to_inventory')
         self.btn_open_past_order = self.findChild(
             QtWidgets.QPushButton, 'btn_open_past_order')
-        self.btn_save_to_projects = self.findChild(
-            QtWidgets.QPushButton, 'btn_save_to_projects')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -88,13 +86,15 @@ class MainWindow(QMainWindow):
         self.btn_other = self.findChild(
             QtWidgets.QPushButton, 'btn_other')
 
+        self.btn_refresh_opensheet = self.findChild(
+            QtWidgets.QPushButton, 'btn_refresh_opensheet')
+
         # attaching functions
         self.btn_open_inventory.clicked.connect(self.open_inventory)
         self.btn_open_new_order.clicked.connect(self.open_new_order)
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_open_past_order.clicked.connect(self.open_past_order)
-        # self.btn_save_to_projects.clicked.connect(lambda: self.save_list('save_to_projects'))
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -119,12 +119,14 @@ class MainWindow(QMainWindow):
         self.btn_other.clicked.connect(
             lambda: self.show_sorted_section('Other'))
 
+        self.btn_refresh_opensheet.clicked.connect(
+            lambda: self.refresh_opensheet(self.is_sheet_open))
+
         # testing
 
         self.hide_btns([
             self.btn_save_list,
-            self.btn_add_to_inventory,
-            self.btn_save_to_projects
+            self.btn_add_to_inventory
         ])
         self.hide_sorting_btns()
 
@@ -156,6 +158,7 @@ class MainWindow(QMainWindow):
         Function to hide sorting buttons
         '''
         self.hide_btns([
+            self.btn_refresh_opensheet,
             self.btn_resistors,
             self.btn_capacitors,
             self.btn_inductors,
@@ -175,6 +178,7 @@ class MainWindow(QMainWindow):
         Function to show sorting buttons
         '''
         self.show_btns([
+            self.btn_refresh_opensheet,
             self.btn_resistors,
             self.btn_capacitors,
             self.btn_inductors,
@@ -474,7 +478,7 @@ class MainWindow(QMainWindow):
 
         data = self.get_table_data()
         if 'inventory' in self.header.text().lower():
-            data = dict_to_dataframe()
+            data = dict_to_dataframe(Inventory)
         elif 'new order' in self.header.text().lower():
             data = get_ordersheet(self.is_sheet_open)
 
@@ -520,6 +524,14 @@ class MainWindow(QMainWindow):
         data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
                             'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
         return data
+
+    def refresh_opensheet(self, filename=None):
+        if 'inventory' in self.header.text():
+            self.fill_table(Inventory)
+        else:
+            filename = get_ordersheet(filename)
+            self.fill_table(filename)
+        self.sub_header.setText('')
 
 
 if __name__ == "__main__":
