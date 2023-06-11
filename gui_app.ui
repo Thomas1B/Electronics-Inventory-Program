@@ -382,9 +382,17 @@ background-color: rgb(255, 255, 255);</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QPushButton" name="btn_test">
+        <widget class="QPushButton" name="btn_refresh_opensheet">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
          <property name="text">
-          <string>PushButton</string>
+          <string>Refresh</string>
          </property>
         </widget>
        </item>
