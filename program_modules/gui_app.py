@@ -3,10 +3,9 @@ Script to run PyQt app functions and classes.
 '''
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QDesktopServices
-from PyQt5 import uic
 import pandas as pd
 import sys
 import os
