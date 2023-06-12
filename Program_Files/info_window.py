@@ -6,13 +6,12 @@ import sys
 
 class Info_Window(QMainWindow):
     def __init__(self):
-        super(info_window, self).__init__()
+        super(Info_Window, self).__init__()
 
         # loading ui file
         uic.loadUi('Program_Files/info_window.ui')
 
         self.show()
-
 
 
 if __name__ == "__main__":

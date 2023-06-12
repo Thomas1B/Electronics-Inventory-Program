@@ -161,9 +161,9 @@ class MainWindow(QMainWindow):
         '''
         Function to show user the program info.
 
-        Shows a second window/
+        Opens a second window
         '''
-        pass
+        self.ui = Info_Window()
 
     def open_website(self, website=''):
         '''
