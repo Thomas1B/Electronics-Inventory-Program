@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.is_sheet_open = False
 
         # Loading .ui file
-        uic.loadUi('gui_app.ui', self)
+        uic.loadUi('program_modules/gui_app.ui', self)
 
         # Setting default table column widths
         self.table.setColumnWidth(0, 175)
