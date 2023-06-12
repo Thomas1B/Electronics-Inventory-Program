@@ -94,8 +94,11 @@ class MainWindow(QMainWindow):
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
-        # attaching functions
+        '''
+            Attaching Functions
+        '''
 
+        # Menu
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
         )
@@ -106,6 +109,7 @@ class MainWindow(QMainWindow):
             lambda: self.open_website('BC Robotics')
         )
 
+        # buttons
         self.btn_open_inventory.clicked.connect(self.open_inventory)
         self.btn_open_new_order.clicked.connect(self.open_new_order)
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
@@ -147,17 +151,21 @@ class MainWindow(QMainWindow):
         self.show()  # needs to here in order to work
 
     def open_website(self, website=''):
-        link = ''
-        if website.lower() == 'digikey':
-            link = 'https://www.digikey.ca/'
+        '''
+        Function to open a website link on the user's default bowser.
 
-        elif website.lower() == 'adafruit':
-            link = 'https://www.adafruit.com/'
+        Parameters:
+            website - str: website's name (used for conditions)
+        '''
+        match website.lower():
+            case 'digikey':
+                website = 'https://www.digikey.ca/'
+            case 'adafruit':
+                website = 'https://www.adafruit.com/'
+            case 'bc robotics':
+                website = 'https://bc-robotics.com/'
 
-        elif website.lower() == 'bc robotics':
-            link = 'https://bc-robotics.com/'
-
-        QDesktopServices.openUrl(QUrl(link))
+        QDesktopServices.openUrl(QUrl(website))
 
     def get_is_sheet_open(self):
         # Variable to keep keep if a table is opened.
