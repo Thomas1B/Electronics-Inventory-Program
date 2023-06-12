@@ -207,6 +207,134 @@ background-color: rgb(255, 255, 255);</string>
      </widget>
     </item>
     <item>
+     <widget class="QFrame" name="frame_6">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="text">
+          <string>Search By:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="maxCount">
+          <number>50</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Resistors</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Capacitors</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Inductors</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Transistors</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Diodes</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Intergrated Circuits (ICs)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Connectors</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Displays</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Buttons &amp; Switches</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>LEDs</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Modules</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>New Item</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="maxLength">
+          <number>65</number>
+         </property>
+         <property name="dragEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="placeholderText">
+          <string>Type here...</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="frame_4">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
