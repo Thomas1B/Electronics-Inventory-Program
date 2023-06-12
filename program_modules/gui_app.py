@@ -393,6 +393,7 @@ class MainWindow(QMainWindow):
                     self.btn_save_list.clicked.connect(
                         lambda: self.save_list('save_project')
                     )
+                    self.show_btns([self.btn_save_list])
                 else:
                     self.wrong_filetyle_msg()
             else:
@@ -409,7 +410,7 @@ class MainWindow(QMainWindow):
                                 used for some of the following if statements.
         '''
 
-        if called_from == 'save_order':  # if new order is being saved.
+        if called_from.lower() == 'save_order':  # if new order is being saved.
 
             # popup to ask user if they where they want to save the order.
             msg = QtWidgets.QMessageBox()
@@ -475,7 +476,7 @@ class MainWindow(QMainWindow):
                 pass
 
         # automatically called when an order is added to the inventory.
-        elif called_from == 'add_to_inventory':
+        elif called_from.lower() == 'add_to_inventory':
             new_inventory = self.get_table_data()
             new_inventory = sort_order(new_inventory)
             with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
@@ -483,7 +484,7 @@ class MainWindow(QMainWindow):
                 for sheet, cat in zip(new_inventory, Inventory.keys()):
                     sheet.to_excel(writer, sheet_name=cat)
 
-        elif called_from == 'save_new_project':  # new project is being saved.
+        elif called_from.lower() == 'save_project':  # new project is being saved.
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving Project')
             msg.setIcon(QtWidgets.QMessageBox.Critical)
