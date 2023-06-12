@@ -11,6 +11,7 @@ import sys
 import os
 import shutil
 
+from .info_window import Info_Window
 
 from .data_handling import (Inventory,
                             load_Inventory,
@@ -162,7 +163,7 @@ class MainWindow(QMainWindow):
 
         Shows a second window/
         '''
-        print("MEOW")
+        pass
 
     def open_website(self, website=''):
         '''
