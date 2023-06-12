@@ -369,7 +369,6 @@ class MainWindow(QMainWindow):
                 pass
 
         else:
-            self.hide_sorting_btns()
             header = 'There are no past orders!\n\n'
             self.popup_nofiles(header=header)
 
@@ -383,6 +382,7 @@ class MainWindow(QMainWindow):
             filetype = filename.split('.')[-1]
             if filename:
                 if filetype in ['csv', 'xlsx']:
+                    self.hide_btns([self.btn_add_to_inventory])
                     order_name = filename.split('/')[-1]
                     text = f'Project: {order_name}'
                     self.header.setText(text)
