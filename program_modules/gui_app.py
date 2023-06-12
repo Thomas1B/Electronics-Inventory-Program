@@ -167,13 +167,6 @@ class MainWindow(QMainWindow):
 
         QDesktopServices.openUrl(QUrl(website))
 
-    def get_is_sheet_open(self):
-        # Variable to keep keep if a table is opened.
-
-        # Returns a filepath to the ordersheet that was last opened.
-
-        return self.is_sheet_open
-
     def show_btns(self, buttons):
         '''
         takes list of buttons to hide.
