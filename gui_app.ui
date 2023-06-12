@@ -658,11 +658,6 @@ background-color: rgb(255, 255, 255);</string>
    <property name="text">
     <string>Program Info</string>
    </property>
-   <property name="font">
-    <font>
-     <family>Terminal</family>
-    </font>
-   </property>
   </action>
  </widget>
  <resources/>

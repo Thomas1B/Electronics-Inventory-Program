@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QDesktopServices
-# from .info_window import info_window
 import pandas as pd
 import sys
 import os
@@ -42,7 +41,7 @@ class MainWindow(QMainWindow):
 
         ''' defining widgets'''
         # Menu Bar
-        self.action_show_program_info = self.findChild(
+        self.action_open_program_info = self.findChild(
             QtWidgets.QAction, 'actionProgram_Info')
 
         self.action_open_Digikey = self.findChild(
@@ -104,7 +103,7 @@ class MainWindow(QMainWindow):
         '''
 
         # Menu
-        self.action_show_program_info.triggered.connect(self.show_program_info)
+        self.action_open_program_info.triggered.connect(self.show_program_info)
 
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
@@ -163,7 +162,7 @@ class MainWindow(QMainWindow):
 
         Shows a second window/
         '''
-        print('MEOW')
+        print("MEOW")
 
     def open_website(self, website=''):
         '''
