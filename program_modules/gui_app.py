@@ -507,33 +507,15 @@ class MainWindow(QMainWindow):
             section - str: name of category to display.
         '''
 
-        data = ''
         if 'inventory' in self.header.text().lower():
-            data = dict_to_dataframe(Inventory)
+            self.fill_table(Inventory[section].get_items())
         else:
             data = get_ordersheet(self.is_sheet_open)
-
-        if type(data) == pd.DataFrame:
-            data = sort_order(data)
-        sorted = {}
-        keys = [
-            'Resistors',
-            'Capacitors',
-            'Inductors',
-            'Transistors',
-            'Diodes',
-            'ICs',
-            'Connectors',
-            'Displays',
-            'Buttons',
-            'LEDs',
-            'Modules',
-            'Other'
-        ]
-
-        for i, key in enumerate(keys):
-            sorted[key] = data[i]
-        self.fill_table(sorted[section].reset_index(drop=True))
+            sorted = {}
+            keys = Inventory.keys()
+            for i, key in enumerate(keys):
+                sorted[key] = data[i]
+            self.fill_table(sorted[section].reset_index(drop=True))
         self.sub_header.setText(section)
 
     def get_table_data(self):
