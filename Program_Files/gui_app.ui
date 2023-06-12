@@ -611,9 +611,15 @@ background-color: rgb(255, 255, 255);</string>
     <addaction name="actionBC_Robotics"/>
    </widget>
    <widget class="QMenu" name="menuInfo">
+    <property name="font">
+     <font>
+      <family>Terminal</family>
+     </font>
+    </property>
     <property name="title">
      <string>Info</string>
     </property>
+    <addaction name="actionProgram_Info"/>
    </widget>
    <addaction name="menuInfo"/>
    <addaction name="menuLinks"/>
@@ -646,6 +652,11 @@ background-color: rgb(255, 255, 255);</string>
     <font>
      <family>Terminal</family>
     </font>
+   </property>
+  </action>
+  <action name="actionProgram_Info">
+   <property name="text">
+    <string>Program Info</string>
    </property>
   </action>
  </widget>
