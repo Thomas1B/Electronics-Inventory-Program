@@ -4,7 +4,7 @@ from PyQt5 import uic
 import sys
 
 
-class info_window(QMainWindow):
+class Info_Window(QMainWindow):
     def __init__(self):
         super(info_window, self).__init__()
 
@@ -18,5 +18,5 @@ class info_window(QMainWindow):
 if __name__ == "__main__":
     # runnning program
     app = QApplication(sys.argv)
-    window1 = info_window()
+    info_window = Info_Window()
     app.exec_()
