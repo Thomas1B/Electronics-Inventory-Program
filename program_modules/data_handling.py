@@ -318,13 +318,13 @@ def get_ordersheet(filepath):
         order = ''
         if filetype == 'csv':
             order = pd.read_csv(filepath)
-            # dropping subtotal line
-            order = order.drop(order.index[-1], axis=0)
+            if str(order.iloc[-1]["Unit Price"]).lower() == 'subtotal':
+                # if subtotal line exists drop it.
+                order = order.drop(order.index[-1], axis=0)
 
         elif filetype == 'xlsx':
             # subtotal line needs to be removed from the xlsx manual.
             # Need to fix this...
-
             order = pd.read_excel(filepath)
         else:
             pass
