@@ -41,6 +41,9 @@ class MainWindow(QMainWindow):
 
         ''' defining widgets'''
         # Menu Bar
+        self.action_show_program_info = self.findChild(
+            QtWidgets.QAction, 'actionProgram_info')
+        
         self.action_open_Digikey = self.findChild(
             QtWidgets.QAction, 'actionDigiKey')
         self.action_open_adafruit = self.findChild(
@@ -48,6 +51,7 @@ class MainWindow(QMainWindow):
         self.action_open_BCrobotics = self.findChild(
             QtWidgets.QAction, 'actionBC_Robotics')
 
+        # Info Labels
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
@@ -95,10 +99,12 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
         '''
-            Attaching Functions
+            Attaching Functions to buttons and other clicked things.
         '''
 
         # Menu
+        self.action_show_program_info.triggered.connect(self.show_program_info)
+
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
         )
@@ -149,6 +155,14 @@ class MainWindow(QMainWindow):
         self.hide_sorting_btns()
 
         self.show()  # needs to here in order to work
+
+    def show_program_info(self):
+        '''
+        Function to show user the program info.
+
+        Shows a second window/
+        '''
+        pass
 
     def open_website(self, website=''):
         '''
