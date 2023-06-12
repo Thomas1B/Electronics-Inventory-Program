@@ -5,6 +5,8 @@ Script to run PyQt app functions and classes.
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+from PyQt5.QtCore import QUrl
+from PyQt5.QtGui import QDesktopServices
 import pandas as pd
 import sys
 import os
@@ -40,8 +42,12 @@ class MainWindow(QMainWindow):
 
         ''' defining widgets'''
         # Menu Bar
-        self.menu_open_order = self.findChild(
-            QtWidgets.QAction, 'actionOpen_Order')
+        self.action_open_Digikey = self.findChild(
+            QtWidgets.QAction, 'actionDigiKey')
+        self.action_open_adafruit = self.findChild(
+            QtWidgets.QAction, 'actionAdafruit')
+        self.action_open_BCrobotics = self.findChild(
+            QtWidgets.QAction, 'actionBC_Robotics')
 
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
@@ -90,6 +96,17 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
         # attaching functions
+
+        self.action_open_Digikey.triggered.connect(
+            lambda: self.open_website('Digikey')
+        )
+        self.action_open_adafruit.triggered.connect(
+            lambda: self.open_website('Adafruit')
+        )
+        self.action_open_BCrobotics.triggered.connect(
+            lambda: self.open_website('BC Robotics')
+        )
+
         self.btn_open_inventory.clicked.connect(self.open_inventory)
         self.btn_open_new_order.clicked.connect(self.open_new_order)
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
@@ -122,8 +139,6 @@ class MainWindow(QMainWindow):
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
 
-        # testing
-
         self.hide_btns([
             self.btn_save_list,
             self.btn_add_to_inventory
@@ -131,6 +146,19 @@ class MainWindow(QMainWindow):
         self.hide_sorting_btns()
 
         self.show()  # needs to here in order to work
+
+    def open_website(self, website=''):
+        link = ''
+        if website.lower() == 'digikey':
+            link = 'https://www.digikey.ca/'
+
+        elif website.lower() == 'adafruit':
+            link = 'https://www.adafruit.com/'
+
+        elif website.lower() ==  'bc robotics':
+            link = 'https://bc-robotics.com/'
+
+        QDesktopServices.openUrl(QUrl(link))
 
     def get_is_sheet_open(self):
         # Variable to keep keep if a table is opened.
