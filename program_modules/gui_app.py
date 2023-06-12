@@ -526,11 +526,14 @@ class MainWindow(QMainWindow):
         return data
 
     def refresh_opensheet(self, filename=None):
-        if 'inventory' in self.header.text():
-            self.fill_table(Inventory)
-        else:
-            filename = get_ordersheet(filename)
-            self.fill_table(filename)
+        '''
+        Function to refresh the last sheet that was opened.
+            used for when a user is looking a specific category.
+
+        '''
+        filename = self.is_sheet_open
+        data = get_ordersheet(filename)
+        self.fill_table(data)
         self.sub_header.setText('')
 
 
