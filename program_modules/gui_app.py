@@ -562,9 +562,12 @@ class MainWindow(QMainWindow):
 
         '''
         filename = self.is_sheet_open
-        data = get_ordersheet(filename)
-        self.fill_table(data)
-        self.sub_header.setText('')
+        if 'inventory' in  filename.lower():
+            self.open_inventory()
+        else:
+            data = get_ordersheet(filename)
+            self.fill_table(data)
+            self.sub_header.setText('')
 
 
 if __name__ == "__main__":
