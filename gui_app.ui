@@ -599,13 +599,52 @@ background-color: rgb(255, 255, 255);</string>
      <bold>true</bold>
     </font>
    </property>
-   <widget class="QMenu" name="menuAbout">
+   <widget class="QMenu" name="menuLinks">
     <property name="title">
-     <string>About</string>
+     <string>Shopping</string>
+    </property>
+    <addaction name="actionDigiKey"/>
+    <addaction name="actionAdafruit"/>
+    <addaction name="actionBC_Robotics"/>
+   </widget>
+   <widget class="QMenu" name="menuInfo">
+    <property name="title">
+     <string>Info</string>
     </property>
    </widget>
-   <addaction name="menuAbout"/>
+   <addaction name="menuInfo"/>
+   <addaction name="menuLinks"/>
   </widget>
+  <action name="actionDigiKey">
+   <property name="text">
+    <string>DigiKey</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Terminal</family>
+    </font>
+   </property>
+  </action>
+  <action name="actionAdafruit">
+   <property name="text">
+    <string>Adafruit</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Terminal</family>
+    </font>
+   </property>
+  </action>
+  <action name="actionBC_Robotics">
+   <property name="text">
+    <string>BC Robotics</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Terminal</family>
+    </font>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
