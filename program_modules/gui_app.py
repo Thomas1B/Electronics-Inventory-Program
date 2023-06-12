@@ -375,12 +375,12 @@ class MainWindow(QMainWindow):
             filetype = filename.split('.')[-1]
             if filename:
                 if filetype in ['csv', 'xlsx']:
+                    self.is_sheet_open = filename
                     self.hide_btns([self.btn_add_to_inventory])
-                    order_name = filename.split('/')[-1]
-                    text = f'Project: {order_name}'
-                    self.header.setText(text)
                     project = get_ordersheet(filename)
                     self.fill_table(project)
+                    order_name = filename.split('/')[-1]
+                    self.header.setText(f'Project: {order_name}')
                     self.show_sorting_btns()
                     self.btn_save_list.setText('Save Project')
                     self.btn_save_list.clicked.connect(
@@ -477,7 +477,8 @@ class MainWindow(QMainWindow):
                 for sheet, cat in zip(new_inventory, Inventory.keys()):
                     sheet.to_excel(writer, sheet_name=cat)
 
-        elif called_from.lower() == 'save_project':  # new project is being saved.
+        # new project is being saved.
+        elif called_from.lower() == 'save_project':
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving Project')
             msg.setIcon(QtWidgets.QMessageBox.Critical)
@@ -562,7 +563,8 @@ class MainWindow(QMainWindow):
 
         '''
         filename = self.is_sheet_open
-        if 'inventory' in  filename.lower():
+        print(filename)
+        if 'inventory' in self.header.text().lower():
             self.open_inventory()
         else:
             data = get_ordersheet(filename)
