@@ -507,10 +507,10 @@ class MainWindow(QMainWindow):
             section - str: name of category to display.
         '''
 
-        data = self.get_table_data()
+        data = ''
         if 'inventory' in self.header.text().lower():
             data = dict_to_dataframe(Inventory)
-        elif 'new order' in self.header.text().lower():
+        else:
             data = get_ordersheet(self.is_sheet_open)
 
         if type(data) == pd.DataFrame:
