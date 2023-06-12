@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         # Menu Bar
         self.action_show_program_info = self.findChild(
             QtWidgets.QAction, 'actionProgram_info')
-        
+
         self.action_open_Digikey = self.findChild(
             QtWidgets.QAction, 'actionDigiKey')
         self.action_open_adafruit = self.findChild(
@@ -261,34 +261,6 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def fill_table(self, dataframe):
-        '''
-        Function to fill in table
-        '''
-        items = dataframe
-        if type(dataframe) == dict:
-            items = pd.concat([dataframe[cat].get_items()
-                               for cat in dataframe]).reset_index(drop=True)
-        elif type(dataframe) == list:
-            items = pd.concat(dataframe)
-
-        count = items.shape[0]
-        self.table.setRowCount(count)
-
-        for row in range(count):
-            self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
-                items['Part Number'][row]))
-            self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
-                items['Manufacturer Part Number'][row]))
-            self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-                items['Description'][row]))
-            self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-                items['Customer Reference'].fillna('')[row]))
-            self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
-                items['Unit Price'].astype(float).round(2).astype(str)[row]))
-            self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
-                items['Quantity'].astype(int).astype(str)[row]))
-
     def open_inventory(self):
         '''
         Function to open the inventory
@@ -408,6 +380,39 @@ class MainWindow(QMainWindow):
         else:
             self.popup_nofiles(header='There are no projects to open!')
 
+    def show_sorted_section(self, section):
+        '''
+        Function to show the sorted sections
+
+        Parameter:
+            section - str: name of category to display.
+        '''
+
+        if 'inventory' in self.header.text().lower():
+            self.fill_table(Inventory[section].get_items())
+        else:
+            data = get_ordersheet(self.is_sheet_open)
+            sorted = {}
+            keys = Inventory.keys()
+            for i, key in enumerate(keys):
+                sorted[key] = data[i]
+            self.fill_table(sorted[section].reset_index(drop=True))
+        self.sub_header.setText(section)
+
+    def refresh_opensheet(self, filename=None):
+        '''
+        Function to refresh the last sheet that was opened.
+            used for when a user is looking a specific category.
+
+        '''
+        filename = self.is_sheet_open
+        if 'inventory' in self.header.text().lower():
+            self.open_inventory()
+        else:
+            data = get_ordersheet(filename)
+            self.fill_table(data)
+            self.sub_header.setText('')
+
     def save_list(self, called_from=None):
         '''
         Function to save a list.
@@ -513,24 +518,33 @@ class MainWindow(QMainWindow):
         if user == QtWidgets.QMessageBox.Yes:
             self.save_list(called_from='add_to_inventory')
 
-    def show_sorted_section(self, section):
+    def fill_table(self, dataframe):
         '''
-        Function to show the sorted sections
-
-        Parameter:
-            section - str: name of category to display.
+        Function to fill in table
         '''
+        items = dataframe
+        if type(dataframe) == dict:
+            items = pd.concat([dataframe[cat].get_items()
+                               for cat in dataframe]).reset_index(drop=True)
+        elif type(dataframe) == list:
+            items = pd.concat(dataframe)
 
-        if 'inventory' in self.header.text().lower():
-            self.fill_table(Inventory[section].get_items())
-        else:
-            data = get_ordersheet(self.is_sheet_open)
-            sorted = {}
-            keys = Inventory.keys()
-            for i, key in enumerate(keys):
-                sorted[key] = data[i]
-            self.fill_table(sorted[section].reset_index(drop=True))
-        self.sub_header.setText(section)
+        count = items.shape[0]
+        self.table.setRowCount(count)
+
+        for row in range(count):
+            self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
+                items['Part Number'][row]))
+            self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
+                items['Manufacturer Part Number'][row]))
+            self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
+                items['Description'][row]))
+            self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
+                items['Customer Reference'].fillna('')[row]))
+            self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
+                items['Unit Price'].astype(float).round(2).astype(str)[row]))
+            self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
+                items['Quantity'].astype(int).astype(str)[row]))
 
     def get_table_data(self):
         '''
@@ -551,20 +565,6 @@ class MainWindow(QMainWindow):
         data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
                             'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
         return data
-
-    def refresh_opensheet(self, filename=None):
-        '''
-        Function to refresh the last sheet that was opened.
-            used for when a user is looking a specific category.
-
-        '''
-        filename = self.is_sheet_open
-        if 'inventory' in self.header.text().lower():
-            self.open_inventory()
-        else:
-            data = get_ordersheet(filename)
-            self.fill_table(data)
-            self.sub_header.setText('')
 
 
 if __name__ == "__main__":
