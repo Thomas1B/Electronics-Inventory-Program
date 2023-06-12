@@ -166,6 +166,31 @@ Inventory = {
 }
 
 
+def dict_to_dataframe(dictionary):
+    '''
+    Function to convert a dictionary into a dataframe.
+
+    '''
+    items = pd.concat([dictionary[cat].get_items()
+                      for cat in dictionary]).reset_index(drop=True)
+    return items
+
+
+def dataframe_to_dict(dataframes=[]):
+    '''
+    Function to convert a list of dataframes into a dictionary, the keys 
+    are the type of category.
+
+    Returns dictionary of categories.
+    '''
+
+    new_dict = {}
+    keys = get_category_types()
+    for dataframe, key in zip(dataframes, keys):
+        new_dict[key] = dataframe
+    return new_dict
+
+
 def get_category_types():
     '''
     Function return a list of keys from the Iventory class.
@@ -204,31 +229,6 @@ def get_inventory(check_load=True):
         check_load = True
 
     return Inventory
-
-
-def dict_to_dataframe(dictionary):
-    '''
-    Function to convert a dictionary into a dataframe.
-
-    '''
-    items = pd.concat([dictionary[cat].get_items()
-                      for cat in dictionary]).reset_index(drop=True)
-    return items
-
-
-def dataframe_to_dict(dataframes=[]):
-    '''
-    Function to convert a list of dataframes into a dictionary, the keys 
-    are the type of category.
-
-    Returns dictionary of categories.
-    '''
-
-    new_dict = {}
-    keys = get_category_types()
-    for dataframe, key in zip(dataframes, keys):
-        new_dict[key] = dataframe
-    return new_dict
 
 
 def sort_order(order):
