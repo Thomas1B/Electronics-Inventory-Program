@@ -319,7 +319,8 @@ def get_ordersheet(filepath):
         if filetype == 'csv':
             order = pd.read_csv(filepath)
             # dropping subtotal line
-            order = order.drop(order.index[-1], axis=0)
+            if str(order.iloc[-1]["Unit Price"]).lower() == "subtotal":
+                order = order.drop(order.index[-1], axis=0)
 
         elif filetype == 'xlsx':
             # subtotal line needs to be removed from the xlsx manual.
@@ -327,7 +328,7 @@ def get_ordersheet(filepath):
 
             order = pd.read_excel(filepath)
         else:
-            pass
+            print('reading data failed')
 
         # condition for when getting a order that has this labels dropped already.
         if all(col in order.columns for col in labels_drop):
