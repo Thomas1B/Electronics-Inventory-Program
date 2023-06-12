@@ -545,7 +545,6 @@ class MainWindow(QMainWindow):
 
         '''
         filename = self.is_sheet_open
-        print(filename)
         if 'inventory' in self.header.text().lower():
             self.open_inventory()
         else:
