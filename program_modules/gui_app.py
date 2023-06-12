@@ -252,6 +252,7 @@ class MainWindow(QMainWindow):
         Function to open the inventory
         '''
         self.sub_header.setText('')
+        self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
@@ -271,7 +272,7 @@ class MainWindow(QMainWindow):
         # if len(os.listdir("Saved_Lists/New Orders")) > 0:
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
+            self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
         filetype = filename.split('.')[-1]
         if filetype:
             if filetype in ['csv', 'xlsx']:
@@ -320,7 +321,7 @@ class MainWindow(QMainWindow):
         self.sub_header.setText('')
         if len(os.listdir('Saved_Lists/Past Orders')) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split(".")[-1]
             if filetype in ['csv', 'xlsx']:
                 self.is_sheet_open = filename
@@ -343,7 +344,7 @@ class MainWindow(QMainWindow):
         '''
         if len(os.listdir("Saved_Lists/Projects")) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Project List', 'Saved_Lists/Projects', 'CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split('.')[-1]
             if filename:
                 if filetype in ['csv', 'xlsx']:
