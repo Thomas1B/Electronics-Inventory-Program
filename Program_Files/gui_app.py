@@ -270,7 +270,11 @@ class MainWindow(QMainWindow):
 
     def export_file(self, autoname=True):
         '''
-        Function to export a file
+        Function to export a file.
+
+        Parameters:
+            autoname - bool: true - automatically named the final.
+                if true, exports to 'Downloads\exported_electrontics_lists'
         '''
         print(autoname)
         if autoname:
@@ -282,6 +286,7 @@ class MainWindow(QMainWindow):
             )
 
             if file_toexport:
+
                 export_filename, export_filetype = file_toexport.split(
                     '/')[-1].split('.')
 
