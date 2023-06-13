@@ -5,13 +5,12 @@ import sys
 
 
 class Info_Window(QMainWindow):
-    def __init__(self):
-        super(Info_Window, self).__init__()
+    def __init__(self, parent=None):
+        super(Info_Window, self).__init__(parent)
 
         # loading ui file
-        uic.loadUi('Program_Files/info_window.ui')
-
-        self.show()
+        uic.loadUi('Program_Files/info_window.ui', self)
+        
 
 
 if __name__ == "__main__":
