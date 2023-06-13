@@ -10,6 +10,7 @@ import pandas as pd
 import sys
 import os
 import shutil
+import re
 
 from .info_window import Info_Window
 
@@ -124,7 +125,8 @@ class MainWindow(QMainWindow):
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_open_past_order.clicked.connect(self.open_past_order)
-        self.btn_export.clicked.connect(self.export_file)
+        self.btn_export.clicked.connect(
+            lambda: self.export_file(autoname=True))
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -266,23 +268,49 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def export_file(self):
+    def export_file(self, autoname=True):
         '''
         Function to export a file
         '''
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, "Exporting File", "Saved_lists", "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
-        )
-        downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
-        shutil.copy2(filename, downloads_path)
-        if os.path.exists(downloads_path + f'/{filename.split("/")[-1]}'):
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('Exporting File Successful')
-            msg.setIcon(QtWidgets.QMessageBox.Information)
-            msg.setText("Exporting file was successful!")
-            msg.setInformativeText('The file was exported to your "downloads" folder.')
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            _ = msg.exec_()
+        print(autoname)
+        if autoname:
+            file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self,
+                "Exporting File",
+                "Saved_lists",
+                "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
+            )
+
+            if file_toexport:
+                export_filename, export_filetype = file_toexport.split(
+                    '/')[-1].split('.')
+
+                export_folder = os.path.expanduser(
+                    "~" + os.sep + "Downloads\exported_electrontics_lists"
+                )
+                if not os.path.exists(export_folder):
+                    os.mkdir(export_folder)
+
+                # while loop to check if file has already be exported,
+                # if it does then add a number to the filename name.
+                # DO NOT CHANGE THE ORDER OF THESE VARIABLES
+                new_name = file_toexport
+                file_toexport = f'{export_folder}\{export_filename}.{export_filetype}'
+                base, ext = os.path.splitext(file_toexport)
+                counter = 1
+                while os.path.exists(new_name):
+                    new_name = f'{base}({counter}){ext}'
+                    counter += 1
+                shutil.copy2(file_toexport, new_name)
+
+            else:
+                # file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
+                #     self,
+                #     "Exporting File",
+                #     "Saved_lists",
+                #     "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
+                # )
+                pass
 
     def open_inventory(self):
         '''
@@ -489,8 +517,7 @@ class MainWindow(QMainWindow):
                 if destination_folder:  # user picks a location.
                     location = f'{destination_folder}/{filename}'
                     try:
-                        c = self.is_sheet_open
-                        shutil.copy2(c, location)
+                        shutil.copy2(self.is_sheet_open, location)
                     except Exception as err:
                         print(err)
                     if os.path.exists(destination_folder+f'/{filename}'):
