@@ -70,6 +70,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_add_to_inventory')
         self.btn_open_past_order = self.findChild(
             QtWidgets.QPushButton, 'btn_open_past_order')
+        self.btn_export = self.findChild(
+            QtWidgets.QPushButton, 'btn_export')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -122,6 +124,7 @@ class MainWindow(QMainWindow):
         self.btn_open_project_lists.clicked.connect(self.open_project_lists)
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_open_past_order.clicked.connect(self.open_past_order)
+        self.btn_export.clicked.connect(self.export_file)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -263,6 +266,24 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
+    def export_file(self):
+        '''
+        Function to export a file
+        '''
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self, "Exporting File", "Saved_lists", "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
+        )
+        downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
+        shutil.copy2(filename, downloads_path)
+        if os.path.exists(downloads_path + f'/{filename.split("/")[-1]}'):
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Exporting File Successful')
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText("Exporting file was successful!")
+            msg.setInformativeText('The file was exported to your "downloads" folder.')
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+
     def open_inventory(self):
         '''
         Function to open the inventory
@@ -308,7 +329,7 @@ class MainWindow(QMainWindow):
                         QtWidgets.QMessageBox.No
                     )
                     if user == QtWidgets.QMessageBox.No:
-                        pass
+                        return
 
                 new_order = get_ordersheet(filename)
                 if new_order:
@@ -390,7 +411,7 @@ class MainWindow(QMainWindow):
             section - str: name of category to display.
         '''
 
-        if 'inventory' in self.header.text().lower():
+        if 'looking at inventory' in self.header.text().lower():
             self.fill_table(Inventory[section].get_items())
         else:
             data = get_ordersheet(self.is_sheet_open)
@@ -408,7 +429,7 @@ class MainWindow(QMainWindow):
 
         '''
         filename = self.is_sheet_open
-        if 'inventory' in self.header.text().lower():
+        if 'looking at inventory' in self.header.text().lower():
             self.open_inventory()
         else:
             data = get_ordersheet(filename)
@@ -467,7 +488,11 @@ class MainWindow(QMainWindow):
                     self, 'Select Destination Folder')
                 if destination_folder:  # user picks a location.
                     location = f'{destination_folder}/{filename}'
-                    shutil.copy2(self.is_sheet_open, location)
+                    try:
+                        c = self.is_sheet_open
+                        shutil.copy2(c, location)
+                    except Exception as err:
+                        print(err)
                     if os.path.exists(destination_folder+f'/{filename}'):
                         # displays successfully save popup
                         msg = QtWidgets.QMessageBox()
