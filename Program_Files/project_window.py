@@ -13,6 +13,7 @@ from .data_handling import (
     Category,
     sort_order,
     get_ordersheet,
+    dict_to_dataframe
 )
 
 Project = {
@@ -30,6 +31,41 @@ Project = {
     'Other': Category("Other"),
 }
 
+class Pick_FileType(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("Choosing FileType")
+        self.setMinimumWidth(400)
+
+        # Create a label to display the selected option
+        self.label = QtWidgets.QLabel("Selected option: ", self)
+        
+
+        # Create a combobox
+        self.combobox = QtWidgets.QComboBox(self)
+        self.combobox.addItem("Option 1")
+        self.combobox.addItem("Option 2")
+        self.combobox.currentIndexChanged.connect(self.handle_combobox_changed)
+
+        # Create a layout and add the combobox and label to it
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.combobox)
+        layout.addWidget(self.label)
+
+        # Create a central widget and set the layout on it
+        central_widget = QtWidgets.QWidget()
+        central_widget.setLayout(layout)
+
+        # Set the central widget of the main window
+        self.setCentralWidget(central_widget)
+
+    def handle_combobox_changed(self, index):
+        # Get the selected option from the combobox
+        selected_option = self.combobox.currentText()
+
+        # Update the label with the selected option
+        self.label.setText("Selected option: " + selected_option)
 
 class Project_Window(QMainWindow):
     def __init__(self, parent=None):
@@ -70,7 +106,6 @@ class Project_Window(QMainWindow):
 
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
-        
 
         self.btn_save_project.clicked.connect(self.save_project)
 
@@ -191,11 +226,12 @@ class Project_Window(QMainWindow):
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
         if user == QtWidgets.QMessageBox.Yes:
-            print("Need to finish this......")
+            self.pick_filetyle = Pick_FileType()
+            self.pick_filetyle.show()
 
 if __name__ == "__main__":
     # runnning program
     app = QApplication(sys.argv)
-    Project_Window = Project_Window()
-    Project_Window.show()
+    project_window = Project_Window()
+    project_window.show()
     app.exec_()
