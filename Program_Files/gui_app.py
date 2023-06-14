@@ -665,16 +665,17 @@ class MainWindow(QMainWindow):
         NEED TO BUILD
         '''
         dialog = QtWidgets.QInputDialog()
-        name, _ = dialog.getText(
+        name, ok = dialog.getText(
             self,
             "Creating New Project",
             'Enter a project name:\n'
         )
-        if name:
+        if ok:
+            # if the user provides a name, it opens a project window from project_window.py
             filepath = f'Saved_Lists/Projects/{name}.csv'
             self.project_window = Project_Window()
             self.project_window.setWindowTitle(
-                'Electronics Inventory Program - New Project')
+                'Electronics Inventory Program - Creating New Project')
             self.project_window.header.setText(f'New Project: {name}')
             self.project_window.load_Project(filepath)
             self.project_window.show()

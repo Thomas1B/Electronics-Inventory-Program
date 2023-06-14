@@ -181,7 +181,7 @@ class Project_Window(QMainWindow):
         Function to save the project.
         '''
         user = QtWidgets.QMessageBox()
-        user.setWindowTitle("Saving new Inventory")
+        user.setWindowTitle("Electronics Inventory Program - Saving Project")
         user.setIcon(QtWidgets.QMessageBox.Question)
         user.setText('\nWould you like to save the project?\n')
         user.setStandardButtons(
@@ -190,7 +190,8 @@ class Project_Window(QMainWindow):
         )
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
-        print("Need to finish this......")
+        if user == QtWidgets.QMessageBox.Yes:
+            print("Need to finish this......")
 
 if __name__ == "__main__":
     # runnning program
