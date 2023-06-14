@@ -196,6 +196,9 @@ class Project_Window(QMainWindow):
 
 
 class Pick_FileType(QMainWindow):
+    '''
+    Class to handle picking a project filetype when saving.
+    '''
     def __init__(self):
         super().__init__()
 
@@ -214,6 +217,7 @@ class Pick_FileType(QMainWindow):
         btn_layout.addWidget(self.btn_ok)
         btn_layout.addWidget(self.btn_cancel)
 
+        # Attaching functions.
         self.btn_ok.clicked.connect(self.ok_handler)
         self.btn_cancel.clicked.connect(self.cancel_hander)
 
