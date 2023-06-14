@@ -13,7 +13,8 @@ import shutil
 import re
 
 from .info_window import Info_Window
-from .project_window import Project_Window
+from .project_window import (Project_Window,
+                             Pick_FileType)
 
 from .data_handling import (Inventory,
                             load_Inventory,
@@ -658,14 +659,19 @@ class MainWindow(QMainWindow):
         If the project name exists popup appears to tell the user, otherwise
         it asks the user what filetype they want and creates the project file.
         '''
+        self.pick_filetype = Pick_FileType()
+        self.pick_filetype.show()
         dialog = QtWidgets.QInputDialog()
-        name, ok = dialog.getText(
-            self,
-            "Creating New Project",
-            'Enter a project name:\n'
-        )
+        # name, ok = dialog.getText(
+        #     self,
+        #     "Creating New Project",
+        #     'Enter a project name:\n'
+        # )
+        ok = False
+        name = False
         if ok and name:
             # user enters a project name and clicks the "ok" button.
+
             filepath = f'Saved_Lists/Projects/{name}.csv'
 
             if not os.path.exists(filepath):
