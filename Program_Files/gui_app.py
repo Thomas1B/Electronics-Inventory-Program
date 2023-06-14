@@ -576,6 +576,7 @@ class MainWindow(QMainWindow):
         # popup to ask user if wants to save the "new" inventory.
         user = QtWidgets.QMessageBox()
         user.setWindowTitle("Saving new Inventory")
+        user.setIcon(QtWidgets.QMessageBox.Question)
         user.setText('\nWould you like to save the new inventory?\n')
         user.setStandardButtons(
             QtWidgets.QMessageBox.Yes |
