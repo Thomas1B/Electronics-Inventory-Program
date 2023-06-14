@@ -270,7 +270,7 @@ class MainWindow(QMainWindow):
         msg.setWindowTitle('Wrong File Type')
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setText('Cannot user that file type!')
-        text = "You can only user '.csv' and '.xlsx' files"
+        text = "You can only use '.csv' (Comma-Seperated-Values) and '.xlsx' (Excel) files."
         msg.setInformativeText(f'{text}')
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
@@ -660,14 +660,15 @@ class MainWindow(QMainWindow):
         '''
         dialog = QtWidgets.QInputDialog(self)
         text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
-        text += 'Example: Temperature Gauge, CSV\n'
+        text += 'Example: "Temperature Gauge, CSV"\n\n'
+        text += 'Filetype options:\n\t- CSV (Comma-Seperated-Values)\n\t- XLSX (Excel)'
         user, ok = dialog.getText(
             self,
             "Creating New Project",
             text
         )
-        filetype = ''
-        name = ''
+        filetype = None   # obtained in try block
+        name = None       # obtained in try block
         if ok:
             try:
                 # trying to split user's string into a name and filetype
@@ -675,7 +676,7 @@ class MainWindow(QMainWindow):
                 name = name.strip()
                 filetype = filetype.strip()
             except Exception as err:
-                # popup you .
+                # popup user entered information in the wrong format.
                 user = QtWidgets.QMessageBox()
                 user.setWindowTitle(
                     'Electronics Inventory Program - Creating New Project'
@@ -693,7 +694,8 @@ class MainWindow(QMainWindow):
             # user enters a project name and clicks the "ok" button.
             print(name, filetype)
             if filetype.lower() in ['csv', 'xlsx', 'excel']:
-                print('dog')
+                if filetype.lower() == 'excel':  # if user enter "excel"
+                    filetype = 'xlsx'
                 filepath = f'Saved_Lists/Projects/{name}.{filetype}'
 
                 if not os.path.exists(filepath):
