@@ -661,18 +661,31 @@ class MainWindow(QMainWindow):
         dialog = QtWidgets.QInputDialog(self)
         text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
         text += 'Example: Temperature Gauge, CSV\n'
-        name, ok = dialog.getText(
+        user, ok = dialog.getText(
             self,
             "Creating New Project",
             text
         )
         filetype = ''
-        try:
-            name, filetype = name.split(',')
-            name = name.strip()
-            filetype = filetype.strip()
-        except Exception as err:
-            print(err)
+        name = ''
+        if ok:
+            try:
+                # trying to split user's string into a name and filetype
+                name, filetype = user.split(',')
+                name = name.strip()
+                filetype = filetype.strip()
+            except Exception as err:
+                # popup you .
+                user = QtWidgets.QMessageBox()
+                user.setWindowTitle(
+                    'Electronics Inventory Program - Creating New Project'
+                )
+                text = 'You entered the information in the wrong format, try again.'
+                user.setText(text)
+                user.setIcon(QtWidgets.QMessageBox.Critical)
+                user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                user = user.exec_()
+                return
 
         print("Meow", name, filetype)
 
@@ -688,7 +701,8 @@ class MainWindow(QMainWindow):
                     self.project_window = Project_Window()
                     self.project_window.setWindowTitle(
                         'Electronics Inventory Program - Creating New Project')
-                    self.project_window.header.setText(f'New Project: {name}.{filetype}')
+                    self.project_window.header.setText(
+                        f'New Project: {name}.{filetype}')
                     self.project_window.load_Project(filepath)
                     self.project_window.show()
                 else:
