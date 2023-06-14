@@ -17,4 +17,5 @@ if __name__ == "__main__":
     # runnning program
     app = QApplication(sys.argv)
     info_window = Info_Window()
+    info_window.show()
     app.exec_()
