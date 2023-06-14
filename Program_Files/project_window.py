@@ -31,41 +31,6 @@ Project = {
     'Other': Category("Other"),
 }
 
-class Pick_FileType(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("Choosing FileType")
-        self.setMinimumWidth(400)
-
-        # Create a label to display the selected option
-        self.label = QtWidgets.QLabel("Selected option: ", self)
-        
-
-        # Create a combobox
-        self.combobox = QtWidgets.QComboBox(self)
-        self.combobox.addItem("Option 1")
-        self.combobox.addItem("Option 2")
-        self.combobox.currentIndexChanged.connect(self.handle_combobox_changed)
-
-        # Create a layout and add the combobox and label to it
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.combobox)
-        layout.addWidget(self.label)
-
-        # Create a central widget and set the layout on it
-        central_widget = QtWidgets.QWidget()
-        central_widget.setLayout(layout)
-
-        # Set the central widget of the main window
-        self.setCentralWidget(central_widget)
-
-    def handle_combobox_changed(self, index):
-        # Get the selected option from the combobox
-        selected_option = self.combobox.currentText()
-
-        # Update the label with the selected option
-        self.label.setText("Selected option: " + selected_option)
 
 class Project_Window(QMainWindow):
     def __init__(self, parent=None):
@@ -229,9 +194,58 @@ class Project_Window(QMainWindow):
             self.pick_filetyle = Pick_FileType()
             self.pick_filetyle.show()
 
+
+class Pick_FileType(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("Choosing FileType")
+        self.setMinimumWidth(400)
+
+        # Create a label to display the selected option
+        self.label = QtWidgets.QLabel(self)
+        text = 'Pick the filetype you would like to save your project as:'
+        self.label.setText(text)
+
+        # buttons
+        self.btn_ok = QtWidgets.QPushButton("OK", self)
+        self.btn_cancel = QtWidgets.QPushButton("Cancel", self)
+        btn_layout = QtWidgets.QHBoxLayout()
+        btn_layout.addWidget(self.btn_ok)
+        btn_layout.addWidget(self.btn_cancel)
+
+        # Create a combobox
+        self.combobox = QtWidgets.QComboBox(self)
+        self.combobox.addItem("CSV (Comma-Sperated Values)")
+        self.combobox.addItem("XLSX (Excel)")
+        # self.combobox.currentIndexChanged.connect(self.get_)
+
+        # Create a layout and add the combobox and label to it
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.combobox)
+        layout.addLayout(btn_layout)
+
+
+
+        # Create a central widget and set the layout on it
+        central_widget = QtWidgets.QWidget()
+        central_widget.setLayout(layout)
+
+        # Set the central widget of the main window
+        self.setCentralWidget(central_widget)
+
+    # def handle_combobox_changed(self, index):
+        # Get the selected option from the combobox
+        # selected_option = self.combobox.currentText()
+
+        # Update the label with the selected option
+        # self.label.setText("Selected option: " + selected_option)
+
+
 if __name__ == "__main__":
     # runnning program
     app = QApplication(sys.argv)
-    project_window = Project_Window()
+    project_window = Pick_FileType()
     project_window.show()
     app.exec_()
