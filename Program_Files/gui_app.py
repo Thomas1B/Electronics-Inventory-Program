@@ -59,6 +59,8 @@ class MainWindow(QMainWindow):
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
 
+        self.table.cellClicked.connect(self.get_row)
+
         # Buttons
         self.btn_open_inventory = self.findChild(
             QtWidgets.QPushButton, 'btn_open_inventory')
@@ -656,13 +658,27 @@ class MainWindow(QMainWindow):
 
     def create_project(self):
         '''
-        Function to create a project
+        Function to create a new project.
+
+        NEED TO BUILD
         '''
         dialog = QtWidgets.QInputDialog()
-        text, user = dialog.getText(
-            self, "Creating New Project", 'Enter a project name:\n')
-        print(user, text)
+        text, _ = dialog.getText(
+            self,
+            "Creating New Project",
+            'Enter a project name:\n'
+        )
+        if text:
+            filepath = f'Saved_Lists/Projects/{text}.csv'
+            # pd.DataFrame().to_csv(filename)
+            self.is_sheet_open = filepath
+            self.header.setText(f'New Project: {text}')
+            self.table.setRowCount(0)
+            print(self.is_sheet_open)
 
+    def get_row(self, row):
+        data = self.get_table_data()
+        print(row, data.iloc[row])
 
 if __name__ == "__main__":
     # runnning program
