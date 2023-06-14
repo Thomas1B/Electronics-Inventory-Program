@@ -429,9 +429,11 @@ class MainWindow(QMainWindow):
                     self.is_sheet_open = filename
                     self.project_window = Project_Window()
                     self.project_window.setWindowTitle(
-                        f'Electronic Inventory Program - Project')
+                        f'Electronic Inventory Program - Project'
+                    )
                     self.project_window.header.setText(
-                        f'Project: {order_name}')
+                        f'Project: {order_name}'
+                    )
                     self.project_window.show()
                     self.project_window.load_Project(filename)
                 else:
