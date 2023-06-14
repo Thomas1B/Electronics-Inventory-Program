@@ -572,9 +572,12 @@ class MainWindow(QMainWindow):
         user.setWindowTitle("Saving new Inventory")
         user.setText('\nWould you like to save the new inventory?\n')
         user.setStandardButtons(
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+            QtWidgets.QMessageBox.Yes |
+            QtWidgets.QMessageBox.No
+        )
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
+
         if user == QtWidgets.QMessageBox.Yes:
             self.save_list(called_from='add_to_inventory')
             line_count = 0
