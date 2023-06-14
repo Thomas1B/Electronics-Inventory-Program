@@ -597,7 +597,10 @@ class MainWindow(QMainWindow):
 
     def fill_table(self, dataframe):
         '''
-        Function to fill in table
+        Function to fill in table.
+
+        Parameter:
+            dataframe: can take a dict, pandas dataframe or list of dataframes.
         '''
         items = dataframe
         if type(dataframe) == dict:
@@ -626,22 +629,27 @@ class MainWindow(QMainWindow):
     def get_table_data(self):
         '''
         returns current table data into a dataframe.
+
+        
         '''
         rows = self.table.rowCount()
         cols = self.table.columnCount()
         data = []
 
-        for r in range(rows):
-            row_data = []
-            for c in range(cols):
-                item = self.table.item(r, c)
-                if item:
-                    row_data.append(item.text())
-            data.append(row_data)
+        if rows:
+            for r in range(rows):
+                row_data = []
+                for c in range(cols):
+                    item = self.table.item(r, c)
+                    if item:
+                        row_data.append(item.text())
+                data.append(row_data)
 
-        data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
-                            'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
-        return data
+            data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
+                                'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
+            return data
+        else:
+            print("NO ROWS IN TABLE")
 
 
 if __name__ == "__main__":
