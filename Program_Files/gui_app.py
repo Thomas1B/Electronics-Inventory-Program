@@ -577,14 +577,14 @@ class MainWindow(QMainWindow):
         if user == QtWidgets.QMessageBox.Yes:
             self.save_list(called_from='add_to_inventory')
             line_count = 0
-            added_orders = 'Saved_lists/added_to_inventory.txts.txt'
+            added_orders = 'Saved_lists/added_to_inventory.txt'
             if os.path.exists(added_orders):
                 with open(added_orders, 'r') as file:
                     # Read the lines and count them
                     line_count = sum(1 for line in file)
             with open(added_orders, 'a') as file:
                 filename = self.is_sheet_open.split('/')[-1]
-                text = '{:>3}: {:s}'.format(line_count+1, filename)
+                text = '{:>3}: {:s}\n'.format(line_count+1, filename)
                 file.write(text)
 
     def fill_table(self, dataframe):
