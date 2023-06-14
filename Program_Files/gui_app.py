@@ -13,8 +13,7 @@ import shutil
 import re
 
 from .info_window import Info_Window
-from .project_window import (Project_Window,
-                             Pick_FileType)
+from .project_window import Project_Window
 
 from .data_handling import (Inventory,
                             load_Inventory,
@@ -270,8 +269,8 @@ class MainWindow(QMainWindow):
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Wrong File Type')
         msg.setIcon(QtWidgets.QMessageBox.Critical)
-        msg.setText('Cannot open that file type!')
-        text = "You can only open '.csv' and '.xlsx' files"
+        msg.setText('Cannot user that file type!')
+        text = "You can only user '.csv' and '.xlsx' files"
         msg.setInformativeText(f'{text}')
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
@@ -667,33 +666,45 @@ class MainWindow(QMainWindow):
             "Creating New Project",
             text
         )
+        filetype = ''
+        try:
+            name, filetype = name.split(',')
+            name = name.strip()
+            filetype = filetype.strip()
+        except Exception as err:
+            print(err)
 
+        print("Meow", name, filetype)
 
-        ok = False
-        name = False
-        if ok and name:
+        if ok and name and filetype:
             # user enters a project name and clicks the "ok" button.
+            print(name, filetype)
+            if filetype.lower() in ['csv', 'xlsx', 'excel']:
+                print('dog')
+                filepath = f'Saved_Lists/Projects/{name}.{filetype}'
 
-            filepath = f'Saved_Lists/Projects/{name}.csv'
-
-            if not os.path.exists(filepath):
-                # if project doesn't exist, open project window.
-                self.project_window = Project_Window()
-                self.project_window.setWindowTitle(
-                    'Electronics Inventory Program - Creating New Project')
-                self.project_window.header.setText(f'New Project: {name}')
-                self.project_window.load_Project(filepath)
-                self.project_window.show()
+                if not os.path.exists(filepath):
+                    # if project doesn't exist, open project window.
+                    self.project_window = Project_Window()
+                    self.project_window.setWindowTitle(
+                        'Electronics Inventory Program - Creating New Project')
+                    self.project_window.header.setText(f'New Project: {name}.{filetype}')
+                    self.project_window.load_Project(filepath)
+                    self.project_window.show()
+                else:
+                    # popup telling user project name already exists.
+                    user = QtWidgets.QMessageBox()
+                    user.setWindowTitle(
+                        'Electronics Inventory Program - Creating New Project'
+                    )
+                    user.setIcon(QtWidgets.QMessageBox.Critical)
+                    text = f'Project name "{name}.{filetype}" already exsits!'
+                    user.setText(text)
+                    user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    user = user.exec_()
             else:
-                user = QtWidgets.QMessageBox()
-                user.setWindowTitle(
-                    'Electronics Inventory Program - Creating New Project'
-                )
-                user.setIcon(QtWidgets.QMessageBox.Critical)
-                text = f'Project name "{name}" already exsits!'
-                user.setText(text)
-                user.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                user = user.exec_()
+                # user enters wrong filetype
+                self.wrong_filetyle_msg()
         elif ok and not name:
             # User clicks "ok", but doesn't enter a project name.
             user = QtWidgets.QMessageBox()
@@ -702,6 +713,17 @@ class MainWindow(QMainWindow):
             )
             user.setIcon(QtWidgets.QMessageBox.Warning)
             text = 'You must enter a project name!'
+            user.setText(text)
+            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            user = user.exec_()
+        elif ok and not filetype:
+            # User clicks "ok", but doesn't enter a project name.
+            user = QtWidgets.QMessageBox()
+            user.setWindowTitle(
+                'Electronics Inventory Program - Creating New Project'
+            )
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            text = 'You must enter a filetype!'
             user.setText(text)
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
