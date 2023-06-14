@@ -19,7 +19,8 @@ from .data_handling import (Inventory,
                             get_ordersheet,
                             add_order_to_Inventory,
                             dict_to_dataframe,
-                            sort_order)
+                            sort_order,
+                            get_inventory)
 
 
 class MainWindow(QMainWindow):
@@ -548,12 +549,11 @@ class MainWindow(QMainWindow):
 
         # automatically called when an order is added to the inventory.
         elif called_from.lower() == 'add_to_inventory':
-            new_inventory = self.get_table_data()
-            new_inventory = sort_order(new_inventory)
+            new_inventory = get_inventory()
             with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
-                for sheet, cat in zip(new_inventory, Inventory.keys()):
-                    sheet.to_excel(writer, sheet_name=cat)
+                for cat in new_inventory.keys():
+                    new_inventory[cat].save_toexcel(writer=writer)
 
         # new project is being saved.
         elif called_from.lower() == 'save_project':
@@ -577,10 +577,12 @@ class MainWindow(QMainWindow):
         if user == QtWidgets.QMessageBox.Yes:
             self.save_list(called_from='add_to_inventory')
             line_count = 0
-            with open('Saved_lists/added_orders.txt', 'r') as file:
-                # Read the lines and count them
-                line_count = sum(1 for line in file)
-            with open('Saved_lists/added_orders.txt', 'a') as file:
+            added_orders = 'Saved_lists/added_to_inventory.txts.txt'
+            if os.path.exists(added_orders):
+                with open(added_orders, 'r') as file:
+                    # Read the lines and count them
+                    line_count = sum(1 for line in file)
+            with open(added_orders, 'a') as file:
                 filename = self.is_sheet_open.split('/')[-1]
                 text = '{:>3}: {:s}'.format(line_count+1, filename)
                 file.write(text)
