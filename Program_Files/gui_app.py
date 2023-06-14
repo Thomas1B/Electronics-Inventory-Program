@@ -660,9 +660,11 @@ class MainWindow(QMainWindow):
 
     def create_project(self):
         '''
-        Function to create a new project.
+        Function to create a new project using a second window.
 
-        NEED TO BUILD
+        Prompt user to enter a enter project name, then checks if it exists.
+        If the project name exists popup appears to tell the user, otherwise
+        it asks the user what filetype they want and creates the project file.
         '''
         dialog = QtWidgets.QInputDialog()
         name, ok = dialog.getText(
