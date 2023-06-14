@@ -425,16 +425,17 @@ class MainWindow(QMainWindow):
             if filename:
                 if filetype in ['csv', 'xlsx']:
                     order_name = filename.split('/')[-1]
-                    
+
                     self.is_sheet_open = filename
                     self.project_window = Project_Window()
-                    self.project_window.setWindowTitle(f'Electronic Inventory Program - Project')
-                    self.project_window.header.setText(f'Project: {order_name}')
+                    self.project_window.setWindowTitle(
+                        f'Electronic Inventory Program - Project')
+                    self.project_window.header.setText(
+                        f'Project: {order_name}')
                     self.project_window.show()
                     self.project_window.load_Project(filename)
                     # project = get_ordersheet(filename)
                     # self.project_window.fill_table(project)
-
 
                     # self.is_sheet_open = filename
                     # self.hide_btns([self.btn_add_to_inventory])
@@ -683,19 +684,16 @@ class MainWindow(QMainWindow):
         if name:
             filepath = f'Saved_Lists/Projects/{name}.csv'
             self.project_window = Project_Window()
-            self.project_window.setWindowTitle('Electronics Inventory Program - New Project')
+            self.project_window.setWindowTitle(
+                'Electronics Inventory Program - New Project')
             self.project_window.header.setText(f'New Project: {name}')
             self.project_window.load_Project(filepath)
             self.project_window.show()
-            # pd.DataFrame().to_csv(filename)
-            # self.is_sheet_open = filepath
-            # self.header.setText(f'New Project: {text}')
-            # self.table.setRowCount(0)
-            # print(self.is_sheet_open)
 
     def get_row(self, row):
         data = self.get_table_data()
         print(row, data.iloc[row])
+
 
 if __name__ == "__main__":
     # runnning program
