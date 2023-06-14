@@ -670,15 +670,39 @@ class MainWindow(QMainWindow):
             "Creating New Project",
             'Enter a project name:\n'
         )
-        if ok:
-            # if the user provides a name, it opens a project window from project_window.py
+        if ok and name:
+            # user enters a project name and clicks the "ok" button.
             filepath = f'Saved_Lists/Projects/{name}.csv'
-            self.project_window = Project_Window()
-            self.project_window.setWindowTitle(
-                'Electronics Inventory Program - Creating New Project')
-            self.project_window.header.setText(f'New Project: {name}')
-            self.project_window.load_Project(filepath)
-            self.project_window.show()
+
+            if not os.path.exists(filepath):
+                # if project doesn't exist, open project window.
+                self.project_window = Project_Window()
+                self.project_window.setWindowTitle(
+                    'Electronics Inventory Program - Creating New Project')
+                self.project_window.header.setText(f'New Project: {name}')
+                self.project_window.load_Project(filepath)
+                self.project_window.show()
+            else:
+                user = QtWidgets.QMessageBox()
+                user.setWindowTitle(
+                    'Electronics Inventory Program - Creating New Project'
+                )
+                user.setIcon(QtWidgets.QMessageBox.Critical)
+                text = f'Project name "{name}" already exsits!'
+                user.setText(text)
+                user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                user = user.exec_()
+        elif ok and not name:
+            # User clicks "ok", but doesn't enter a project name.
+            user = QtWidgets.QMessageBox()
+            user.setWindowTitle(
+                'Electronics Inventory Program - Creating New Project'
+            )
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            text = 'You must enter a project name!'
+            user.setText(text)
+            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            user = user.exec_()
 
     def get_row(self, row):
         data = self.get_table_data()
