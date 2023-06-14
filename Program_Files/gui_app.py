@@ -327,7 +327,7 @@ class MainWindow(QMainWindow):
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
-            self.fill_table(dict_to_dataframe(Inventory))
+            self.fill_table(Inventory)
             self.show_sorting_btns()
         else:
             text = 'There is no inventory file!\n\n'
