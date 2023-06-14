@@ -340,7 +340,7 @@ def get_ordersheet(filepath):
         return order
 
 
-def add_order_to_Inventory(filename, get_user=False):
+def add_order_to_Inventory(filename):
     '''
     Function to add a new order to the inventory
     '''
