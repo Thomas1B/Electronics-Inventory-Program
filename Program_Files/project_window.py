@@ -40,6 +40,9 @@ class Project_Window(QMainWindow):
 
         self.is_sheet_open = False
 
+        self.btn_save_project = self.findChild(
+            QtWidgets.QPushButton, 'btn_save_project')
+
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
         self.btn_capacitors = self.findChild(
@@ -67,6 +70,9 @@ class Project_Window(QMainWindow):
 
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
+        
+
+        self.btn_save_project.clicked.connect(self.save_project)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -170,6 +176,21 @@ class Project_Window(QMainWindow):
             self.fill_table(sorted[section].reset_index(drop=True))
         self.sub_header.setText(section)
 
+    def save_project(self):
+        '''
+        Function to save the project.
+        '''
+        user = QtWidgets.QMessageBox()
+        user.setWindowTitle("Saving new Inventory")
+        user.setIcon(QtWidgets.QMessageBox.Question)
+        user.setText('\nWould you like to save the project?\n')
+        user.setStandardButtons(
+            QtWidgets.QMessageBox.Yes |
+            QtWidgets.QMessageBox.No
+        )
+        user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+        user = user.exec_()
+        print("Need to finish this......")
 
 if __name__ == "__main__":
     # runnning program
