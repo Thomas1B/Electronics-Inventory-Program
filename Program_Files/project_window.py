@@ -1,3 +1,9 @@
+'''
+Script to run the project_window.ui
+
+Creates a second window to allow the user to create/edit a project
+'''
+
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic

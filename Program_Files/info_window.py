@@ -1,3 +1,12 @@
+'''
+
+Script to run the info_window.ui
+
+Shows the user information about the program
+
+'''
+
+
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
