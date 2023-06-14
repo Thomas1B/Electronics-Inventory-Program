@@ -688,14 +688,16 @@ class MainWindow(QMainWindow):
                 user = user.exec_()
                 return
 
-        print("Meow", name, filetype)
-
         if ok and name and filetype:
             # user enters a project name and clicks the "ok" button.
             print(name, filetype)
-            if filetype.lower() in ['csv', 'xlsx', 'excel']:
-                if filetype.lower() == 'excel':  # if user enter "excel"
+            if filetype.lower() in ['csv', 'xlsx', 'excel', '.csv', '.xlsx']:
+                if filetype.lower() == 'excel':
+                    # if user enter "excel"
                     filetype = 'xlsx'
+                elif "." in filetype.lower():
+                    # if user enter "." in the filetype, remove it so program doesnt crash.
+                    filetype = filetype.strip('.')
                 filepath = f'Saved_Lists/Projects/{name}.{filetype}'
 
                 if not os.path.exists(filepath):
