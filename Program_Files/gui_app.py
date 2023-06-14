@@ -13,6 +13,7 @@ import shutil
 import re
 
 from .info_window import Info_Window
+from .project_window import Project_Window
 
 from .data_handling import (Inventory,
                             load_Inventory,
@@ -423,18 +424,29 @@ class MainWindow(QMainWindow):
             filetype = filename.split('.')[-1]
             if filename:
                 if filetype in ['csv', 'xlsx']:
-                    self.is_sheet_open = filename
-                    self.hide_btns([self.btn_add_to_inventory])
-                    project = get_ordersheet(filename)
-                    self.fill_table(project)
                     order_name = filename.split('/')[-1]
-                    self.header.setText(f'Project: {order_name}')
-                    self.show_sorting_btns()
-                    self.btn_save_list.setText('Save Project')
-                    self.btn_save_list.clicked.connect(
-                        lambda: self.save_list('save_project')
-                    )
-                    self.show_btns([self.btn_save_list])
+                    
+                    self.is_sheet_open = filename
+                    self.project_window = Project_Window()
+                    self.project_window.setWindowTitle(f'Electronic Inventory Program - Project')
+                    self.project_window.header.setText(f'Project: {order_name}')
+                    self.project_window.show()
+                    self.project_window.load_Project(filename)
+                    # project = get_ordersheet(filename)
+                    # self.project_window.fill_table(project)
+
+
+                    # self.is_sheet_open = filename
+                    # self.hide_btns([self.btn_add_to_inventory])
+                    # project = get_ordersheet(filename)
+                    # self.fill_table(project)
+                    # self.header.setText(f'Project: {order_name}')
+                    # self.show_sorting_btns()
+                    # self.btn_save_list.setText('Save Project')
+                    # self.btn_save_list.clicked.connect(
+                    #     lambda: self.save_list('save_project')
+                    # )
+                    # self.show_btns([self.btn_save_list])
                 else:
                     self.wrong_filetyle_msg()
             else:
@@ -663,18 +675,23 @@ class MainWindow(QMainWindow):
         NEED TO BUILD
         '''
         dialog = QtWidgets.QInputDialog()
-        text, _ = dialog.getText(
+        name, _ = dialog.getText(
             self,
             "Creating New Project",
             'Enter a project name:\n'
         )
-        if text:
-            filepath = f'Saved_Lists/Projects/{text}.csv'
+        if name:
+            filepath = f'Saved_Lists/Projects/{name}.csv'
+            self.project_window = Project_Window()
+            self.project_window.setWindowTitle('Electronics Inventory Program - New Project')
+            self.project_window.header.setText(f'New Project: {name}')
+            self.project_window.load_Project(filepath)
+            self.project_window.show()
             # pd.DataFrame().to_csv(filename)
-            self.is_sheet_open = filepath
-            self.header.setText(f'New Project: {text}')
-            self.table.setRowCount(0)
-            print(self.is_sheet_open)
+            # self.is_sheet_open = filepath
+            # self.header.setText(f'New Project: {text}')
+            # self.table.setRowCount(0)
+            # print(self.is_sheet_open)
 
     def get_row(self, row):
         data = self.get_table_data()
