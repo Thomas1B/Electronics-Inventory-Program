@@ -568,12 +568,13 @@ class MainWindow(QMainWindow):
         add_order_to_Inventory(self.is_sheet_open)
 
         # popup to ask user if wants to save the "new" inventory.
-        user = QtWidgets.QMessageBox.question(
-            self,
-            'Saving New Inventory',
-            'Would you like to save the new inventory?',
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-            QtWidgets.QMessageBox.Yes)
+        user = QtWidgets.QMessageBox()
+        user.setWindowTitle("Saving new Inventory")
+        user.setText('\nWould you like to save the new inventory?\n')
+        user.setStandardButtons(
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+        user = user.exec_()
         if user == QtWidgets.QMessageBox.Yes:
             self.save_list(called_from='add_to_inventory')
             line_count = 0
