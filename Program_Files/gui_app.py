@@ -628,9 +628,9 @@ class MainWindow(QMainWindow):
 
     def get_table_data(self):
         '''
-        returns current table data into a dataframe.
+        Function to get the displayed table data into a dataframe.
 
-        
+        Returns a pandas dataframe.
         '''
         rows = self.table.rowCount()
         cols = self.table.columnCount()
