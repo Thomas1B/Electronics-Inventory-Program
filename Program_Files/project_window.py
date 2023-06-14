@@ -46,6 +46,12 @@ class Project_Window(QMainWindow):
 
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
+        
+        self.btn_open_project = self.findChild(
+            QtWidgets.QPushButton, 'btn_open_project')
+        
+        self.btn_open_project.hide()
+
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')

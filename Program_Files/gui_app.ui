@@ -83,7 +83,7 @@
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Open Project Lists</string>
+          <string>Open Project</string>
          </property>
         </widget>
        </item>
@@ -182,7 +182,7 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Open Past Order</string>
+          <string>Open Past Orders</string>
          </property>
          <property name="default">
           <bool>false</bool>
