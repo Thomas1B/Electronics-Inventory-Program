@@ -659,14 +659,16 @@ class MainWindow(QMainWindow):
         If the project name exists popup appears to tell the user, otherwise
         it asks the user what filetype they want and creates the project file.
         '''
-        self.pick_filetype = Pick_FileType()
-        self.pick_filetype.show()
-        dialog = QtWidgets.QInputDialog()
-        # name, ok = dialog.getText(
-        #     self,
-        #     "Creating New Project",
-        #     'Enter a project name:\n'
-        # )
+        dialog = QtWidgets.QInputDialog(self)
+        text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
+        text += 'Example: Temperature Gauge, CSV\n'
+        name, ok = dialog.getText(
+            self,
+            "Creating New Project",
+            text
+        )
+
+
         ok = False
         name = False
         if ok and name:

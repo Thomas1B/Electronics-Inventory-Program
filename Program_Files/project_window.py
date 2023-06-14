@@ -8,7 +8,10 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 import sys
+import os
 import pandas as pd
+
+
 from .data_handling import (
     Category,
     sort_order,
@@ -192,93 +195,7 @@ class Project_Window(QMainWindow):
         user = user.exec_()
         if user == QtWidgets.QMessageBox.Yes:
             print('dog')
-            # self.pick_filetyle = Pick_FileType()
-            # self.pick_filetyle.show()
 
-
-class Pick_FileType(QMainWindow):
-    '''
-    Class to handle picking a project filetype when saving.
-    '''
-
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("Choosing Project Name and Filetype")
-        self.setMinimumWidth(400)
-
-        # Create a label to display the selected option
-        self.label = QtWidgets.QLabel(self)
-        text = '\nEnter your project name and pick the filetype you want:\n'
-        self.label.setText(text)
-
-        # buttons
-        self.button_box = QtWidgets.QDialogButtonBox(
-            QtWidgets.QDialogButtonBox.Ok |
-            QtWidgets.QDialogButtonBox.Cancel
-        )
-        # Attaching functions.
-        self.button_box.accepted.connect(self.ok_handler)
-        self.button_box.rejected.connect(self.cancel_hander)
-
-        # Create a line edit
-        self.line_edit = QtWidgets.QLineEdit(self)
-        self.line_edit.setPlaceholderText("Enter your program name...")
-
-        # Create a combobox
-        self.combobox = QtWidgets.QComboBox(self)
-        self.combobox.addItem("CSV (Comma-Sperated Values)")
-        self.combobox.addItem("XLSX (Excel File)")
-
-        # Form layout for line edit and combo box.
-        form_layout = QtWidgets.QFormLayout()
-        form_layout.setVerticalSpacing(15)
-        form_layout.addRow("Project Name", self.line_edit)
-        form_layout.addRow("Filetype", self.combobox)
-
-        form_container_layout = QtWidgets.QVBoxLayout()
-        form_container_layout.addLayout(form_layout)
-        spacer = QtWidgets.QSpacerItem(0,
-                                       20,
-                                       QtWidgets.QSizePolicy.Minimum,
-                                       QtWidgets.QSizePolicy.Expanding
-                                       )
-        form_container_layout.addItem(spacer)
-
-        # Creating main layout.
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(self.label)
-        layout.addLayout(form_container_layout)
-        layout.addWidget(self.button_box)
-
-        # Create a central widget and set the layout on it
-        central_widget = QtWidgets.QWidget()
-        central_widget.setLayout(layout)
-
-        # Set the central widget of the main window
-        self.setCentralWidget(central_widget)
-
-    def cancel_hander(self):
-        '''
-        Function to handle the cancel button.
-
-        Triggered when user cancel's when picking a filetype.
-        '''
-        self.close()  # close Pick_Filetype Window.
-
-    def ok_handler(self):
-        '''
-        Function to handle the ok button.
-
-        Triggered when the user picks a filetype.
-        '''
-
-        # Get the selected option from the combobox
-        project_name = self.line_edit.text()
-        selected_option = self.combobox.currentText()
-        print(project_name, selected_option)
-
-        return selected_option
 
 
 if __name__ == "__main__":
