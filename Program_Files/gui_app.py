@@ -74,6 +74,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_open_past_order')
         self.btn_export = self.findChild(
             QtWidgets.QPushButton, 'btn_export')
+        self.btn_create_project = self.findChild(
+            QtWidgets.QPushButton, 'btn_create_project')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -128,6 +130,7 @@ class MainWindow(QMainWindow):
         self.btn_open_past_order.clicked.connect(self.open_past_order)
         self.btn_export.clicked.connect(
             lambda: self.export_file(autoname=True))
+        self.btn_create_project.clicked.connect(self.create_project)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -650,6 +653,15 @@ class MainWindow(QMainWindow):
             return data
         else:
             print("NO ROWS IN TABLE")
+
+    def create_project(self):
+        '''
+        Function to create a project
+        '''
+        dialog = QtWidgets.QInputDialog()
+        text, user = dialog.getText(
+            self, "Creating New Project", 'Enter a project name:\n')
+        print(user, text)
 
 
 if __name__ == "__main__":
