@@ -434,20 +434,6 @@ class MainWindow(QMainWindow):
                         f'Project: {order_name}')
                     self.project_window.show()
                     self.project_window.load_Project(filename)
-                    # project = get_ordersheet(filename)
-                    # self.project_window.fill_table(project)
-
-                    # self.is_sheet_open = filename
-                    # self.hide_btns([self.btn_add_to_inventory])
-                    # project = get_ordersheet(filename)
-                    # self.fill_table(project)
-                    # self.header.setText(f'Project: {order_name}')
-                    # self.show_sorting_btns()
-                    # self.btn_save_list.setText('Save Project')
-                    # self.btn_save_list.clicked.connect(
-                    #     lambda: self.save_list('save_project')
-                    # )
-                    # self.show_btns([self.btn_save_list])
                 else:
                     self.wrong_filetyle_msg()
             else:
