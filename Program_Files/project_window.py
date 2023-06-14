@@ -191,47 +191,65 @@ class Project_Window(QMainWindow):
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
         if user == QtWidgets.QMessageBox.Yes:
-            self.pick_filetyle = Pick_FileType()
-            self.pick_filetyle.show()
+            print('dog')
+            # self.pick_filetyle = Pick_FileType()
+            # self.pick_filetyle.show()
 
 
 class Pick_FileType(QMainWindow):
     '''
     Class to handle picking a project filetype when saving.
     '''
+
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Choosing FileType")
+        self.setWindowTitle("Choosing Project Name and Filetype")
         self.setMinimumWidth(400)
 
         # Create a label to display the selected option
         self.label = QtWidgets.QLabel(self)
-        text = 'Pick the filetype you would like to save your project as:'
+        text = '\nEnter your project name and pick the filetype you want:\n'
         self.label.setText(text)
 
         # buttons
-        self.btn_ok = QtWidgets.QPushButton("OK", self)
-        self.btn_cancel = QtWidgets.QPushButton("Cancel", self)
-        btn_layout = QtWidgets.QHBoxLayout()
-        btn_layout.addWidget(self.btn_ok)
-        btn_layout.addWidget(self.btn_cancel)
-
+        self.button_box = QtWidgets.QDialogButtonBox(
+            QtWidgets.QDialogButtonBox.Ok |
+            QtWidgets.QDialogButtonBox.Cancel
+        )
         # Attaching functions.
-        self.btn_ok.clicked.connect(self.ok_handler)
-        self.btn_cancel.clicked.connect(self.cancel_hander)
+        self.button_box.accepted.connect(self.ok_handler)
+        self.button_box.rejected.connect(self.cancel_hander)
 
+        # Create a line edit
+        self.line_edit = QtWidgets.QLineEdit(self)
+        self.line_edit.setPlaceholderText("Enter your program name...")
 
         # Create a combobox
         self.combobox = QtWidgets.QComboBox(self)
         self.combobox.addItem("CSV (Comma-Sperated Values)")
-        self.combobox.addItem("XLSX (Excel)")
+        self.combobox.addItem("XLSX (Excel File)")
 
-        # Create a layout and add the combobox and label to it
+        # Form layout for line edit and combo box.
+        form_layout = QtWidgets.QFormLayout()
+        form_layout.setVerticalSpacing(15)
+        form_layout.addRow("Project Name", self.line_edit)
+        form_layout.addRow("Filetype", self.combobox)
+
+        form_container_layout = QtWidgets.QVBoxLayout()
+        form_container_layout.addLayout(form_layout)
+        spacer = QtWidgets.QSpacerItem(0,
+                                       20,
+                                       QtWidgets.QSizePolicy.Minimum,
+                                       QtWidgets.QSizePolicy.Expanding
+                                       )
+        form_container_layout.addItem(spacer)
+
+        # Creating main layout.
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
-        layout.addWidget(self.combobox)
-        layout.addLayout(btn_layout)
+        layout.addLayout(form_container_layout)
+        layout.addWidget(self.button_box)
 
         # Create a central widget and set the layout on it
         central_widget = QtWidgets.QWidget()
@@ -246,9 +264,9 @@ class Pick_FileType(QMainWindow):
 
         Triggered when user cancel's when picking a filetype.
         '''
-        self.close() # close Pick_Filetype Window.
+        self.close()  # close Pick_Filetype Window.
 
-    def ok_handler(self, index):
+    def ok_handler(self):
         '''
         Function to handle the ok button.
 
@@ -256,13 +274,16 @@ class Pick_FileType(QMainWindow):
         '''
 
         # Get the selected option from the combobox
+        project_name = self.line_edit.text()
         selected_option = self.combobox.currentText()
-        print(selected_option)
+        print(project_name, selected_option)
+
+        return selected_option
 
 
 if __name__ == "__main__":
     # runnning program
     app = QApplication(sys.argv)
-    project_window = Pick_FileType()
+    project_window = Project_Window()
     project_window.show()
     app.exec_()
