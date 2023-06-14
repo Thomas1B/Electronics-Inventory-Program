@@ -561,14 +561,6 @@ class MainWindow(QMainWindow):
                 for cat in new_inventory.keys():
                     new_inventory[cat].save_toexcel(writer=writer)
 
-        # new project is being saved.
-        elif called_from.lower() == 'save_project':
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('Saving Project')
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText("Saving projects feature is not working yet")
-            _ = msg.exec()
-
     def add_to_inventory(self):
         # using function from data_handling.py
         add_order_to_Inventory(self.is_sheet_open)
