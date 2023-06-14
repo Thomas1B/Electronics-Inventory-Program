@@ -214,19 +214,20 @@ class Pick_FileType(QMainWindow):
         btn_layout.addWidget(self.btn_ok)
         btn_layout.addWidget(self.btn_cancel)
 
+        self.btn_ok.clicked.connect(self.ok_handler)
+        self.btn_cancel.clicked.connect(self.cancel_hander)
+
+
         # Create a combobox
         self.combobox = QtWidgets.QComboBox(self)
         self.combobox.addItem("CSV (Comma-Sperated Values)")
         self.combobox.addItem("XLSX (Excel)")
-        # self.combobox.currentIndexChanged.connect(self.get_)
 
         # Create a layout and add the combobox and label to it
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.combobox)
         layout.addLayout(btn_layout)
-
-
 
         # Create a central widget and set the layout on it
         central_widget = QtWidgets.QWidget()
@@ -235,12 +236,24 @@ class Pick_FileType(QMainWindow):
         # Set the central widget of the main window
         self.setCentralWidget(central_widget)
 
-    # def handle_combobox_changed(self, index):
-        # Get the selected option from the combobox
-        # selected_option = self.combobox.currentText()
+    def cancel_hander(self):
+        '''
+        Function to handle the cancel button.
 
-        # Update the label with the selected option
-        # self.label.setText("Selected option: " + selected_option)
+        Triggered when user cancel's when picking a filetype.
+        '''
+        self.close() # close Pick_Filetype Window.
+
+    def ok_handler(self, index):
+        '''
+        Function to handle the ok button.
+
+        Triggered when the user picks a filetype.
+        '''
+
+        # Get the selected option from the combobox
+        selected_option = self.combobox.currentText()
+        print(selected_option)
 
 
 if __name__ == "__main__":
