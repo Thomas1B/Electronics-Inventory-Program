@@ -248,13 +248,14 @@ class Project_Window(QMainWindow):
             match user:  # checking user's response:
                 case QtWidgets.QMessageBox.Yes:
                     # user accepts to save.
-                    print('Saving not working yet')
+                    self.save_project()
                     event.accept()
-                case QtWidgets.QMessageBox.Cancel:
-                    event.ignore()
-                case _:
+                case QtWidgets.QMessageBox.No:
                     # user declines to save.
                     event.accept()
+                case _:
+                    # user cancels selection.
+                    event.ignore()
 
 
 if __name__ == "__main__":
