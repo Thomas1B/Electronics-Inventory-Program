@@ -61,8 +61,6 @@ class MainWindow(QMainWindow):
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
 
         self.table.cellClicked.connect(self.get_clicked_row)
-        
-
 
         # Buttons
         self.btn_open_inventory = self.findChild(
@@ -431,7 +429,7 @@ class MainWindow(QMainWindow):
                     order_name = filename.split('/')[-1]
 
                     self.is_sheet_open = filename
-                    
+
                     self.project_window.setWindowTitle(
                         f'Electronic Inventory Program - Project'
                     )
@@ -752,16 +750,17 @@ class MainWindow(QMainWindow):
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
 
-    def get_clicked_row(self, row):
+    def get_clicked_row(self, index, labels):
         '''
         Function to get the item row when user clicks a cell
         '''
 
-        data = self.get_table_data()
-
         if self.project_window.isVisible():
-            self.project_window.get_item(data.iloc[row])
-            print(row, data.iloc[row])
+            data = self.get_table_data()
+            item = pd.Series([cell for cell in data.iloc[index]])
+            item = pd.DataFrame(item).T
+            item.columns = data.keys()
+            self.project_window.item_from_main_window(item)
 
 
 if __name__ == "__main__":

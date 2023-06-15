@@ -16,7 +16,8 @@ from .data_handling import (
     Category,
     sort_order,
     get_ordersheet,
-    dict_to_dataframe
+    dict_to_dataframe,
+    sort_order
 )
 
 Project = {
@@ -194,7 +195,10 @@ class Project_Window(QMainWindow):
         if user == QtWidgets.QMessageBox.Yes:
             print('dog')
 
-    def get_item(self, item):
+    def item_from_main_window(self, item):
+        '''
+        Function to get items from the Main UI Window.
+        '''
         print('Print From second window')
         print(item)
 
