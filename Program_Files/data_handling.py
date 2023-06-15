@@ -105,7 +105,10 @@ class Category:
         else:
             with pd.ExcelWriter(f'Saved_Files/{self.category}.xlsx') as writer:
                 self.items.to_excel(
-                    writer, sheet_name=self.category, index=False)
+                    writer,
+                    sheet_name=self.category,
+                    index=False
+                )
 
     def save_tocsv(self, group=False):
         '''
@@ -241,7 +244,7 @@ def sort_order(order):
 
     Return list of dataframe for each category.
     '''
-    
+
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
