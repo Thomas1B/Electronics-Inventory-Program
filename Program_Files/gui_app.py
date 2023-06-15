@@ -272,7 +272,7 @@ class MainWindow(QMainWindow):
         msg.setWindowTitle('Wrong File Type')
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setText('Cannot user that file type!')
-        text = "You can only use '.csv' (Comma-Seperated-Values) and '.xlsx' (Excel) files."
+        text = "You can only use 'CSV' (Comma-Seperated-Values) and 'XLSX' (Excel) files."
         msg.setInformativeText(f'{text}')
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
