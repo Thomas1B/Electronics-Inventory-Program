@@ -351,7 +351,7 @@ class MainWindow(QMainWindow):
         # if len(os.listdir("Saved_Lists/New Orders")) > 0:
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-            self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx);; All Files(*)')
+            self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
         filetype = filename.split('.')[-1]
         if filetype:
             if filetype in ['csv', 'xlsx']:
@@ -388,10 +388,6 @@ class MainWindow(QMainWindow):
                         [section for section in new_order if not section.empty][0])
             else:
                 self.wrong_filetyle_msg()
-        # else:
-        #     header = 'No order files to open!'
-        #     text = 'Make sure that new orders are in the "New Orders" folder.'
-        #     self.popup_nofiles(header=header, text=text)
 
     def open_past_order(self):
         '''
