@@ -760,11 +760,16 @@ class MainWindow(QMainWindow):
             if project window is open, then send the clicked row to
             the project window.
             '''
+
             data = self.get_table_data()
+
+            # getting the individual item and putting into a dataframe.
             item = pd.Series([cell for cell in data.iloc[index]])
             item = pd.DataFrame(item).T
             item.columns = data.keys()
-            item['Quantity'] = 1
+            item['Quantity'] = 1  # need this for incrementing quantities.
+
+            # passing item to project window.
             self.project_window.item_from_main_window(item)
 
 
