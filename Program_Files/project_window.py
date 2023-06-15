@@ -115,13 +115,8 @@ class Project_Window(QMainWindow):
             used for when a user is looking a specific category.
 
         '''
-        filename = self.is_sheet_open
-        if 'looking at inventory' in self.header.text().lower():
-            self.open_inventory()
-        else:
-            data = get_ordersheet(filename)
-            self.fill_table(data)
-            self.sub_header.setText('')
+        self.fill_table(Project)
+        self.sub_header.setText('')
 
     def load_Project(self, filename=None):
         '''
@@ -175,16 +170,7 @@ class Project_Window(QMainWindow):
         Parameter:
             section - str: name of category to display.
         '''
-
-        if 'looking at inventory' in self.header.text().lower():
-            self.fill_table(Project[section].get_items())
-        else:
-            data = get_ordersheet(self.is_sheet_open)
-            sorted = {}
-            keys = Project.keys()
-            for i, key in enumerate(keys):
-                sorted[key] = data[i]
-            self.fill_table(sorted[section].reset_index(drop=True))
+        self.fill_table(Project[section].get_items())
         self.sub_header.setText(section)
 
     def save_project(self):
