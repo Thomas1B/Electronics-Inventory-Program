@@ -47,16 +47,19 @@ class Project_Window(QMainWindow):
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
 
+        # variable to keep track of what sheet is opened.
         self.is_sheet_open = False
+
+        # variable to keep track if the sheet was been editted.
+        self.editted_saved = True  # used for saving
 
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
-        
+
         self.btn_open_project = self.findChild(
             QtWidgets.QPushButton, 'btn_open_project')
-        
-        self.btn_open_project.hide()
 
+        self.btn_open_project.hide()
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -193,14 +196,53 @@ class Project_Window(QMainWindow):
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
         if user == QtWidgets.QMessageBox.Yes:
-            print('dog')
+            print('Saving not working yet')
 
-    def item_from_main_window(self, item):
+    def item_from_main_window(self, items):
         '''
         Function to get items from the Main UI Window.
         '''
-        print('Print From second window')
-        print(item)
+        items = sort_order(items)
+        for item, section in zip(items, Project.keys()):
+            if len(item) > 0:
+                Project[section].add_item(item)
+                Project[section].remove_duplicates()
+        self.editted_saved = False
+        self.fill_table(Project)
+
+    def closeEvent(self, event):
+        '''
+        Function to detect when user closes the window.
+        '''
+        if self.editted_saved:
+            # if editted project has been saved already.
+            event.accept()  # let the window close
+            print("Closed")
+        else:
+            # popup to warning user editted project has not been saved.
+            event.ignore()
+            user = QtWidgets.QMessageBox()
+            user.setWindowTitle(
+                "Electronics Inventory Program - Saving Project")
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            user.setText(
+                'Project has been editted!\n\nWould you like to save?')
+            user.setStandardButtons(
+                QtWidgets.QMessageBox.Yes |
+                QtWidgets.QMessageBox.No
+            )
+            user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            user = user.exec_()
+
+            match user: # checking user's response:
+                case QtWidgets.QMessageBox.Yes:
+                    # user accepts to save.
+                    print('Saving not working yet')
+                    event.accept()
+                case _:
+                    # user declines to save.
+                    event.accept()
+
 
 if __name__ == "__main__":
     # runnning program
