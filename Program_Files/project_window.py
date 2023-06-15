@@ -185,18 +185,22 @@ class Project_Window(QMainWindow):
         '''
         Function to save the project.
         '''
-        user = QtWidgets.QMessageBox()
-        user.setWindowTitle("Electronics Inventory Program - Saving Project")
-        user.setIcon(QtWidgets.QMessageBox.Question)
-        user.setText('\nWould you like to save the project?\n')
-        user.setStandardButtons(
-            QtWidgets.QMessageBox.Yes |
-            QtWidgets.QMessageBox.No
-        )
-        user.setDefaultButton(QtWidgets.QMessageBox.Yes)
-        user = user.exec_()
-        if user == QtWidgets.QMessageBox.Yes:
-            print('Saving not working yet')
+        filetype = self.is_sheet_open.split('.')[-1]
+        if filetype == 'csv':
+            data = dict_to_dataframe(Project)
+            data.to_csv(self.is_sheet_open)
+        elif filetype == 'xlsx':
+            with pd.ExcelWriter(self.is_sheet_open) as writer:
+                # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
+                for cat in Project.keys():
+                    Project[cat].save_toexcel(writer=writer)
+        self.editted_saved = True
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle('File Save Successful')
+        msg.setIcon(QtWidgets.QMessageBox.Information)
+        msg.setText('Saving Project was successful!')
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
 
     def item_from_main_window(self, items):
         '''
@@ -229,16 +233,19 @@ class Project_Window(QMainWindow):
                 'Project has been editted!\n\nWould you like to save?')
             user.setStandardButtons(
                 QtWidgets.QMessageBox.Yes |
-                QtWidgets.QMessageBox.No
+                QtWidgets.QMessageBox.No | 
+                QtWidgets.QMessageBox.Cancel
             )
             user.setDefaultButton(QtWidgets.QMessageBox.Yes)
             user = user.exec_()
 
-            match user: # checking user's response:
+            match user:  # checking user's response:
                 case QtWidgets.QMessageBox.Yes:
                     # user accepts to save.
                     print('Saving not working yet')
                     event.accept()
+                case QtWidgets.QMessageBox.Cancel:
+                    event.ignore()
                 case _:
                     # user declines to save.
                     event.accept()
