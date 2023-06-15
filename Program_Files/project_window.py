@@ -51,6 +51,8 @@ class Project_Window(QMainWindow):
 
         # loading ui file
         uic.loadUi('Program_Files/project_window.ui', self)
+        self.resize(1000, 800)
+        self.move(1200, 300)
 
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
