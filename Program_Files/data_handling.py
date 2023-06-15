@@ -241,6 +241,7 @@ def sort_order(order):
 
     Return list of dataframe for each category.
     '''
+    
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
