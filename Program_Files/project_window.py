@@ -62,7 +62,7 @@ class Project_Window(QMainWindow):
         self.btn_open_project = self.findChild(
             QtWidgets.QPushButton, 'btn_open_project')
 
-        self.btn_open_project.hide()
+        # self.btn_open_project.hide()
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -93,6 +93,7 @@ class Project_Window(QMainWindow):
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
         self.btn_save_project.clicked.connect(self.save_project)
+        self.btn_open_project.clicked.connect(self.open_project)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -120,6 +121,28 @@ class Project_Window(QMainWindow):
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
 
+    def open_project(self):
+        '''
+        Function to open a project
+        '''
+        if len(os.listdir("Saved_Lists/Projects")) > 0:
+            filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
+            filetype = filename.split('.')[-1]
+            if filename:
+                order_name = filename.split('/')[-1]
+                self.header.setText(
+                    f'Project: {order_name}'
+                )
+
+                self.load_Project(filename)
+                self.editted_saved = True
+                self.show()
+            else:
+                pass
+        else:
+            self.popup_nofiles(header='There are no projects to open!')
+
     def refresh_opensheet(self, filename=None):
         '''
         Function to refresh the last sheet that was opened.
@@ -135,17 +158,21 @@ class Project_Window(QMainWindow):
 
         Skips empty classes.
         '''
+
+        # deleting items from the Project dictionary so items don't append.
+        self.delete_all_items()
+
+        if not os.path.exists(filename):
+            self.editted_saved = False
+
         project = get_ordersheet(filename)
         self.is_sheet_open = filename
-        if self.project_loaded == False:
-            if project:
-                for section, cat in zip(project, Project.keys()):
-                    if not section.empty:
-                        Project[cat].add_item(section)
-                self.fill_table(Project)
-                self.project_loaded = True
-        else:
-            self.fill_table(Project)
+        if project:
+            for section, cat in zip(project, Project.keys()):
+                if not section.empty:
+                    Project[cat].add_item(section)
+            self.project_loaded = True
+        self.fill_table(Project)
 
     def fill_table(self, dataframe):
         '''
@@ -256,6 +283,13 @@ class Project_Window(QMainWindow):
                 case _:
                     # user cancels selection.
                     event.ignore()
+
+    def delete_all_items(self):
+        '''
+        Function to delete all items in the project
+        '''
+        for section in Project.keys():
+            Project[section].drop_all_items()
 
 
 if __name__ == "__main__":

@@ -151,6 +151,11 @@ class Category:
         '''
         return self.items.sort_values('Manufacturer Part Number').reset_index(drop=True)
 
+    def drop_all_items(self):
+        '''
+        Function to drop all items in the dataframe.
+        '''
+        self.items.drop(self.items.index, inplace=True)
 
 # Dictionary of categories for the inventory.
 Inventory = {

@@ -705,11 +705,9 @@ class MainWindow(QMainWindow):
                     # to allow the user to create a new project.
                     title = 'Electronics Inventory Program - Creating New Project'
                     self.project_window.setWindowTitle(title)
-                    self.project_window.header.setText(
-                        f'New Project: {name}.{filetype}'
-                    )
+                    text = f'New Project: {name}.{filetype}'
+                    self.project_window.header.setText(text)
                     self.project_window.load_Project(filepath)
-                    self.project_window.editted_saved = False
                     self.project_window.show()
                 else:
                     # popup telling user project name already exists.
