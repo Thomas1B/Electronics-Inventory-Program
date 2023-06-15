@@ -60,7 +60,9 @@ class MainWindow(QMainWindow):
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
 
-        self.table.cellClicked.connect(self.get_row)
+        self.table.cellClicked.connect(self.get_clicked_row)
+        
+
 
         # Buttons
         self.btn_open_inventory = self.findChild(
@@ -166,6 +168,8 @@ class MainWindow(QMainWindow):
             self.btn_add_to_inventory
         ])
         self.hide_sorting_btns()
+
+        self.project_window = Project_Window(self)
 
         self.show()  # needs to here in order to work
 
@@ -427,7 +431,7 @@ class MainWindow(QMainWindow):
                     order_name = filename.split('/')[-1]
 
                     self.is_sheet_open = filename
-                    self.project_window = Project_Window()
+                    
                     self.project_window.setWindowTitle(
                         f'Electronic Inventory Program - Project'
                     )
@@ -705,7 +709,6 @@ class MainWindow(QMainWindow):
                 if not os.path.exists(filepath):
                     # if project doesn't exist, open the project window
                     # to allow the user to create a new project.
-                    self.project_window = Project_Window()
                     title = 'Electronics Inventory Program - Creating New Project'
                     self.project_window.setWindowTitle(title)
                     self.project_window.header.setText(
@@ -749,9 +752,16 @@ class MainWindow(QMainWindow):
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
 
-    def get_row(self, row):
+    def get_clicked_row(self, row):
+        '''
+        Function to get the item row when user clicks a cell
+        '''
+
         data = self.get_table_data()
-        print(row, data.iloc[row])
+
+        if self.project_window.isVisible():
+            self.project_window.get_item(data.iloc[row])
+            print(row, data.iloc[row])
 
 
 if __name__ == "__main__":

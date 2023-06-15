@@ -42,6 +42,10 @@ class Project_Window(QMainWindow):
         # loading ui file
         uic.loadUi('Program_Files/project_window.ui', self)
 
+        self.header = self.findChild(QtWidgets.QLabel, 'header')
+        self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
+        self.table = self.findChild(QtWidgets.QTableWidget, 'table')
+
         self.is_sheet_open = False
 
         self.btn_save_project = self.findChild(
@@ -190,7 +194,9 @@ class Project_Window(QMainWindow):
         if user == QtWidgets.QMessageBox.Yes:
             print('dog')
 
-
+    def get_item(self, item):
+        print('Print From second window')
+        print(item)
 
 if __name__ == "__main__":
     # runnning program
