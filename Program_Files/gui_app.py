@@ -764,6 +764,7 @@ class MainWindow(QMainWindow):
             item = pd.Series([cell for cell in data.iloc[index]])
             item = pd.DataFrame(item).T
             item.columns = data.keys()
+            item['Quantity'] = 1
             self.project_window.item_from_main_window(item)
 
 
