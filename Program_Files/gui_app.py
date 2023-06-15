@@ -436,6 +436,7 @@ class MainWindow(QMainWindow):
                         f'Project: {order_name}'
                     )
                     self.project_window.load_Project(filename)
+                    self.project_window.editted_saved = True
                     self.project_window.show()
                 else:
                     self.wrong_filetyle_msg()
@@ -712,6 +713,7 @@ class MainWindow(QMainWindow):
                         f'New Project: {name}.{filetype}'
                     )
                     self.project_window.load_Project(filepath)
+                    self.project_window.editted_saved = False
                     self.project_window.show()
                 else:
                     # popup telling user project name already exists.
