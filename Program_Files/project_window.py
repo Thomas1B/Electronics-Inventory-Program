@@ -40,18 +40,21 @@ class Project_Window(QMainWindow):
     def __init__(self, parent=None):
         super(Project_Window, self).__init__(parent)
 
-        # loading ui file
-        uic.loadUi('Program_Files/project_window.ui', self)
-
-        self.header = self.findChild(QtWidgets.QLabel, 'header')
-        self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
-        self.table = self.findChild(QtWidgets.QTableWidget, 'table')
+        # variable to see if project has been loaded.
+        self.project_loaded = False
 
         # variable to keep track of what sheet is opened.
         self.is_sheet_open = False
 
         # variable to keep track if the sheet was been editted.
         self.editted_saved = True  # used for saving
+
+        # loading ui file
+        uic.loadUi('Program_Files/project_window.ui', self)
+
+        self.header = self.findChild(QtWidgets.QLabel, 'header')
+        self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
+        self.table = self.findChild(QtWidgets.QTableWidget, 'table')
 
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
@@ -134,10 +137,14 @@ class Project_Window(QMainWindow):
         '''
         project = get_ordersheet(filename)
         self.is_sheet_open = filename
-        if project:
-            for section, cat in zip(project, Project.keys()):
-                if not section.empty:
-                    Project[cat].add_item(section)
+        if self.project_loaded == False:
+            if project:
+                for section, cat in zip(project, Project.keys()):
+                    if not section.empty:
+                        Project[cat].add_item(section)
+                self.fill_table(Project)
+                self.project_loaded = True
+        else:
             self.fill_table(Project)
 
     def fill_table(self, dataframe):
@@ -221,7 +228,6 @@ class Project_Window(QMainWindow):
         if self.editted_saved:
             # if editted project has been saved already.
             event.accept()  # let the window close
-            print("Closed")
         else:
             # popup to warning user editted project has not been saved.
             event.ignore()
@@ -233,7 +239,7 @@ class Project_Window(QMainWindow):
                 'Project has been editted!\n\nWould you like to save?')
             user.setStandardButtons(
                 QtWidgets.QMessageBox.Yes |
-                QtWidgets.QMessageBox.No | 
+                QtWidgets.QMessageBox.No |
                 QtWidgets.QMessageBox.Cancel
             )
             user.setDefaultButton(QtWidgets.QMessageBox.Yes)
