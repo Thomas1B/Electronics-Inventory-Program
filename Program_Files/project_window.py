@@ -126,6 +126,8 @@ class Project_Window(QMainWindow):
     def load_Project(self, filename=None):
         '''
         Function to load the project into the Project dictionary of classes.
+
+        Skips empty classes.
         '''
         project = get_ordersheet(filename)
         self.is_sheet_open = filename
