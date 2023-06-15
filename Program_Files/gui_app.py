@@ -756,6 +756,10 @@ class MainWindow(QMainWindow):
         '''
 
         if self.project_window.isVisible():
+            '''
+            if project window is open, then send the clicked row to
+            the project window.
+            '''
             data = self.get_table_data()
             item = pd.Series([cell for cell in data.iloc[index]])
             item = pd.DataFrame(item).T
