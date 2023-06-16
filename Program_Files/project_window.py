@@ -133,10 +133,34 @@ class Project_Window(QMainWindow):
         '''
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Wrong File Type')
+        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+        icon = self.style().standardIcon(pixmapi)
+        msg.setWindowIcon(icon)
         msg.setIcon(QtWidgets.QMessageBox.Critical)
+
         msg.setText('Cannot user that file type!')
         text = "You can only use 'CSV' (Comma-Seperated-Values) and 'XLSX' (Excel) files."
-        msg.setInformativeText(f'{text}')
+        msg.setInformativeText(text)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
+
+    def no_files_msg(self, title='No Files', header="", text=""):
+        '''
+        Function to display a pop up warning user there are no files to open
+
+        Parameters:
+            header - str: "header" text to pop up.
+            text - str: informative text for pop up.
+        '''
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle(title)
+        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+        icon = self.style().standardIcon(pixmapi)
+        msg.setWindowIcon(icon)
+
+        msg.setIcon(QtWidgets.QMessageBox.Warning)
+        msg.setText(header)
+        msg.setInformativeText(text)
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
@@ -258,13 +282,9 @@ class Project_Window(QMainWindow):
             else:
                 pass
         else:
+            title = 'No Projects'
             header = 'There are no projects to open!'
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('Missing Files')
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-            msg.setText(header)
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            _ = msg.exec_()
+            self.no_files_msg(title=title, header=header)
 
     def refresh_opensheet(self, filename=None):
         '''
