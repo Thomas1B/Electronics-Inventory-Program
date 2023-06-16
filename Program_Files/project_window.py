@@ -389,7 +389,7 @@ class Project_Window(QMainWindow):
                 for cat in Project.keys():
                     Project[cat].save_toexcel(writer=writer)
         self.editted_saved = True
-        
+
         # showing pop up msg
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('File Save Successful')
@@ -417,18 +417,20 @@ class Project_Window(QMainWindow):
         '''
         Function to detect when user closes the window.
         '''
-        if self.editted_saved:
-            # if editted project has been saved already.
-            event.accept()  # let the window close
-        else:
-            # popup to warning user editted project has not been saved.
-            event.ignore()
+        if self.editted_saved:  # if editted project has been saved already.
+            event.accept()  # let the window close.
+        else:  # popup to warning user editted project has not been saved.
+            title = "Electronics Inventory Program - Saving Project"
+            text = 'Project has been editted!\n\nWould you like to save?'
+            event.ignore()  # dont let window close.
+
             user = QtWidgets.QMessageBox()
-            user.setWindowTitle(
-                "Electronics Inventory Program - Saving Project")
+            user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
-            user.setText(
-                'Project has been editted!\n\nWould you like to save?')
+            user.setText(text)
             user.setStandardButtons(
                 QtWidgets.QMessageBox.Yes |
                 QtWidgets.QMessageBox.No |

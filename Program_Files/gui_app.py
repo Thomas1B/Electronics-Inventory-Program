@@ -546,7 +546,7 @@ class MainWindow(QMainWindow):
                         msg.setWindowTitle('Unsuccessfully saved!')
                         pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
                         icon = self.style().standardIcon(pixmapi)
-                        user.setWindowIcon(icon)
+                        msg.setWindowIcon(icon)
                         msg.setIcon(QtWidgets.QMessageBox.Critical)
                         msg.setText(
                             'The new order was unsuccessfully copied to "Past Orders".')
