@@ -251,7 +251,7 @@ class MainWindow(QMainWindow):
             self.btn_other
         ])
 
-    def popup_nofiles(self, title='No Files', header="", text=""):
+    def no_files_msg(self, title='No Files', header="", text=""):
         '''
         Function to display a pop up warning user there are no files to open
 
@@ -261,7 +261,6 @@ class MainWindow(QMainWindow):
         '''
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle(title)
-
         pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
         icon = self.style().standardIcon(pixmapi)
         msg.setWindowIcon(icon)
@@ -339,7 +338,7 @@ class MainWindow(QMainWindow):
             header = 'There is no inventory file.'
             text = 'Either import one or create one!'
             title = 'No Inventory'
-            self.popup_nofiles(title=title, header=header, text=text)
+            self.no_files_msg(title=title, header=header, text=text)
             self.hide_sorting_btns()
 
     def open_new_order(self):
@@ -409,7 +408,7 @@ class MainWindow(QMainWindow):
 
         else:
             header = 'There are no past orders to open!'
-            self.popup_nofiles(title='No Past Orders', header=header)
+            self.no_files_msg(title='No Past Orders', header=header)
 
     def open_project_lists(self):
         '''
