@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>640</height>
+    <height>557</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -24,6 +24,10 @@
   </property>
   <property name="windowTitle">
    <string>Program Information</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Icons/information-white.png</normaloff>Icons/information-white.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -62,7 +66,7 @@
          <x>0</x>
          <y>0</y>
          <width>473</width>
-         <height>587</height>
+         <height>507</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -114,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>515</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>
