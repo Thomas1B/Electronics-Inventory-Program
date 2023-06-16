@@ -162,7 +162,8 @@ class Project_Window(QMainWindow):
         '''
 
         # deleting items from the Project dictionary so items don't append.
-        self.delete_all_items()
+        for section in Project.keys():
+            Project[section].drop_all_items()
 
         if not os.path.exists(filename):
             self.editted_saved = False
@@ -286,12 +287,6 @@ class Project_Window(QMainWindow):
                     # user cancels selection.
                     event.ignore()
 
-    def delete_all_items(self):
-        '''
-        Function to delete all items in the project
-        '''
-        for section in Project.keys():
-            Project[section].drop_all_items()
 
 
 if __name__ == "__main__":
