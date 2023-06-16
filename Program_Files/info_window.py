@@ -10,6 +10,7 @@ Shows the user information about the program
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+from PyQt5.QtGui import QIcon
 import sys
 
 
@@ -19,7 +20,9 @@ class Info_Window(QMainWindow):
 
         # loading ui file
         uic.loadUi('Program_Files/info_window.ui', self)
-        
+        self.adjustSize()
+
+        self.show()
 
 
 if __name__ == "__main__":

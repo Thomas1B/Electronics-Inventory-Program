@@ -179,7 +179,6 @@ class MainWindow(QMainWindow):
         Opens a second window
         '''
         self.info_window = Info_Window()
-        self.info_window.show()
 
     def open_website(self, website=''):
         '''
