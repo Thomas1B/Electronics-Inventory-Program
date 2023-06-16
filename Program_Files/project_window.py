@@ -138,7 +138,6 @@ class Project_Window(QMainWindow):
                 )
 
                 self.load_Project(filename)
-                self.editted_saved = True
                 self.show()
             else:
                 pass
@@ -286,7 +285,6 @@ class Project_Window(QMainWindow):
                 case _:
                     # user cancels selection.
                     event.ignore()
-
 
 
 if __name__ == "__main__":
