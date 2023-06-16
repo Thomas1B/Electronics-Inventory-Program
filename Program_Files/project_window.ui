@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>New Project</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Icons/application-list.png</normaloff>Icons/application-list.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>

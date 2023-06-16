@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>549</width>
     <height>886</height>
    </rect>
   </property>
@@ -30,6 +30,10 @@
   </property>
   <property name="windowTitle">
    <string>Electronics Inventory Program</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Icons/databases.png</normaloff>Icons/databases.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -618,7 +622,7 @@ background-color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>549</width>
      <height>20</height>
     </rect>
    </property>
