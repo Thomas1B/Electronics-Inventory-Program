@@ -299,17 +299,17 @@ class MainWindow(QMainWindow):
                 export_filename, export_filetype = file_toexport.split(
                     '/')[-1].split('.')
 
-                export_folder = os.path.expanduser(
+                destination_folder = os.path.expanduser(
                     "~" + os.sep + "Downloads\exported_electrontics_lists"
                 )
-                if not os.path.exists(export_folder):
-                    os.mkdir(export_folder)
+                if not os.path.exists(destination_folder):
+                    os.mkdir(destination_folder)
 
                 # while loop to check if file has already be exported,
                 # if it does then add a number to the filename name.
                 # DO NOT CHANGE THE ORDER OF THESE VARIABLES
-                new_name = file_toexport
-                file_toexport = f'{export_folder}\{export_filename}.{export_filetype}'
+                # new_name = file_toexport
+                new_name = f'{destination_folder}\{export_filename}.{export_filetype}'
                 base, ext = os.path.splitext(file_toexport)
                 counter = 1
                 while os.path.exists(new_name):
@@ -318,12 +318,6 @@ class MainWindow(QMainWindow):
                 shutil.copy2(file_toexport, new_name)
 
             else:
-                # file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
-                #     self,
-                #     "Exporting File",
-                #     "Saved_lists",
-                #     "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
-                # )
                 pass
 
     def open_inventory(self):
