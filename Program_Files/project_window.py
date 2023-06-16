@@ -389,8 +389,13 @@ class Project_Window(QMainWindow):
                 for cat in Project.keys():
                     Project[cat].save_toexcel(writer=writer)
         self.editted_saved = True
+        
+        # showing pop up msg
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('File Save Successful')
+        pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
+        icon = self.style().standardIcon(pixmapi)
+        msg.setWindowIcon(icon)
         msg.setIcon(QtWidgets.QMessageBox.Information)
         msg.setText('Saving Project was successful!')
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
