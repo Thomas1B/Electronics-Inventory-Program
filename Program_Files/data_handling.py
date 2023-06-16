@@ -160,14 +160,14 @@ class Category:
     def get_subtotal(self):
         '''
         Function to get the subtotal of all the items in the category.
-        '''
 
+        Returns float
+        '''
         subtotal = 0
-        row_count = self.items.shape[0]
-        for i in range(row_count):
+        for i in range(self.items.shape[0]):
             subtotal += self.items.iloc[i]['Quantity'].astype(
                 float)*self.items.iloc[i]['Unit Price'].astype(float)
-        print(subtotal)
+        return subtotal
 
 
 # Dictionary of categories for the inventory.
