@@ -17,7 +17,8 @@ from .data_handling import (
     sort_order,
     get_ordersheet,
     dict_to_dataframe,
-    sort_order
+    sort_order,
+    get_subtotal
 )
 
 Project = {
@@ -335,7 +336,6 @@ class Project_Window(QMainWindow):
             self.project_loaded = True
         self.fill_table(Project)
 
-        Project['Resistors'].get_subtotal()
 
     def fill_table(self, dataframe):
         '''
