@@ -56,6 +56,7 @@ class Project_Window(QMainWindow):
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
+        self.subtotal = self.findChild(QtWidgets.QLabel, 'subtotal')
 
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')

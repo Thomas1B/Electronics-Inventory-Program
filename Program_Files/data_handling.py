@@ -157,6 +157,13 @@ class Category:
         '''
         self.items.drop(self.items.index, inplace=True)
 
+    def get_subtotal(self):
+        '''
+        Function to get the subtotal.
+        '''
+        for i in self.items.index:
+            print(i)
+
 # Dictionary of categories for the inventory.
 Inventory = {
     'Resistors': Category("Resistors"),
