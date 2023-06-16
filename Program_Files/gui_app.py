@@ -251,7 +251,7 @@ class MainWindow(QMainWindow):
             self.btn_other
         ])
 
-    def popup_nofiles(self, header="", text="", title='Missing Files'):
+    def popup_nofiles(self, title='No Files', header="", text=""):
         '''
         Function to display a pop up warning user there are no files to open
 
@@ -268,7 +268,7 @@ class MainWindow(QMainWindow):
 
         msg.setIcon(QtWidgets.QMessageBox.Warning)
         msg.setText(header)
-        msg.setInformativeText(f'{text}')
+        msg.setInformativeText(text)
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
@@ -330,16 +330,17 @@ class MainWindow(QMainWindow):
         '''
         self.sub_header.setText('')
         self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
-        if os.path.exists("Saved_Lists/Inventory.xlsx"):
+        if not os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
             self.show_sorting_btns()
         else:
-            text = 'There is no inventory file!\n\n'
-            text += 'Check for a file called "Inventory.xlsx"\n'
+            header = 'There is no inventory file.'
+            text = 'Either import one or create one!'
+            title = 'No Inventory'
+            self.popup_nofiles(title=title, header=header, text=text)
             self.hide_sorting_btns()
-            self.popup_nofiles(text=text)
 
     def open_new_order(self):
         '''
