@@ -127,7 +127,7 @@ class Project_Window(QMainWindow):
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
 
-    def wrong_filetype(self):
+    def wrong_filetype_msg(self):
         '''
         Function to display a pop telling user they selected a wrong filetype.
         '''
@@ -246,16 +246,25 @@ class Project_Window(QMainWindow):
                 self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
             filetype = filename.split('.')[-1]
             if filename:
-                order_name = filename.split('/')[-1]
-                self.header.setText(
-                    f'Project: {order_name}'
-                )
-                self.load_Project(filename)
-                self.show()
+                if filetype in ['csv', 'xlsx']:
+                    order_name = filename.split('/')[-1]
+                    self.header.setText(
+                        f'Project: {order_name}'
+                    )
+                    self.load_Project(filename)
+                    self.show()
+                else:
+                    self.wrong_filetype_msg()
             else:
                 pass
         else:
-            self.popup_nofiles(header='There are no projects to open!')
+            header = 'There are no projects to open!'
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Missing Files')
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+            msg.setText(header)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
 
     def refresh_opensheet(self, filename=None):
         '''

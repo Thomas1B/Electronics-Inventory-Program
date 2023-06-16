@@ -417,29 +417,30 @@ class MainWindow(QMainWindow):
         '''
         Function to open project lists.
         '''
-        if len(os.listdir("Saved_Lists/Projects")) > 0:
-            filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
-            filetype = filename.split('.')[-1]
-            if filename:
-                if filetype in ['csv', 'xlsx']:
-                    order_name = filename.split('/')[-1]
+        # if len(os.listdir("Saved_Lists/Projects")) > 0:
+        #     filename, _ = QtWidgets.QFileDialog.getOpenFileName(
+        #         self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
+        #     filetype = filename.split('.')[-1]
+        #     if filename:
+        #         if filetype in ['csv', 'xlsx']:
+        #             order_name = filename.split('/')[-1]
 
-                    self.project_window.setWindowTitle(
-                        f'Electronic Inventory Program - Project'
-                    )
-                    self.project_window.header.setText(
-                        f'Project: {order_name}'
-                    )
-                    self.project_window.load_Project(filename)
-                    self.project_window.editted_saved = True
-                    self.project_window.show()
-                else:
-                    self.wrong_filetype_msg()
-            else:
-                pass
-        else:
-            self.popup_nofiles(header='There are no projects to open!')
+        #             self.project_window.setWindowTitle(
+        #                 f'Electronic Inventory Program - Project'
+        #             )
+        #             self.project_window.header.setText(
+        #                 f'Project: {order_name}'
+        #             )
+        #             self.project_window.load_Project(filename)
+        #             self.project_window.editted_saved = True
+        #             self.project_window.show()
+        #         else:
+        #             self.wrong_filetype_msg()
+        #     else:
+        #         pass
+        # else:
+        #     self.popup_nofiles(header='There are no projects to open!')
+        self.project_window.open_project()
 
     def show_sorted_section(self, section):
         '''
