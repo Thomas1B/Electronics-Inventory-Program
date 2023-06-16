@@ -490,25 +490,34 @@ class MainWindow(QMainWindow):
             if user == QtWidgets.QMessageBox.Yes:  # user want to save to "Past Order" Folder
                 destination_folder = 'Saved_Lists/Past Orders'
                 shutil.copy2(self.is_sheet_open, destination_folder)
+
+                # displays successfully save popup
                 if os.path.exists(destination_folder+f'/{filename}'):
-                    # displays successfully save popup
                     msg = QtWidgets.QMessageBox()
                     msg.setWindowTitle('Filed Saved Successfully')
+                    pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
+                    icon = self.style().standardIcon(pixmapi)
+                    user.setWindowIcon(icon)
                     msg.setIcon(QtWidgets.QMessageBox.Information)
                     msg.setText(
                         'The new order was successfully saved.')
                     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     _ = msg.exec_()
+                # displays unsuccessfully save popup
                 else:
-                    # displays unsuccessfully save popup
                     msg = QtWidgets.QMessageBox()
                     msg.setWindowTitle('Unsuccessfully saved!')
+                    pixmapi = getattr(QtWidgets.QStyle,
+                                      "SP_MessageBoxCritical")
+                    icon = self.style().standardIcon(pixmapi)
+                    user.setWindowIcon(icon)
                     msg.setIcon(QtWidgets.QMessageBox.Critical)
                     msg.setText(
                         'The new order was unsuccessfully copied to "Past Orders".')
                     msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                     _ = msg.exec_()
-            elif user == QtWidgets.QMessageBox.Save:  # user want to save to elsewhere.
+            # user want to save to elsewhere.
+            elif user == QtWidgets.QMessageBox.Save:
                 destination_folder = QtWidgets.QFileDialog.getExistingDirectory(
                     self, 'Select Destination Folder')
                 if destination_folder:  # user picks a location.
@@ -521,15 +530,23 @@ class MainWindow(QMainWindow):
                         # displays successfully save popup
                         msg = QtWidgets.QMessageBox()
                         msg.setWindowTitle('Filed Saved Successfully')
+                        pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
+                        icon = self.style().standardIcon(pixmapi)
+                        user.setWindowIcon(icon)
+                        
                         msg.setIcon(QtWidgets.QMessageBox.Information)
                         msg.setText(
-                            'The new order was successfully saved.')
+                            'The new order was successfully saved.'
+                        )
                         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                         _ = msg.exec_()
                     else:
                         # displays unsuccessfully save popup
                         msg = QtWidgets.QMessageBox()
                         msg.setWindowTitle('Unsuccessfully saved!')
+                        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                        icon = self.style().standardIcon(pixmapi)
+                        user.setWindowIcon(icon)
                         msg.setIcon(QtWidgets.QMessageBox.Critical)
                         msg.setText(
                             'The new order was unsuccessfully copied to "Past Orders".')
