@@ -380,6 +380,16 @@ def add_order_to_Inventory(filename):
             Inventory[section].remove_duplicates()
 
 
+def get_subtotal(dictionary):
+    '''
+    Function to get the subtotal of the entire Dictionary of classes. 
+    '''
+    subtotal = 0
+    for section in dictionary.keys():
+        subtotal += dictionary[section].get_subtotal()
+    return round(subtotal, 2)
+
+
 if __name__ == "__main__":
     print('Running check inventory file...')
     result = load_Inventory()
