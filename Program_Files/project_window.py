@@ -39,6 +39,10 @@ Project = {
 class Project_Window(QMainWindow):
     def __init__(self, parent=None):
         super(Project_Window, self).__init__(parent)
+        # loading ui file
+        uic.loadUi('Program_Files/project_window.ui', self)
+        self.resize(1000, 800)
+        self.move(1200, 300)
 
         # variable to see if project has been loaded.
         self.project_loaded = False
@@ -48,11 +52,6 @@ class Project_Window(QMainWindow):
 
         # variable to keep track if the sheet was been editted.
         self.editted_saved = True  # used for saving
-
-        # loading ui file
-        uic.loadUi('Program_Files/project_window.ui', self)
-        self.resize(1000, 800)
-        self.move(1200, 300)
 
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
@@ -267,7 +266,11 @@ class Project_Window(QMainWindow):
         '''
         if len(os.listdir("Saved_Lists/Projects")) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Project List', 'Saved_Lists/Projects', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self,
+                'Electronics Inventory Program - Opening Project',
+                'Saved_Lists/Projects',
+                'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)'
+            )
             filetype = filename.split('.')[-1]
             if filename:
                 if filetype in ['csv', 'xlsx']:

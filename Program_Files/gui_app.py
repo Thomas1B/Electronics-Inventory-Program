@@ -5,7 +5,7 @@ Script to run PyQt app functions and classes.
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QUrl
-from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtGui import QDesktopServices, QIcon
 import pandas as pd
 import sys
 import os
@@ -296,7 +296,7 @@ class MainWindow(QMainWindow):
         if autoname:
             file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self,
-                "Exporting File",
+                "Electronics Inventory Program - Exporting File",
                 "Saved_lists",
                 "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
             )
@@ -398,7 +398,11 @@ class MainWindow(QMainWindow):
         self.sub_header.setText('')
         if len(os.listdir('Saved_Lists/Past Orders')) > 0:
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Opening Past Orders', 'Saved_Lists/Past Orders', 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
+                self,
+                'Electronics Inventory Program - Opening Past Orders',
+                'Saved_Lists/Past Orders',
+                'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)'
+            )
             filetype = filename.split(".")[-1]
             if filetype in ['csv', 'xlsx']:
                 self.is_sheet_open = filename
@@ -467,11 +471,15 @@ class MainWindow(QMainWindow):
             # popup to ask user if they where they want to save the order.
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle('Saving New Order')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_DialogSaveButton")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
             msg.setIcon(QtWidgets.QMessageBox.Question)
+
             text = 'Would you like save the order to the "Past Orders" folder or elsewhere?'
+            info_text = "Note: Orders should be added the inventory first."
             msg.setText(text)
-            msg.setInformativeText(
-                "Note: Orders should be added the inventory first.")
+            msg.setInformativeText(info_text)
             msg.setStandardButtons(
                 QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Cancel)
             msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
@@ -545,8 +553,12 @@ class MainWindow(QMainWindow):
         # popup to ask user if wants to save the "new" inventory.
         user = QtWidgets.QMessageBox()
         user.setWindowTitle("Saving new Inventory")
+        pixmapi = getattr(QtWidgets.QStyle, "SP_DialogSaveButton")
+        icon = self.style().standardIcon(pixmapi)
+        user.setWindowIcon(icon)
+
         user.setIcon(QtWidgets.QMessageBox.Question)
-        user.setText('\nWould you like to save the new inventory?\n')
+        user.setText('Would you like to save the new inventory?')
         user.setStandardButtons(
             QtWidgets.QMessageBox.Yes |
             QtWidgets.QMessageBox.No
@@ -649,6 +661,7 @@ class MainWindow(QMainWindow):
 
         # User clicks 'ok', goes into try block to split user's string
         # into a filename and filetype.
+        title = 'Electronics Inventory Program - Creating New Project'  # window title
         if ok:
             try:
                 # try block to split user's string into a name and filetype
@@ -658,8 +671,11 @@ class MainWindow(QMainWindow):
             except Exception as err:
                 # popup to tell user entered information is in the wrong format.
                 user = QtWidgets.QMessageBox()
-                title = 'Electronics Inventory Program - Creating New Project'
                 user.setWindowTitle(title)
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                icon = self.style().standardIcon(pixmapi)
+                user.setWindowIcon(icon)
+
                 text = 'You entered the information in the wrong format, try again.'
                 user.setText(text)
                 user.setIcon(QtWidgets.QMessageBox.Critical)
@@ -682,7 +698,6 @@ class MainWindow(QMainWindow):
                 if not os.path.exists(filepath):
                     # if project doesn't exist, open the project window
                     # to allow the user to create a new project.
-                    title = 'Electronics Inventory Program - Creating New Project'
                     self.project_window.setWindowTitle(title)
                     text = f'New Project: {name}.{filetype}'
                     self.project_window.header.setText(text)
@@ -691,9 +706,15 @@ class MainWindow(QMainWindow):
                 else:
                     # popup telling user project name already exists.
                     user = QtWidgets.QMessageBox()
-                    title = 'Electronics Inventory Program - Creating New Project'
                     user.setWindowTitle(title)
+                    pixmapi = getattr(
+                        QtWidgets.QStyle,
+                        "SP_MessageBoxCritical"
+                    )
+                    icon = self.style().standardIcon(pixmapi)
+                    user.setWindowIcon(icon)
                     user.setIcon(QtWidgets.QMessageBox.Critical)
+
                     text = f'Project name "{name}.{filetype}" already exsits!'
                     user.setText(text)
                     user.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -705,8 +726,10 @@ class MainWindow(QMainWindow):
         # User clicks "ok", but doesn't enter a project name.
         elif ok and not name:
             user = QtWidgets.QMessageBox()
-            title = 'Electronics Inventory Program - Creating New Project'
             user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
             text = 'You must enter a project name!'
             user.setText(text)
@@ -716,8 +739,10 @@ class MainWindow(QMainWindow):
         # User clicks "ok", but doesn't enter a filetype.
         elif ok and not filetype:
             user = QtWidgets.QMessageBox()
-            title = 'Electronics Inventory Program - Creating New Project'
             user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
             text = 'You must enter a filetype!'
             user.setText(text)
