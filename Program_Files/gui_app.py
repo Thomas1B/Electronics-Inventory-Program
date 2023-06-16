@@ -286,7 +286,6 @@ class MainWindow(QMainWindow):
             autoname - bool: true - automatically named the final.
                 if true, exports to 'Downloads\exported_electrontics_lists'
         '''
-        print(autoname)
         if autoname:
             file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self,
