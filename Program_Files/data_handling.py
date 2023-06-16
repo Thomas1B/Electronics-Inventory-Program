@@ -159,10 +159,16 @@ class Category:
 
     def get_subtotal(self):
         '''
-        Function to get the subtotal.
+        Function to get the subtotal of all the items in the category.
         '''
-        for i in self.items.index:
-            print(i)
+
+        subtotal = 0
+        row_count = self.items.shape[0]
+        for i in range(row_count):
+            subtotal += self.items.iloc[i]['Quantity'].astype(
+                float)*self.items.iloc[i]['Unit Price'].astype(float)
+        print(subtotal)
+
 
 # Dictionary of categories for the inventory.
 Inventory = {
@@ -349,8 +355,13 @@ def get_ordersheet(filepath):
         if all(col in order.columns for col in labels_drop):
             # dropping unwanted labels
             order.drop(labels_drop, axis=1, inplace=True)
-        order[labels].reset_index(
-            drop=True, inplace=True)  # reindexing dataframe
+        # reindexing dataframe
+        order[labels].reset_index(drop=True, inplace=True)
+        # dropping unnamed columns
+        unnamed_cols = [
+            col for col in order.columns if 'unnamed' in col.lower()
+        ]
+        order.drop(columns=unnamed_cols, inplace=True)
         # sorting the order into categories of product types.
         order = sort_order(order)
         return order
