@@ -333,7 +333,7 @@ class MainWindow(QMainWindow):
         '''
         self.sub_header.setText('')
         self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
-        if not os.path.exists("Saved_Lists/Inventory.xlsx"):
+        if os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
