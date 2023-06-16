@@ -185,6 +185,7 @@ class Project_Window(QMainWindow):
 
         # User clicks 'ok', goes into try block to split user's string
         # into a filename and filetype.
+        title = 'Electronics Inventory Program - Creating New Project'  # window title
         if ok:
             try:
                 # try block to split user's string into a name and filetype
@@ -194,8 +195,11 @@ class Project_Window(QMainWindow):
             except Exception as err:
                 # popup to tell user entered information is in the wrong format.
                 user = QtWidgets.QMessageBox()
-                title = 'Electronics Inventory Program - Creating New Project'
                 user.setWindowTitle(title)
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                icon = self.style().standardIcon(pixmapi)
+                user.setWindowIcon(icon)
+
                 text = 'You entered the information in the wrong format, try again.'
                 user.setText(text)
                 user.setIcon(QtWidgets.QMessageBox.Critical)
@@ -218,7 +222,6 @@ class Project_Window(QMainWindow):
                 if not os.path.exists(filepath):
                     # if project doesn't exist, open the project window
                     # to allow the user to create a new project.
-                    title = 'Electronics Inventory Program - Creating New Project'
                     self.setWindowTitle(title)
                     text = f'New Project: {name}.{filetype}'
                     self.header.setText(text)
@@ -227,9 +230,15 @@ class Project_Window(QMainWindow):
                 else:
                     # popup telling user project name already exists.
                     user = QtWidgets.QMessageBox()
-                    title = 'Electronics Inventory Program - Creating New Project'
                     user.setWindowTitle(title)
+                    pixmapi = getattr(
+                        QtWidgets.QStyle,
+                        "SP_MessageBoxCritical"
+                    )
+                    icon = self.style().standardIcon(pixmapi)
+                    user.setWindowIcon(icon)
                     user.setIcon(QtWidgets.QMessageBox.Critical)
+
                     text = f'Project name "{name}.{filetype}" already exsits!'
                     user.setText(text)
                     user.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -241,8 +250,10 @@ class Project_Window(QMainWindow):
         # User clicks "ok", but doesn't enter a project name.
         elif ok and not name:
             user = QtWidgets.QMessageBox()
-            title = 'Electronics Inventory Program - Creating New Project'
             user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
             text = 'You must enter a project name!'
             user.setText(text)
@@ -252,8 +263,10 @@ class Project_Window(QMainWindow):
         # User clicks "ok", but doesn't enter a filetype.
         elif ok and not filetype:
             user = QtWidgets.QMessageBox()
-            title = 'Electronics Inventory Program - Creating New Project'
             user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
             text = 'You must enter a filetype!'
             user.setText(text)
