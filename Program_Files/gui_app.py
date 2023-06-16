@@ -405,7 +405,7 @@ class MainWindow(QMainWindow):
                 self.header.setText(f'Past Order: {filetype}')
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
-            elif filetype == '':
+            elif filetype:
                 self.wrong_filetype_msg()
             else:
                 pass
