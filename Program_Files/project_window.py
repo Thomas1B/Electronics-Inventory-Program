@@ -64,6 +64,9 @@ class Project_Window(QMainWindow):
         self.btn_open_project = self.findChild(
             QtWidgets.QPushButton, 'btn_open_project')
 
+        self.btn_create_project = self.findChild(
+            QtWidgets.QPushButton, 'btn_create_project')
+
         # self.btn_open_project.hide()
 
         self.btn_resistors = self.findChild(
@@ -96,6 +99,7 @@ class Project_Window(QMainWindow):
 
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_open_project.clicked.connect(self.open_project)
+        self.btn_create_project.clicked.connect(self.create_project)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -123,6 +127,116 @@ class Project_Window(QMainWindow):
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
 
+    def wrong_filetype(self):
+        '''
+        Function to display a pop telling user they selected a wrong filetype.
+        '''
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle('Wrong File Type')
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setText('Cannot user that file type!')
+        text = "You can only use 'CSV' (Comma-Seperated-Values) and 'XLSX' (Excel) files."
+        msg.setInformativeText(f'{text}')
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
+
+    def create_project(self):
+        '''
+        Function to create a new project using a second window.
+
+        Prompt user to enter a enter project name, then checks if it exists.
+        If the project name exists popup appears to tell the user, otherwise
+        it asks the user what filetype they want and creates the project file.
+        '''
+        dialog = QtWidgets.QInputDialog(self)
+        text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
+        text += 'Example: "Temperature Gauge, CSV"\n\n'
+        text += 'Filetype options:\n\t- CSV (Comma-Seperated-Values)\n\t- XLSX (Excel)'
+        user, ok = dialog.getText(
+            self,
+            "Creating New Project",
+            text
+        )
+        filetype = None   # obtained in try block.
+        name = None       # obtained in try block.
+
+        # User clicks 'ok', goes into try block to split user's string
+        # into a filename and filetype.
+        if ok:
+            try:
+                # try block to split user's string into a name and filetype
+                name, filetype = user.split(',')
+                name = name.strip()
+                filetype = filetype.strip()
+            except Exception as err:
+                # popup to tell user entered information is in the wrong format.
+                user = QtWidgets.QMessageBox()
+                title = 'Electronics Inventory Program - Creating New Project'
+                user.setWindowTitle(title)
+                text = 'You entered the information in the wrong format, try again.'
+                user.setText(text)
+                user.setIcon(QtWidgets.QMessageBox.Critical)
+                user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                user = user.exec_()
+                return
+
+        # user enters a project name and clicks the "ok" button.
+        if ok and name and filetype:
+            # checking for correct filetype.
+            if filetype.lower() in ['csv', 'xlsx', 'excel', '.csv', '.xlsx']:
+                if filetype.lower() == 'excel':
+                    # if user enter "excel", changes filetype to '.xlsx'
+                    filetype = 'xlsx'
+                elif "." in filetype.lower():
+                    # if user enters "." in the filetype, remove it so program doesn.t crash.
+                    filetype = filetype.strip('.')
+                filepath = f'Saved_Lists/Projects/{name}.{filetype}'
+
+                if not os.path.exists(filepath):
+                    # if project doesn't exist, open the project window
+                    # to allow the user to create a new project.
+                    title = 'Electronics Inventory Program - Creating New Project'
+                    self.setWindowTitle(title)
+                    text = f'New Project: {name}.{filetype}'
+                    self.header.setText(text)
+                    self.load_Project(filepath)
+                    self.show()
+                else:
+                    # popup telling user project name already exists.
+                    user = QtWidgets.QMessageBox()
+                    title = 'Electronics Inventory Program - Creating New Project'
+                    user.setWindowTitle(title)
+                    user.setIcon(QtWidgets.QMessageBox.Critical)
+                    text = f'Project name "{name}.{filetype}" already exsits!'
+                    user.setText(text)
+                    user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                    user = user.exec_()
+            else:
+                # pop to tell user they enter a wrong filetype.
+                self.wrong_filetype_msg()
+
+        # User clicks "ok", but doesn't enter a project name.
+        elif ok and not name:
+            user = QtWidgets.QMessageBox()
+            title = 'Electronics Inventory Program - Creating New Project'
+            user.setWindowTitle(title)
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            text = 'You must enter a project name!'
+            user.setText(text)
+            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            user = user.exec_()
+
+        # User clicks "ok", but doesn't enter a filetype.
+        elif ok and not filetype:
+            user = QtWidgets.QMessageBox()
+            title = 'Electronics Inventory Program - Creating New Project'
+            user.setWindowTitle(title)
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            text = 'You must enter a filetype!'
+            user.setText(text)
+            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            user = user.exec_()
+
     def open_project(self):
         '''
         Function to open a project
@@ -136,7 +250,6 @@ class Project_Window(QMainWindow):
                 self.header.setText(
                     f'Project: {order_name}'
                 )
-
                 self.load_Project(filename)
                 self.show()
             else:
