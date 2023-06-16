@@ -268,7 +268,7 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def wrong_filetyle_msg(self):
+    def wrong_filetype_msg(self):
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Wrong File Type')
         msg.setIcon(QtWidgets.QMessageBox.Critical)
@@ -388,7 +388,7 @@ class MainWindow(QMainWindow):
                     self.fill_table(
                         [section for section in new_order if not section.empty][0])
             else:
-                self.wrong_filetyle_msg()
+                self.wrong_filetype_msg()
 
     def open_past_order(self):
         '''
@@ -405,7 +405,7 @@ class MainWindow(QMainWindow):
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
             elif filetype == '':
-                self.wrong_filetyle_msg()
+                self.wrong_filetype_msg()
             else:
                 pass
 
@@ -435,7 +435,7 @@ class MainWindow(QMainWindow):
                     self.project_window.editted_saved = True
                     self.project_window.show()
                 else:
-                    self.wrong_filetyle_msg()
+                    self.wrong_filetype_msg()
             else:
                 pass
         else:
@@ -721,7 +721,7 @@ class MainWindow(QMainWindow):
                     user = user.exec_()
             else:
                 # pop to tell user they enter a wrong filetype.
-                self.wrong_filetyle_msg()
+                self.wrong_filetype_msg()
 
         # User clicks "ok", but doesn't enter a project name.
         elif ok and not name:
