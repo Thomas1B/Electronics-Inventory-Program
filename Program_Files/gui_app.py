@@ -425,7 +425,6 @@ class MainWindow(QMainWindow):
                 if filetype in ['csv', 'xlsx']:
                     order_name = filename.split('/')[-1]
 
-
                     self.project_window.setWindowTitle(
                         f'Electronic Inventory Program - Project'
                     )
