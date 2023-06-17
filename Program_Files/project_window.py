@@ -59,6 +59,7 @@ class Project_Window(QMainWindow):
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
         self.subtotal = self.findChild(QtWidgets.QLabel, 'subtotal')
 
+
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
 
@@ -222,8 +223,7 @@ class Project_Window(QMainWindow):
                 filepath = f'Saved_Lists/Projects/{name}.{filetype}'
 
                 if not os.path.exists(filepath):
-                    # if project doesn't exist, open the project window
-                    # to allow the user to create a new project.
+                    # if project doesn't exist, create it
                     self.setWindowTitle(title)
                     text = f'New Project: {name}.{filetype}'
                     self.header.setText(text)
@@ -240,7 +240,6 @@ class Project_Window(QMainWindow):
                     icon = self.style().standardIcon(pixmapi)
                     user.setWindowIcon(icon)
                     user.setIcon(QtWidgets.QMessageBox.Critical)
-
                     text = f'Project name "{name}.{filetype}" already exsits!'
                     user.setText(text)
                     user.setStandardButtons(QtWidgets.QMessageBox.Ok)
@@ -335,6 +334,7 @@ class Project_Window(QMainWindow):
                     Project[cat].add_item(section)
             self.project_loaded = True
         self.fill_table(Project)
+        self.update_subtotal()
 
     def fill_table(self, dataframe):
         '''
@@ -414,6 +414,7 @@ class Project_Window(QMainWindow):
                 Project[section].remove_duplicates()
         self.editted_saved = False
         self.fill_table(Project)
+        self.update_subtotal()
 
     def closeEvent(self, event):
         '''
@@ -453,6 +454,12 @@ class Project_Window(QMainWindow):
                     # user cancels selection.
                     event.ignore()
 
+    def update_subtotal(self):
+        '''
+        Function to update the subtotal of the project.
+        '''
+        subtotal = get_subtotal(Project)
+        self.subtotal.setText(f'Project Subtotal: ${str(subtotal)}')
 
 if __name__ == "__main__":
     # runnning program
