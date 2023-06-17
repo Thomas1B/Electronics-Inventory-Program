@@ -45,6 +45,10 @@ class Project_Window(QMainWindow):
         self.resize(1000, 800)
         self.move(1200, 300)
 
+            # for row in range(table.rowCount()):
+        #     item = self.table.item(row, 1)
+        #     item.setFlags(item.flags() | QtWidgets.ItemIsEditable)
+
         # variable to see if project has been loaded.
         self.project_loaded = False
 
@@ -59,6 +63,7 @@ class Project_Window(QMainWindow):
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
         self.subtotal = self.findChild(QtWidgets.QLabel, 'subtotal')
 
+        self.table.itemChanged.connect(self.update_subtotal)
 
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
@@ -414,7 +419,6 @@ class Project_Window(QMainWindow):
                 Project[section].remove_duplicates()
         self.editted_saved = False
         self.fill_table(Project)
-        self.update_subtotal()
 
     def closeEvent(self, event):
         '''
