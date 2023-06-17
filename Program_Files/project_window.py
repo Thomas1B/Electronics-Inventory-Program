@@ -336,7 +336,6 @@ class Project_Window(QMainWindow):
             self.project_loaded = True
         self.fill_table(Project)
 
-
     def fill_table(self, dataframe):
         '''
         Function to fill in table.
