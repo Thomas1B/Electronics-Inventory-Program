@@ -45,10 +45,6 @@ class Project_Window(QMainWindow):
         self.resize(1000, 800)
         self.move(1200, 300)
 
-            # for row in range(table.rowCount()):
-        #     item = self.table.item(row, 1)
-        #     item.setFlags(item.flags() | QtWidgets.ItemIsEditable)
-
         # variable to see if project has been loaded.
         self.project_loaded = False
 
@@ -464,6 +460,7 @@ class Project_Window(QMainWindow):
         '''
         subtotal = get_subtotal(Project)
         self.subtotal.setText(f'Project Subtotal: ${str(subtotal)}')
+
 
 if __name__ == "__main__":
     # runnning program
