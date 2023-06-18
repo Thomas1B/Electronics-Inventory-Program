@@ -384,12 +384,12 @@ class Project_Window(QMainWindow):
         filetype = self.is_sheet_open.split('.')[-1]
         if filetype == 'csv':
             data = dict_to_dataframe(Project)
-            data.to_csv(self.is_sheet_open)
+            data.to_csv(self.is_sheet_open, index=False)
         elif filetype == 'xlsx':
             with pd.ExcelWriter(self.is_sheet_open) as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
                 for cat in Project.keys():
-                    Project[cat].save_toexcel(writer=writer)
+                    Project[cat].save_toexcel(writer=writer, index=True)
         self.editted_saved = True
 
         # showing pop up msg
