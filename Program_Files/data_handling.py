@@ -355,15 +355,13 @@ def get_ordersheet(filepath):
         if all(col in order.columns for col in labels_drop):
             # dropping unwanted labels
             order.drop(labels_drop, axis=1, inplace=True)
-        # reindexing dataframe
-        order[labels].reset_index(drop=True, inplace=True)
         # dropping unnamed columns
         unnamed_cols = [
             col for col in order.columns if 'unnamed' in col.lower()
         ]
         order.drop(columns=unnamed_cols, inplace=True)
-        # sorting the order into categories of product types.
-        order = sort_order(order)
+        order[labels].reset_index(drop=True, inplace=True)  # reindexing
+        order = sort_order(order)  # sorting the order
         return order
 
 
