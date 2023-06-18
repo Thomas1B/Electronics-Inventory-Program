@@ -350,7 +350,6 @@ class MainWindow(QMainWindow):
         Function to open an order
         '''
         self.sub_header.setText('')
-        # if len(os.listdir("Saved_Lists/New Orders")) > 0:
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
@@ -530,10 +529,11 @@ class MainWindow(QMainWindow):
                         # displays successfully save popup
                         msg = QtWidgets.QMessageBox()
                         msg.setWindowTitle('Filed Saved Successfully')
-                        pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
+                        pixmapi = getattr(QtWidgets.QStyle,
+                                          "SP_DialogApplyButton")
                         icon = self.style().standardIcon(pixmapi)
                         user.setWindowIcon(icon)
-                        
+
                         msg.setIcon(QtWidgets.QMessageBox.Information)
                         msg.setText(
                             'The new order was successfully saved.'
@@ -544,7 +544,8 @@ class MainWindow(QMainWindow):
                         # displays unsuccessfully save popup
                         msg = QtWidgets.QMessageBox()
                         msg.setWindowTitle('Unsuccessfully saved!')
-                        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                        pixmapi = getattr(QtWidgets.QStyle,
+                                          "SP_MessageBoxCritical")
                         icon = self.style().standardIcon(pixmapi)
                         msg.setWindowIcon(icon)
                         msg.setIcon(QtWidgets.QMessageBox.Critical)
