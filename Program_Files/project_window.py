@@ -42,8 +42,7 @@ class Project_Window(QMainWindow):
         super(Project_Window, self).__init__(parent)
         # loading ui file
         uic.loadUi('Program_Files/project_window.ui', self)
-        self.resize(1000, 800)
-        self.move(1200, 300)
+        self.move(1050, 50)
 
         # variable to see if project has been loaded.
         self.project_loaded = False

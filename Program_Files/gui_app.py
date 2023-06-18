@@ -27,7 +27,7 @@ from .data_handling import (Inventory,
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.move(100, 300)
+        self.move(50, 50)
 
         # variable to keep track if a table is opened.
         # Used for getting openning sorted parts
