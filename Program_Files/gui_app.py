@@ -33,6 +33,9 @@ class MainWindow(QMainWindow):
         # Used for getting openning sorted parts
         self.is_sheet_open = False
 
+        # variable to keep track if the sheet was been editted.
+        self.editted_saved = True  # used for saving
+
         # Loading .ui file
         uic.loadUi('Program_Files/gui_app.ui', self)
 
@@ -60,8 +63,6 @@ class MainWindow(QMainWindow):
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
-
-        self.table.cellClicked.connect(self.get_clicked_row)
 
         # Buttons
         self.btn_open_inventory = self.findChild(
@@ -112,6 +113,10 @@ class MainWindow(QMainWindow):
         '''
             Attaching Functions to buttons and other clicked things.
         '''
+
+        # connecting functions to table
+        self.table.cellClicked.connect(self.get_clicked_row)
+        self.table.itemChanged.connect(self.update_item)
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
@@ -788,6 +793,14 @@ class MainWindow(QMainWindow):
 
             # passing item to project window.
             self.project_window.item_from_main_window(item)
+
+    def update_item(self):
+        '''
+        Function to update an item when user edits the table.
+        '''
+
+        self.editted_saved = False
+        pass
 
 
 if __name__ == "__main__":
