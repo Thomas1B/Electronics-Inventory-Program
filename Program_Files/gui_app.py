@@ -33,8 +33,8 @@ class MainWindow(QMainWindow):
         # Used for getting openning sorted parts
         self.is_sheet_open = False
 
-        # variable to keep track if the sheet was been editted.
-        self.editted_saved = True  # used for saving
+        # variable to keep track if the inventory was been editted.
+        self.inventory_saved = True  # used for saving
 
         # Loading .ui file
         uic.loadUi('Program_Files/gui_app.ui', self)
@@ -116,7 +116,6 @@ class MainWindow(QMainWindow):
 
         # connecting functions to table
         self.table.cellClicked.connect(self.get_clicked_row)
-        self.table.itemChanged.connect(self.update_item)
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
@@ -176,6 +175,45 @@ class MainWindow(QMainWindow):
         self.project_window = Project_Window(self)
 
         self.show()  # needs to here in order to work
+
+    def closeEvent(self, event):
+        '''
+        Function to detect when user closes the window.
+        '''
+
+        if self.inventory_saved:
+            event.accept()
+        else:
+            event.ignore()  # dont let window close.
+
+            title = "Electronics Inventory Program - Saving"
+            text = f'Inventory has been editted!\n\nWould you like to save?'
+            user = QtWidgets.QMessageBox()
+            user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            user.setText(text)
+            user.setStandardButtons(
+                QtWidgets.QMessageBox.Yes |
+                QtWidgets.QMessageBox.No |
+                QtWidgets.QMessageBox.Cancel
+            )
+            user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            user = user.exec_()
+
+            match user:  # checking user's response:
+                case QtWidgets.QMessageBox.Yes:
+                    # user accepts to save.
+                    # self.save_project()
+                    event.accept()
+                case QtWidgets.QMessageBox.No:
+                    # user declines to save.
+                    event.accept()
+                case _:
+                    # user cancels selection.
+                    event.ignore()
 
     def show_program_info(self):
         '''
@@ -399,8 +437,8 @@ class MainWindow(QMainWindow):
         '''
         Function to open a past order
         '''
-        self.sub_header.setText('')
         if len(os.listdir('Saved_Lists/Past Orders')) > 0:
+            self.sub_header.setText('')
             filename, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self,
                 'Electronics Inventory Program - Opening Past Orders',
@@ -793,14 +831,9 @@ class MainWindow(QMainWindow):
 
             # passing item to project window.
             self.project_window.item_from_main_window(item)
-
-    def update_item(self):
-        '''
-        Function to update an item when user edits the table.
-        '''
-
-        self.editted_saved = False
-        pass
+        # else:
+        #     data = self.get_table_data()
+        #     print(data.iloc[index])
 
 
 if __name__ == "__main__":
