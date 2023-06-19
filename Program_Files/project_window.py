@@ -174,7 +174,6 @@ class Project_Window(QMainWindow):
         '''
         self.how_to_use_window = User_Info_Window()
         self.how_to_use_window.show()
-        
 
     def open_website(self, website=''):
         '''
@@ -637,7 +636,7 @@ class Project_Window(QMainWindow):
             data = self.get_table_data()
         except Exception:
             return
-        
+
         column_name = data.keys()[item.column()]
         row_index = item.row()
         row = pd.DataFrame(data.iloc[row_index]).T
