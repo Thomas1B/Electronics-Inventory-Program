@@ -82,6 +82,10 @@ background-color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Export File</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-export.png</normaloff>Icons/blue-folder-export.png</iconset>
+         </property>
         </widget>
        </item>
        <item row="0" column="0">
@@ -112,6 +116,10 @@ background-color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Open New Order</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book-open.png</normaloff>Icons/book-open.png</iconset>
+         </property>
          <property name="default">
           <bool>false</bool>
          </property>
@@ -133,6 +141,10 @@ background-color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Save New Order</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/disk.png</normaloff>Icons/disk.png</iconset>
+         </property>
         </widget>
        </item>
        <item row="2" column="4">
@@ -143,6 +155,10 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Add to Inventory</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
          </property>
         </widget>
        </item>
@@ -174,6 +190,10 @@ background-color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Open Past Orders</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
+         </property>
          <property name="default">
           <bool>false</bool>
          </property>
@@ -201,6 +221,10 @@ background-color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Open Inventory</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book-open-list.png</normaloff>Icons/book-open-list.png</iconset>
+         </property>
         </widget>
        </item>
        <item row="0" column="5">
@@ -220,7 +244,11 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Open Project</string>
+          <string>Open Projects</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
          </property>
         </widget>
        </item>
@@ -232,6 +260,10 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Create Project</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book--pencil.png</normaloff>Icons/book--pencil.png</iconset>
          </property>
         </widget>
        </item>
@@ -423,11 +455,21 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Refresh</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/arrow-circle-double.png</normaloff>Icons/arrow-circle-double.png</iconset>
          </property>
         </widget>
        </item>
@@ -687,6 +729,10 @@ background-color: rgb(255, 255, 255);</string>
    </property>
   </action>
   <action name="actionProgram_Info">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/book-question.png</normaloff>Icons/book-question.png</iconset>
+   </property>
    <property name="text">
     <string>Program Info</string>
    </property>
