@@ -165,8 +165,7 @@ class Category:
         '''
         subtotal = 0
         for i in range(self.items.shape[0]):
-            subtotal += self.items.iloc[i]['Quantity'].astype(
-                float)*self.items.iloc[i]['Unit Price'].astype(float)
+            subtotal += float(self.items.iloc[i]['Quantity'])*float(self.items.iloc[i]['Unit Price'])
         return subtotal
 
 

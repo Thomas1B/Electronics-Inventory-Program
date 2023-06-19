@@ -14,6 +14,8 @@ import os
 import pandas as pd
 import shutil
 
+import inspect
+
 
 from .data_handling import (
     Category,
@@ -487,7 +489,6 @@ class Project_Window(QMainWindow):
                     if item:
                         row_data.append(item.text())
                 data.append(row_data)
-
             data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
                                 'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
             return data
@@ -592,6 +593,7 @@ class Project_Window(QMainWindow):
         Function to update the Project inventory when the table is in edit mode.
         '''
         if not self.in_edit_mode:
+            self.function_to_check(test_text='DOG')
             self.in_edit_mode = True
             self.editted_saved = False
             self.btn_edit_mode.setText('Exit Edit Mode')
@@ -601,12 +603,13 @@ class Project_Window(QMainWindow):
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
         else:
+            self.function_to_check(test_text='CAT')
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
             project_name = self.header.text().split(':')[-1].strip()
             text = f'Project: {project_name}'
             self.header.setText(text)
-            self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+            self.table.itemChanged.disconnect(self.get_editted)
             self.table.itemChanged.connect(self.update_subtotal)
 
     def get_editted(self, item):
@@ -636,7 +639,15 @@ class Project_Window(QMainWindow):
                 break
         
         Project[category].get_items().update(data)
+        self.update_subtotal(item)
         
+    def function_to_check(self, test_text = 'MEOW'):
+        caller_frame = inspect.currentframe().f_back
+        caller_name = inspect.getframeinfo(caller_frame).function
+        caller_line = inspect.getframeinfo(caller_frame).lineno
+        caller_filename = inspect.getframeinfo(caller_frame).filename
+        print(f"Called from function '{caller_name}' at line {caller_line} in file '{caller_filename}'")
+        print(test_text)
 
 
 if __name__ == "__main__":
