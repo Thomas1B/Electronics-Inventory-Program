@@ -626,9 +626,37 @@ class MainWindow(QMainWindow):
         Function to add an order to inventory.
             - Triggered by add_to_inventory button.
         '''
-    
 
+        # checking if order has been added already.
+        read_orders_list = 'Saved_Lists/Orders_added_to_inventory.txt'
+        if os.path.exists(read_orders_list):
+            read_orders = pd.read_csv(read_orders_list, delimiter='\s+')
 
+            files = []
+            with open(read_orders_list, 'r') as file:
+                lines = file.readlines()
+                for line in lines:
+                    line = line.rstrip()
+                    line = line.split(": ")[-1]
+                    line = line.split('.')[0]
+                    files.append(line)
+
+            name = self.is_sheet_open.split("/")[-1].split('.')[0]
+
+            if name in files:
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('Reading New Order')
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxInformation")
+                icon = self.style().standardIcon(pixmapi)
+                msg.setWindowIcon(icon)
+                header = 'Order already added!'
+                msg.setText(header)
+                info_text = f'The order "{name}" has already been added to the inventory.'
+                msg.setInformativeText(info_text)
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                msg.exec_()
+                return 
+            
 
         # using function from data_handling.py
         add_order_to_Inventory(self.is_sheet_open)
