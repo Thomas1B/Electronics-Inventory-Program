@@ -5,7 +5,9 @@ Creates a second window to allow the user to create/edit a project
 '''
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QUrl
 from PyQt5 import uic
 import sys
 import os
@@ -60,6 +62,13 @@ class Project_Window(QMainWindow):
 
         self.table.itemChanged.connect(self.update_subtotal)
 
+        self.action_open_Digikey = self.findChild(
+            QtWidgets.QAction, 'actionDigiKey')
+        self.action_open_adafruit = self.findChild(
+            QtWidgets.QAction, 'actionAdafruit')
+        self.action_open_BCrobotics = self.findChild(
+            QtWidgets.QAction, 'actionBC_Robotics')
+
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
 
@@ -99,6 +108,16 @@ class Project_Window(QMainWindow):
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
+        self.action_open_Digikey.triggered.connect(
+            lambda: self.open_website('Digikey')
+        )
+        self.action_open_adafruit.triggered.connect(
+            lambda: self.open_website('Adafruit')
+        )
+        self.action_open_BCrobotics.triggered.connect(
+            lambda: self.open_website('BC Robotics')
+        )
+
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_open_project.clicked.connect(self.open_project)
         self.btn_create_project.clicked.connect(self.create_project)
@@ -128,6 +147,23 @@ class Project_Window(QMainWindow):
 
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
+
+    def open_website(self, website=''):
+        '''
+        Function to open a website link on the user's default bowser.
+
+        Parameters:
+            website - str: website's name (used for conditions)
+        '''
+        match website.lower():
+            case 'digikey':
+                website = 'https://www.digikey.ca/'
+            case 'adafruit':
+                website = 'https://www.adafruit.com/'
+            case 'bc robotics':
+                website = 'https://bc-robotics.com/'
+
+        QDesktopServices.openUrl(QUrl(website))
 
     def wrong_filetype_msg(self):
         '''

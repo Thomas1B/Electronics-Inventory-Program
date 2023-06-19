@@ -59,6 +59,10 @@
          <property name="text">
           <string>Open Project</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
+         </property>
         </widget>
        </item>
        <item row="0" column="0">
@@ -73,6 +77,10 @@
          </property>
          <property name="text">
           <string>Save Project</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/disk.png</normaloff>Icons/disk.png</iconset>
          </property>
         </widget>
        </item>
@@ -94,6 +102,10 @@
          </property>
          <property name="text">
           <string>Create Project</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book--pencil.png</normaloff>Icons/book--pencil.png</iconset>
          </property>
         </widget>
        </item>
@@ -315,6 +327,10 @@
          <property name="text">
           <string>Refresh</string>
          </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/arrow-circle-double.png</normaloff>Icons/arrow-circle-double.png</iconset>
+         </property>
         </widget>
        </item>
        <item row="1" column="1">
@@ -508,10 +524,47 @@
      <x>0</x>
      <y>0</y>
      <width>639</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <widget class="QMenu" name="menuShopping">
+    <property name="font">
+     <font>
+      <family>Terminal</family>
+     </font>
+    </property>
+    <property name="title">
+     <string>Shopping</string>
+    </property>
+    <addaction name="actionDigikey"/>
+    <addaction name="actionAdafruit"/>
+    <addaction name="actionBC_Robotics"/>
+   </widget>
+   <addaction name="menuShopping"/>
   </widget>
+  <action name="actionDigikey">
+   <property name="text">
+    <string>Digikey</string>
+   </property>
+  </action>
+  <action name="actionAdafruit">
+   <property name="text">
+    <string>Adafruit</string>
+   </property>
+  </action>
+  <action name="actionBC_Robotics">
+   <property name="text">
+    <string>BC Robotics</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
