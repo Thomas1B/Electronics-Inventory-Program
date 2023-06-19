@@ -73,6 +73,17 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="2" column="0">
+        <widget class="QPushButton" name="btn_export">
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Export File</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QPushButton" name="btn_open_new_order">
          <property name="minimumSize">
@@ -221,28 +232,6 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Create Project</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="btn_export">
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Export File</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="btn_import_inventory">
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Import Inventory</string>
          </property>
         </widget>
        </item>
