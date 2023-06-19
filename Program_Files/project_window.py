@@ -12,6 +12,7 @@ from PyQt5 import uic
 import sys
 import os
 import pandas as pd
+import shutil
 
 
 from .data_handling import (
@@ -72,6 +73,9 @@ class Project_Window(QMainWindow):
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project')
 
+        self.btn_export_project = self.findChild(
+            QtWidgets.QPushButton, 'btn_export_project')
+
         self.btn_open_project = self.findChild(
             QtWidgets.QPushButton, 'btn_open_project')
 
@@ -119,6 +123,7 @@ class Project_Window(QMainWindow):
         )
 
         self.btn_save_project.clicked.connect(self.save_project)
+        self.btn_export_project.clicked.connect(lambda: self.export_project(autoname=True))
         self.btn_open_project.clicked.connect(self.open_project)
         self.btn_create_project.clicked.connect(self.create_project)
 
@@ -164,6 +169,60 @@ class Project_Window(QMainWindow):
                 website = 'https://bc-robotics.com/'
 
         QDesktopServices.openUrl(QUrl(website))
+
+    def export_project(self, autoname=True):
+        '''
+        Function to export a Project.
+
+        Parameters:
+            autoname - bool: true - automatically named the final.
+                if true, exports to 'Downloads\exported_electrontics_lists\Projects'
+        '''
+        if autoname:
+            file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
+                self,
+                "Electronics Inventory Program - Exporting Project",
+                "Saved_Lists/Projects",
+                "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
+            )
+
+            if file_toexport:
+
+                export_filename, export_filetype = file_toexport.split(
+                    '/')[-1].split('.')
+
+                destination_folder = os.path.expanduser(
+                    "~" + os.sep + "Downloads\exported_electrontics_lists\Projects"
+                )
+                if not os.path.exists(destination_folder):
+                    os.mkdir(destination_folder)
+
+                # while loop to check if file has already be exported,
+                # if it does then add a number to the filename name.
+                # DO NOT CHANGE THE ORDER OF THESE VARIABLES
+                # new_name = file_toexport
+                new_name = f'{destination_folder}\{export_filename}.{export_filetype}'
+                base, ext = os.path.splitext(file_toexport)
+                counter = 1
+                while os.path.exists(new_name):
+                    new_name = f'{destination_folder}/{export_filename}({counter}){ext}'
+                    counter += 1
+                shutil.copy2(file_toexport, new_name)
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('Exporting File')
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxInformation")
+                icon = self.style().standardIcon(pixmapi)
+                msg.setWindowIcon(icon)
+                msg.setIcon(QtWidgets.QMessageBox.Information)
+
+                msg.setText('File exported!')
+                text = f'Project exported to "exported_electronics_lists/Project" in your downloads.'
+                msg.setInformativeText(text)
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
+
+            else:
+                pass
 
     def wrong_filetype_msg(self):
         '''
