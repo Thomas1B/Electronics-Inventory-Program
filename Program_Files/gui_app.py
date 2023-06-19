@@ -475,9 +475,10 @@ class MainWindow(QMainWindow):
                 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)'
             )
             filetype = filename.split(".")[-1]
+            name = filename.split('/')[-1]
             if filetype in ['csv', 'xlsx']:
                 self.is_sheet_open = filename
-                self.header.setText(f'Past Order: {filetype}')
+                self.header.setText(f'Past Order: {name}')
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
             elif filetype:
