@@ -12,7 +12,7 @@ import os
 import shutil
 import re
 
-from .info_windows import Info_Window
+from .info_windows import Info_Window, User_Info_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
@@ -51,6 +51,8 @@ class MainWindow(QMainWindow):
         # Menu Bar
         self.action_open_program_info = self.findChild(
             QtWidgets.QAction, 'actionProgram_Info')
+        self.action_how_to_use = self.findChild(
+            QtWidgets.QAction, 'actionHow_To_Use')
 
         self.action_open_Digikey = self.findChild(
             QtWidgets.QAction, 'actionDigiKey')
@@ -119,6 +121,7 @@ class MainWindow(QMainWindow):
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
+        self.action_how_to_use.triggered.connect(self.show_how_to_use)
 
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
@@ -223,6 +226,13 @@ class MainWindow(QMainWindow):
         '''
         self.info_window = Info_Window()
         self.info_window.show()
+
+    def show_how_to_use(self):
+        '''
+        Function to show the "how to use" window for the user.
+        '''
+        self.how_to_use_window = User_Info_Window()
+        self.how_to_use_window.show()
 
     def open_website(self, website=''):
         '''

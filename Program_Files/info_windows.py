@@ -20,7 +20,16 @@ class Info_Window(QMainWindow):
 
         # loading ui file
         uic.loadUi('Program_Files/info_window.ui', self)
-        self.adjustSize()
+        # self.adjustSize()
+
+        self.show()
+
+
+class User_Info_Window(QMainWindow):
+    def __init__(self):
+        super(User_Info_Window, self).__init__()
+
+        uic.loadUi('Program_Files/how_to_use.ui', self)
 
         self.show()
 
