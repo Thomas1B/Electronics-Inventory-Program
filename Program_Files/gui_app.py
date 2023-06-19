@@ -452,8 +452,7 @@ class MainWindow(QMainWindow):
                     self.show_btns(
                         [self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
-                    self.fill_table(
-                        [section for section in new_order if not section.empty][0])
+                    self.fill_table(new_order)
             else:
                 self.wrong_filetype_msg()
 
