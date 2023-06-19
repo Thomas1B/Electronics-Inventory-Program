@@ -375,7 +375,8 @@ class MainWindow(QMainWindow):
         Function to open the inventory
         '''
         self.sub_header.setText('')
-        self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
+        # self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
+        self.hide_btns([self.btn_add_to_inventory])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
@@ -601,11 +602,24 @@ class MainWindow(QMainWindow):
 
         # automatically called when an order is added to the inventory.
         elif called_from.lower() == 'add_to_inventory':
+            self.inventory_saved = True
             new_inventory = get_inventory()
             with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
                 for cat in new_inventory.keys():
                     new_inventory[cat].save_toexcel(writer=writer)
+
+            # displays successfully save popup
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Inventory Saved Successfully')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Information)
+            msg.setText(
+                'Inventory saved was successfully.')
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
 
     def add_to_inventory(self):
         # using function from data_handling.py
@@ -629,14 +643,14 @@ class MainWindow(QMainWindow):
 
         match user:
             case QtWidgets.QMessageBox.Yes:
-                self.inventory_saved = True
                 # saving to inventory
                 self.save_list(called_from='add_to_inventory')
                 # text file to store files that have been added.
-                added_orders = 'Saved_lists/added_to_inventory.txt'
+                added_orders = 'Saved_lists/Orders_added_to_inventory.txt'
                 line_count = 0  # count used to increment added orders.
+
+                # this file exists, count the number of line
                 if os.path.exists(added_orders):
-                    # this file exists, count the number of line
                     with open(added_orders, 'r') as file:
                         # Read the lines and count them
                         line_count = sum(1 for line in file)
