@@ -354,9 +354,10 @@ def get_ordersheet(filepath):
             pass
 
         # condition for when getting a order that has this labels dropped already.
-        if all(col in order.columns for col in labels_drop):
-            # dropping unwanted labels
-            order.drop(labels_drop, axis=1, inplace=True)
+        # if all(col in order.columns for col in labels_drop):
+        #     # dropping unwanted labels
+        #     order.drop(labels_drop, axis=1, inplace=True)
+        order = order[labels]
         # dropping unnamed columns
         unnamed_cols = [
             col for col in order.columns if 'unnamed' in col.lower()
