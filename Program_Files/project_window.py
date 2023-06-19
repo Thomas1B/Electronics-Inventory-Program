@@ -15,7 +15,6 @@ import pandas as pd
 import shutil
 
 
-
 from .data_handling import (
     Category,
     sort_order,
@@ -24,6 +23,8 @@ from .data_handling import (
     sort_order,
     get_subtotal
 )
+
+from .info_windows import User_Info_Window
 
 Project = {
     'Resistors': Category("Resistors"),
@@ -66,6 +67,9 @@ class Project_Window(QMainWindow):
         self.subtotal = self.findChild(QtWidgets.QLabel, 'subtotal')
 
         self.table.itemChanged.connect(self.update_subtotal)
+
+        self.action_how_to_use = self.findChild(
+            QtWidgets.QAction, 'actionHow_to_use_Project_tool')
 
         self.action_open_Digikey = self.findChild(
             QtWidgets.QAction, 'actionDigiKey')
@@ -119,6 +123,8 @@ class Project_Window(QMainWindow):
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
+        self.action_how_to_use.triggered.connect(self.show_how_to_use)
+
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
         )
@@ -161,6 +167,14 @@ class Project_Window(QMainWindow):
 
         self.btn_refresh_opensheet.clicked.connect(
             lambda: self.refresh_opensheet(self.is_sheet_open))
+
+    def show_how_to_use(self):
+        '''
+        Function to show the "how to use" window.
+        '''
+        self.how_to_use_window = User_Info_Window()
+        self.how_to_use_window.show()
+        
 
     def open_website(self, website=''):
         '''
@@ -626,8 +640,8 @@ class Project_Window(QMainWindow):
             if any(char.isalpha() for char in item.text()):
                 # user entered a string into number cells.
                 print('letter in cell!!!!')
-                return 
-            
+                return
+
         # getting the editted data and category
         data = None
         category = None
@@ -636,10 +650,10 @@ class Project_Window(QMainWindow):
                 data = df
                 category = list(Project.keys())[i]
                 break
-        
+
         Project[category].get_items().update(data)
         self.update_subtotal(item)
-        
+
 
 if __name__ == "__main__":
     # runnning program

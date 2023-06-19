@@ -598,6 +598,13 @@ background-color: rgb(255, 255, 255);</string>
     <addaction name="actionAdafruit"/>
     <addaction name="actionBC_Robotics"/>
    </widget>
+   <widget class="QMenu" name="menuInfo">
+    <property name="title">
+     <string>Info</string>
+    </property>
+    <addaction name="actionHow_to_use_Project_tool"/>
+   </widget>
+   <addaction name="menuInfo"/>
    <addaction name="menuShopping"/>
   </widget>
   <action name="actionDigiKey">
@@ -613,6 +620,15 @@ background-color: rgb(255, 255, 255);</string>
   <action name="actionBC_Robotics">
    <property name="text">
     <string>BC Robotics</string>
+   </property>
+  </action>
+  <action name="actionHow_to_use_Project_tool">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/information-italic.png</normaloff>Icons/information-italic.png</iconset>
+   </property>
+   <property name="text">
+    <string>How to use Project tool</string>
    </property>
   </action>
  </widget>
