@@ -50,7 +50,7 @@ class Project_Window(QMainWindow):
         # variable to keep track of what sheet is opened.
         self.is_sheet_open = False
 
-        # variable to keep track if the sheet was been editted.
+        # variable to keep track if the project has been saved.
         self.editted_saved = True  # used for saving
 
         self.header = self.findChild(QtWidgets.QLabel, 'header')
