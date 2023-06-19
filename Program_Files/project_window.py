@@ -606,7 +606,6 @@ class Project_Window(QMainWindow):
         Function to update the Project inventory when the table is in edit mode.
         '''
         if not self.in_edit_mode:
-            self.function_to_check(test_text='DOG')
             self.in_edit_mode = True
             self.editted_saved = False
             self.btn_edit_mode.setText('Exit Edit Mode')
@@ -616,7 +615,6 @@ class Project_Window(QMainWindow):
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
         else:
-            self.function_to_check(test_text='CAT')
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
             project_name = self.header.text().split(':')[-1].strip()
