@@ -186,8 +186,8 @@ class MainWindow(QMainWindow):
         else:
             event.ignore()  # dont let window close.
 
-            title = "Electronics Inventory Program - Saving"
-            text = f'Inventory has been editted!\n\nWould you like to save?'
+            title = "Closing Program"
+            text = f'Inventory has been editted!\n\nWould you like to save before closing the program?'
             user = QtWidgets.QMessageBox()
             user.setWindowTitle(title)
             pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
