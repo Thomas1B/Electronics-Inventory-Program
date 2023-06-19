@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>557</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -66,7 +66,7 @@
          <x>0</x>
          <y>0</y>
          <width>473</width>
-         <height>507</height>
+         <height>527</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -93,7 +93,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;User Information&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;To properly handle XLSX (Excel) files, it is necessary for the user to remove the 'Subtotal' line from the sheet.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;This Electronics Inventory Management Program is a straightforward and efficient Python software designed to aid in the organization and management of electronic components. Its user-friendly interface allows users to easily import and read CSV (Comma-Separated Values) and XLSX (Excel) files that contain information about different electronic components. To successfully sort the parts, the program requires the following columns: 'Part Number', 'Manufacturer Part Number', 'Description', 'Customer Reference', 'Unit Price', and 'Quantity'. Any additional columns present in the data files will be skipped by the program.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;When the user interacts with the system by opening a new order, accessing their inventory, reviewing projects, or checking past orders, they will be presented with options to choose from to filter the electronics types in that particular file. Additionally, they can save orders for future reference. When a new order is added to the inventory, the program automatically organizes the items and places them in the appropriate sections. Subsequently, the user is prompted to save the edited inventory.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Program Information&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;To properly handle XLSX (Excel) files, it is necessary for the user to remove the 'Subtotal' line from the sheet.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;This Electronics Inventory Management Program is a straightforward and efficient Python software designed to aid in the organization and management of electronic components. Its user-friendly interface allows users to easily import and read CSV (Comma-Separated Values) and XLSX (Excel) files that contain information about different electronic components. To successfully sort the parts, the program requires the following columns: 'Part Number', 'Manufacturer Part Number', 'Description', 'Customer Reference', 'Unit Price', and 'Quantity'. Any additional columns present in the data files will be skipped by the program.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;When the user interacts with the system by opening a new order, accessing their inventory, reviewing projects, or checking past orders, they will be presented with options to choose from to filter the electronics types in that particular file. Additionally, they can save orders for future reference. When a new order is added to the inventory, the program automatically organizes the items and places them in the appropriate sections. Subsequently, the user is prompted to save the edited inventory.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -118,7 +118,7 @@
      <x>0</x>
      <y>0</y>
      <width>515</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

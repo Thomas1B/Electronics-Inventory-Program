@@ -12,7 +12,7 @@ import os
 import shutil
 import re
 
-from .info_window import Info_Window
+from .info_windows import Info_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
@@ -222,6 +222,7 @@ class MainWindow(QMainWindow):
         Opens a second window
         '''
         self.info_window = Info_Window()
+        self.info_window.show()
 
     def open_website(self, website=''):
         '''

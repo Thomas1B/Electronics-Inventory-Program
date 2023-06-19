@@ -694,6 +694,7 @@ background-color: rgb(255, 255, 255);</string>
      <string>Info</string>
     </property>
     <addaction name="actionProgram_Info"/>
+    <addaction name="actionHow_To_Use"/>
    </widget>
    <addaction name="menuInfo"/>
    <addaction name="menuLinks"/>
@@ -735,6 +736,15 @@ background-color: rgb(255, 255, 255);</string>
    </property>
    <property name="text">
     <string>Program Info</string>
+   </property>
+  </action>
+  <action name="actionHow_To_Use">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/information-italic.png</normaloff>Icons/information-italic.png</iconset>
+   </property>
+   <property name="text">
+    <string>How To Use</string>
    </property>
   </action>
  </widget>
