@@ -568,7 +568,7 @@ class MainWindow(QMainWindow):
                     msg.setWindowTitle('Filed Saved Successfully')
                     pixmapi = getattr(QtWidgets.QStyle, "SP_DialogApplyButton")
                     icon = self.style().standardIcon(pixmapi)
-                    user.setWindowIcon(icon)
+                    msg.setWindowIcon(icon)
                     msg.setIcon(QtWidgets.QMessageBox.Information)
                     msg.setText(
                         'The new order was successfully saved.')
