@@ -5,8 +5,8 @@ Creates a second window to allow the user to create/edit a project
 '''
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QDesktopServices, QIcon
 from PyQt5.QtCore import QUrl
 from PyQt5 import uic
 import sys

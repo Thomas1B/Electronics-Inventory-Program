@@ -544,15 +544,15 @@
     <property name="title">
      <string>Shopping</string>
     </property>
-    <addaction name="actionDigikey"/>
+    <addaction name="actionDigiKey"/>
     <addaction name="actionAdafruit"/>
     <addaction name="actionBC_Robotics"/>
    </widget>
    <addaction name="menuShopping"/>
   </widget>
-  <action name="actionDigikey">
+  <action name="actionDigiKey">
    <property name="text">
-    <string>Digikey</string>
+    <string>DigiKey</string>
    </property>
   </action>
   <action name="actionAdafruit">
