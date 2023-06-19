@@ -628,7 +628,15 @@ class Project_Window(QMainWindow):
         Function to get the item that has been editted.
         '''
 
-        data = self.get_table_data()
+        try:
+            '''
+            Need this try block to stop an error when user is in edit more and look at 
+            sub sections of the project.
+            '''
+            data = self.get_table_data()
+        except Exception:
+            return
+        
         column_name = data.keys()[item.column()]
         row_index = item.row()
         row = pd.DataFrame(data.iloc[row_index]).T
