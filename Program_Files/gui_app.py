@@ -363,9 +363,21 @@ class MainWindow(QMainWindow):
                 base, ext = os.path.splitext(file_toexport)
                 counter = 1
                 while os.path.exists(new_name):
-                    new_name = f'{base}({counter}){ext}'
+                    new_name = f'{destination_folder}/{export_filename}({counter}){ext}'
                     counter += 1
                 shutil.copy2(file_toexport, new_name)
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('Exporting File')
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxInformation")
+                icon = self.style().standardIcon(pixmapi)
+                msg.setWindowIcon(icon)
+                msg.setIcon(QtWidgets.QMessageBox.Information)
+
+                msg.setText('File exported!')
+                text = f'File exported to "exported_electronics_lists" in your downloads.'
+                msg.setInformativeText(text)
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
 
             else:
                 pass
@@ -388,6 +400,7 @@ class MainWindow(QMainWindow):
             title = 'No Inventory'
             self.no_files_msg(title=title, header=header, text=text)
             self.hide_sorting_btns()
+            self.btn_import_inventory.show()
 
     def open_new_order(self):
         '''
@@ -655,8 +668,7 @@ class MainWindow(QMainWindow):
                 msg.setInformativeText(info_text)
                 msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 msg.exec_()
-                return 
-            
+                return
 
         # using function from data_handling.py
         add_order_to_Inventory(self.is_sheet_open)
