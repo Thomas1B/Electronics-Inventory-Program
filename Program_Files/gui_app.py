@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
             QtWidgets.QAction, 'actionBC_Robotics')
 
         # Info Labels
+        self.header_frame = self.findChild(QtWidgets.QFrame, 'header_frame')
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
@@ -171,7 +172,8 @@ class MainWindow(QMainWindow):
 
         self.hide_btns([
             self.btn_save_list,
-            self.btn_add_to_inventory
+            self.btn_add_to_inventory,
+            self.header_frame
         ])
         self.hide_sorting_btns()
 
@@ -411,6 +413,7 @@ class MainWindow(QMainWindow):
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
             self.show_sorting_btns()
+            self.header_frame.show()
         else:
             header = 'There is no inventory file.'
             text = 'Create an inventory by reading in some orders!'
@@ -458,6 +461,7 @@ class MainWindow(QMainWindow):
                     self.show_btns(
                         [self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
+                    self.header_frame.show()
                     self.fill_table(new_order)
             else:
                 self.wrong_filetype_msg()
@@ -481,6 +485,7 @@ class MainWindow(QMainWindow):
                 self.header.setText(f'Past Order: {name}')
                 self.fill_table(get_ordersheet(filename))
                 self.show_sorting_btns()
+                self.header_frame.show()
             elif filetype:
                 self.wrong_filetype_msg()
             else:
