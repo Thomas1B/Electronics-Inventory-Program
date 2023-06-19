@@ -39,8 +39,8 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
         <widget class="QPushButton" name="btn_save_project">
          <property name="font">
           <font>
@@ -59,7 +59,26 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="btn_edit_mode">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Edit Mode</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/edit-writing-mode.png</normaloff>Icons/edit-writing-mode.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
         <widget class="QPushButton" name="btn_export_project">
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;
@@ -74,7 +93,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="2">
         <widget class="QPushButton" name="btn_open_project">
          <property name="maximumSize">
           <size>
@@ -99,7 +118,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="3">
         <widget class="QPushButton" name="btn_create_project">
          <property name="maximumSize">
           <size>
@@ -183,7 +202,7 @@ background-color: rgb(255, 255, 255);</string>
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                </property>
                <property name="wordWrap">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="margin">
                 <number>0</number>
@@ -192,6 +211,22 @@ background-color: rgb(255, 255, 255);</string>
                 <number>-1</number>
                </property>
               </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>25</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
              <item>
               <widget class="QLabel" name="sub_header">
@@ -213,7 +248,7 @@ background-color: rgb(255, 255, 255);</string>
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                </property>
                <property name="wordWrap">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="margin">
                 <number>0</number>

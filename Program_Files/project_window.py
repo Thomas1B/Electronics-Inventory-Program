@@ -56,6 +56,9 @@ class Project_Window(QMainWindow):
         # variable to keep track if the project has been saved.
         self.editted_saved = True  # used for saving
 
+        # keeping track if the program is in edit mode.
+        self.in_edit_mode = False
+
         self.header = self.findChild(QtWidgets.QLabel, 'header')
         self.sub_header = self.findChild(QtWidgets.QLabel, 'sub_header')
         self.table = self.findChild(QtWidgets.QTableWidget, 'table')
@@ -81,6 +84,9 @@ class Project_Window(QMainWindow):
 
         self.btn_create_project = self.findChild(
             QtWidgets.QPushButton, 'btn_create_project')
+
+        self.btn_edit_mode = self.findChild(
+            QtWidgets.QPushButton, 'btn_edit_mode')
 
         # self.btn_open_project.hide()
 
@@ -123,9 +129,11 @@ class Project_Window(QMainWindow):
         )
 
         self.btn_save_project.clicked.connect(self.save_project)
-        self.btn_export_project.clicked.connect(lambda: self.export_project(autoname=True))
+        self.btn_export_project.clicked.connect(
+            lambda: self.export_project(autoname=True))
         self.btn_open_project.clicked.connect(self.open_project)
         self.btn_create_project.clicked.connect(self.create_project)
+        self.btn_edit_mode.clicked.connect(self.edit_mode)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -429,7 +437,6 @@ class Project_Window(QMainWindow):
                     Project[cat].add_item(section)
             self.project_loaded = True
         self.fill_table(Project)
-        self.update_subtotal()
 
     def fill_table(self, dataframe):
         '''
@@ -461,6 +468,31 @@ class Project_Window(QMainWindow):
                 items['Unit Price'].astype(float).round(2).astype(str)[row]))
             self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
                 items['Quantity'].astype(int).astype(str)[row]))
+
+    def get_table_data(self):
+        '''
+        Function to get the displayed table data into a dataframe.
+
+        Returns a pandas dataframe.
+        '''
+        rows = self.table.rowCount()
+        cols = self.table.columnCount()
+        data = []
+
+        if rows:
+            for r in range(rows):
+                row_data = []
+                for c in range(cols):
+                    item = self.table.item(r, c)
+                    if item:
+                        row_data.append(item.text())
+                data.append(row_data)
+
+            data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
+                                'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
+            return data
+        else:
+            print("NO ROWS IN TABLE")
 
     def show_sorted_section(self, section):
         '''
@@ -548,12 +580,63 @@ class Project_Window(QMainWindow):
                     # user cancels selection.
                     event.ignore()
 
-    def update_subtotal(self):
+    def update_subtotal(self, item):
         '''
         Function to update the subtotal of the project.
         '''
         subtotal = get_subtotal(Project)
         self.subtotal.setText(f'Project Subtotal: ${str(subtotal)}')
+
+    def edit_mode(self):
+        '''
+        Function to update the Project inventory when the table is in edit mode.
+        '''
+        if not self.in_edit_mode:
+            self.in_edit_mode = True
+            self.editted_saved = False
+            self.btn_edit_mode.setText('Exit Edit Mode')
+            project_name = self.header.text().split(':')[-1].strip()
+            text = f'Editting project: {project_name}'
+            self.header.setText(text)
+            self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
+            self.table.itemChanged.connect(self.get_editted)
+        else:
+            self.in_edit_mode = False
+            self.btn_edit_mode.setText('Edit Mode')
+            project_name = self.header.text().split(':')[-1].strip()
+            text = f'Project: {project_name}'
+            self.header.setText(text)
+            self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+            self.table.itemChanged.connect(self.update_subtotal)
+
+    def get_editted(self, item):
+        '''
+        Function to get the item that has been editted.
+        '''
+
+        data = self.get_table_data()
+        column_name = data.keys()[item.column()]
+        row_index = item.row()
+        row = pd.DataFrame(data.iloc[row_index]).T
+
+        if column_name in ['Unit Price', 'Quantity']:
+            # checking if there is any letter in the editted price or quantity.
+            if any(char.isalpha() for char in item.text()):
+                # user entered a string into number cells.
+                print('letter in cell!!!!')
+                return 
+            
+        # getting the editted data and category
+        data = None
+        category = None
+        for i, df in enumerate(sort_order(row)):
+            if not df.empty:
+                data = df
+                category = list(Project.keys())[i]
+                break
+        
+        Project[category].get_items().update(data)
+        
 
 
 if __name__ == "__main__":
