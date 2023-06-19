@@ -352,7 +352,7 @@ background-color: rgb(255, 255, 255);</string>
              <enum>Qt::ScrollBarAsNeeded</enum>
             </property>
             <property name="editTriggers">
-             <set>QAbstractItemView::DoubleClicked</set>
+             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="alternatingRowColors">
              <bool>false</bool>
