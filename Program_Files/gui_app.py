@@ -627,22 +627,26 @@ class MainWindow(QMainWindow):
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
 
-        if user == QtWidgets.QMessageBox.Yes:
-            # saving to inventory
-            self.save_list(called_from='add_to_inventory')
-            # text file to store files that have been added.
-            added_orders = 'Saved_lists/added_to_inventory.txt'
-            line_count = 0  # count used to increment added orders.
-            if os.path.exists(added_orders):
-                # this file exists, count the number of line
-                with open(added_orders, 'r') as file:
-                    # Read the lines and count them
-                    line_count = sum(1 for line in file)
-            with open(added_orders, 'a') as file:
-                # adding order name to text of previous added orders.
-                filename = self.is_sheet_open.split('/')[-1]
-                text = '{:>3}: {:s}\n'.format(line_count+1, filename)
-                file.write(text)
+        match user:
+            case QtWidgets.QMessageBox.Yes:
+                self.inventory_saved = True
+                # saving to inventory
+                self.save_list(called_from='add_to_inventory')
+                # text file to store files that have been added.
+                added_orders = 'Saved_lists/added_to_inventory.txt'
+                line_count = 0  # count used to increment added orders.
+                if os.path.exists(added_orders):
+                    # this file exists, count the number of line
+                    with open(added_orders, 'r') as file:
+                        # Read the lines and count them
+                        line_count = sum(1 for line in file)
+                with open(added_orders, 'a') as file:
+                    # adding order name to text of previous added orders.
+                    filename = self.is_sheet_open.split('/')[-1]
+                    text = '{:>3}: {:s}\n'.format(line_count+1, filename)
+                    file.write(text)
+            case _:
+                self.inventory_saved = False
 
     def fill_table(self, dataframe):
         '''
