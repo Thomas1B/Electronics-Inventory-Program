@@ -340,7 +340,7 @@ class MainWindow(QMainWindow):
             file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
                 self,
                 "Electronics Inventory Program - Exporting File",
-                "Saved_lists",
+                "Saved_Lists",
                 "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
             )
 
