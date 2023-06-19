@@ -396,11 +396,10 @@ class MainWindow(QMainWindow):
             self.show_sorting_btns()
         else:
             header = 'There is no inventory file.'
-            text = 'Either import one or create one!'
+            text = 'Create an inventory by reading in some orders!'
             title = 'No Inventory'
             self.no_files_msg(title=title, header=header, text=text)
             self.hide_sorting_btns()
-            self.btn_import_inventory.show()
 
     def open_new_order(self):
         '''
