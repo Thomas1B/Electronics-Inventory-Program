@@ -621,6 +621,7 @@ class Project_Window(QMainWindow):
             text = f'Project: {project_name}'
             self.header.setText(text)
             self.table.itemChanged.disconnect(self.get_editted)
+            self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             self.table.itemChanged.connect(self.update_subtotal)
 
     def get_editted(self, item):
