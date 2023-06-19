@@ -622,6 +622,14 @@ class MainWindow(QMainWindow):
             _ = msg.exec_()
 
     def add_to_inventory(self):
+        '''
+        Function to add an order to inventory.
+            - Triggered by add_to_inventory button.
+        '''
+    
+
+
+
         # using function from data_handling.py
         add_order_to_Inventory(self.is_sheet_open)
 
