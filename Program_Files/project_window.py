@@ -14,7 +14,6 @@ import os
 import pandas as pd
 import shutil
 
-import inspect
 
 
 from .data_handling import (
@@ -641,14 +640,6 @@ class Project_Window(QMainWindow):
         Project[category].get_items().update(data)
         self.update_subtotal(item)
         
-    def function_to_check(self, test_text = 'MEOW'):
-        caller_frame = inspect.currentframe().f_back
-        caller_name = inspect.getframeinfo(caller_frame).function
-        caller_line = inspect.getframeinfo(caller_frame).lineno
-        caller_filename = inspect.getframeinfo(caller_frame).filename
-        print(f"Called from function '{caller_name}' at line {caller_line} in file '{caller_filename}'")
-        print(test_text)
-
 
 if __name__ == "__main__":
     # runnning program
