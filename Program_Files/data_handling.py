@@ -61,7 +61,7 @@ class Category:
 
         # Changing the datatype of 'Quantity' and 'Unit Price'.
         # (Fixes bugs in later code)
-        self.get_items()['Quantity'] = self.get_items()[
+        self.items['Quantity'] = self.get_items()[
             'Quantity'].astype(float)
         self.get_items()['Unit Price'] = self.get_items()[
             'Unit Price'].astype(float)
@@ -101,6 +101,8 @@ class Category:
                      only pass 'writer' when saving in a group of other sheets.
         '''
         if writer:
+            if self.items.empty:
+                self.items = pd.DataFrame(columns=labels)
             self.items.to_excel(writer, sheet_name=self.category, index=False)
         else:
             with pd.ExcelWriter(f'Saved_Files/{self.category}.xlsx') as writer:
@@ -165,7 +167,8 @@ class Category:
         '''
         subtotal = 0
         for i in range(self.items.shape[0]):
-            subtotal += float(self.items.iloc[i]['Quantity'])*float(self.items.iloc[i]['Unit Price'])
+            subtotal += float(self.items.iloc[i]['Quantity']) * \
+                float(self.items.iloc[i]['Unit Price'])
         return subtotal
 
 
