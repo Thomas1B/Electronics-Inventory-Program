@@ -498,11 +498,13 @@ class MainWindow(QMainWindow):
                     self.wrong_filetype_msg()
         elif len(filename) > 1:
             data = []
+            names = []
             for name in filename:
                 filetype = name.split('.')[-1]
                 if filetype in ['csv', 'xlsx']:
                     self.is_sheet_open = name
                     order_name = name.split('/')[-1]
+                    names.append(order_name)
 
                     if filetype == 'xlsx':
                         '''
@@ -527,6 +529,11 @@ class MainWindow(QMainWindow):
 
             data = pd.DataFrame(data).reset_index(drop=True)
             self.fill_table(data)
+            text = 'New Orders: {:s}'.format(', '.join
+                                             (names))
+            print(text)
+            self.header.setText(text)
+            self.header_frame.show()
 
     def open_past_order(self):
         '''
