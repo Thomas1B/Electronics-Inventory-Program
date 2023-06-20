@@ -606,7 +606,6 @@ class Project_Window(QMainWindow):
         '''
         if not self.in_edit_mode:
             self.in_edit_mode = True
-            self.editted_saved = False
             self.btn_edit_mode.setText('Exit Edit Mode')
             project_name = self.header.text().split(':')[-1].strip()
             text = f'Editting project: {project_name}'
@@ -656,7 +655,8 @@ class Project_Window(QMainWindow):
                 data = df
                 category = list(Project.keys())[i]
                 break
-
+        
+        self.editted_saved = False
         Project[category].get_items().update(data)
         self.update_subtotal(item)
 
