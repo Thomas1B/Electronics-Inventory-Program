@@ -21,7 +21,8 @@ from .data_handling import (Inventory,
                             add_order_to_Inventory,
                             dict_to_dataframe,
                             sort_order,
-                            get_inventory)
+                            get_inventory,
+                            labels)
 
 
 class MainWindow(QMainWindow):
@@ -454,51 +455,78 @@ class MainWindow(QMainWindow):
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
-        print(type(filename))
-        print(filename)
 
-        match len(filename):
-            case 1:
-                filename = filename[0]
-                filetype = filename.split('.')[-1]
-                if filetype:
-                    if filetype in ['csv', 'xlsx']:
-                        self.is_sheet_open = filename
-                        order_name = filename.split('/')[-1]
+        # user selected mulitple files, so the orders are combined into one data frame.
+        if len(filename) == 1:
+            filename = filename[0]
+            filetype = filename.split('.')[-1]
+            if filetype:
+                if filetype in ['csv', 'xlsx']:
+                    self.is_sheet_open = filename
+                    order_name = filename.split('/')[-1]
 
-                        if filetype == 'xlsx':
-                            '''
-                            only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
+                    if filetype == 'xlsx':
+                        '''
+                        only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
 
-                            This may change at some time...
-                            '''
-                            user = QtWidgets.QMessageBox.question(
-                                self,
-                                'Opening an excel file',
-                                'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
-                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                                QtWidgets.QMessageBox.No
-                            )
-                            if user == QtWidgets.QMessageBox.No:
-                                return
+                        This may change at some time...
+                        '''
+                        user = QtWidgets.QMessageBox.question(
+                            self,
+                            'Opening an excel file',
+                            'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
+                            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                            QtWidgets.QMessageBox.No
+                        )
+                        if user == QtWidgets.QMessageBox.No:
+                            return
 
-                        new_order = get_ordersheet(filename)
-                        if new_order:
-                            text = f'Looking at new order: {order_name}'
-                            self.header.setText(text)
-                            self.btn_save_list.setText('Save Order')
-                            self.btn_save_list.clicked.connect(
-                                lambda: self.save_list('save_order')
-                            )
-                            self.show_btns(
-                                [self.btn_save_list, self.btn_add_to_inventory])
-                            self.show_sorting_btns()
-                            self.header_frame.show()
-                            self.fill_table(new_order)
-                    else:
-                        self.wrong_filetype_msg()
-            case _:
-                pass
+                    new_order = get_ordersheet(filename)
+                    if new_order:
+                        text = f'Looking at new order: {order_name}'
+                        self.header.setText(text)
+                        self.btn_save_list.setText('Save Order')
+                        self.btn_save_list.clicked.connect(
+                            lambda: self.save_list('save_order')
+                        )
+                        self.show_btns(
+                            [self.btn_save_list, self.btn_add_to_inventory])
+                        self.show_sorting_btns()
+                        self.header_frame.show()
+                        self.fill_table(new_order)
+                else:
+                    self.wrong_filetype_msg()
+        elif len(filename) > 1:
+            data = []
+            for name in filename:
+                filetype = name.split('.')[-1]
+                if filetype in ['csv', 'xlsx']:
+                    self.is_sheet_open = name
+                    order_name = name.split('/')[-1]
+
+                    if filetype == 'xlsx':
+                        '''
+                        only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
+
+                        This may change at some time...
+                        '''
+                        user = QtWidgets.QMessageBox.question(
+                            self,
+                            'Opening an excel file',
+                            'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
+                            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                            QtWidgets.QMessageBox.No
+                        )
+                        if user == QtWidgets.QMessageBox.No:
+                            return
+                    order = get_ordersheet(self.is_sheet_open)
+                    for section in order:
+                        if not section.empty:
+                            for i in range(section.shape[0]):
+                                data.append(section.iloc[i])
+
+            data = pd.DataFrame(data).reset_index(drop=True)
+            self.fill_table(data)
 
     def open_past_order(self):
         '''
