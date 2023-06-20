@@ -73,6 +73,25 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
+       <item row="3" column="0">
+        <widget class="QPushButton" name="btn_edit_mode">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Edit Mode</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/edit-writing-mode.png</normaloff>Icons/edit-writing-mode.png</iconset>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QPushButton" name="btn_export">
          <property name="styleSheet">
@@ -85,6 +104,71 @@ background-color: rgb(255, 255, 255);</string>
          <property name="icon">
           <iconset>
            <normaloff>Icons/blue-folder-export.png</normaloff>Icons/blue-folder-export.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="btn_open_past_order">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Open Past Orders</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="btn_open_project_lists">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Open Projects</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
          </property>
         </widget>
        </item>
@@ -128,81 +212,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="btn_save_list">
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Save New Order</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/disk.png</normaloff>Icons/disk.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="4">
-        <widget class="QPushButton" name="btn_add_to_inventory">
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Add to Inventory</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="btn_open_past_order">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-           <pointsize>8</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Open Past Orders</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4">
+       <item row="0" column="2">
         <widget class="QPushButton" name="btn_open_inventory">
          <property name="maximumSize">
           <size>
@@ -227,14 +237,8 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="5">
-        <widget class="QPushButton" name="btn_open_project_lists">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_save_list">
          <property name="font">
           <font>
            <family>Terminal</family>
@@ -244,15 +248,30 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Open Projects</string>
+          <string>Save New Order</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
+           <normaloff>Icons/disk.png</normaloff>Icons/disk.png</iconset>
          </property>
         </widget>
        </item>
-       <item row="2" column="5">
+       <item row="2" column="2">
+        <widget class="QPushButton" name="btn_add_to_inventory">
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Add to Inventory</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
         <widget class="QPushButton" name="btn_create_project">
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;

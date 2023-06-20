@@ -10,7 +10,7 @@ import pandas as pd
 import sys
 import os
 import shutil
-import re
+import inspect
 
 from .info_windows import Info_Window, User_Info_Window
 from .project_window import Project_Window
@@ -35,6 +35,9 @@ class MainWindow(QMainWindow):
 
         # variable to keep track if the inventory was been editted.
         self.inventory_saved = True  # used for saving
+
+        # keeping track if the program is in edit mode.
+        self.in_edit_mode = False
 
         # Loading .ui file
         uic.loadUi('Program_Files/gui_app.ui', self)
@@ -84,6 +87,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_export')
         self.btn_create_project = self.findChild(
             QtWidgets.QPushButton, 'btn_create_project')
+        self.btn_edit_mode = self.findChild(
+            QtWidgets.QPushButton, 'btn_edit_mode')
 
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
@@ -143,6 +148,7 @@ class MainWindow(QMainWindow):
         self.btn_export.clicked.connect(
             lambda: self.export_file(autoname=True))
         self.btn_create_project.clicked.connect(self.create_project)
+        self.btn_edit_mode.clicked.connect(self.edit_mode)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -173,7 +179,8 @@ class MainWindow(QMainWindow):
         self.hide_btns([
             self.btn_save_list,
             self.btn_add_to_inventory,
-            self.header_frame
+            self.header_frame,
+            self.btn_edit_mode
         ])
         self.hide_sorting_btns()
 
@@ -341,6 +348,25 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
+    def disable_feature_msg(self, header=None, text=None):
+        '''
+        Function to display a pop that a feature has been disable.
+        '''
+
+        if not header:
+            header = 'Feature is disabled.'
+
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle('Disable Feature')
+        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+        icon = self.style().standardIcon(pixmapi)
+        msg.setWindowIcon(icon)
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setText(header)
+        msg.setInformativeText(text)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
+
     def export_file(self, autoname=True):
         '''
         Function to export a file.
@@ -405,15 +431,14 @@ class MainWindow(QMainWindow):
             if not self.inventory_saved:
                 self.btn_save_list.setText('Save Inventory')
                 self.btn_save_list.clicked.connect(
-                    lambda: self.save_list('save_order')
+                    lambda: self.save_list('add_to_inventory')
                 )
                 self.btn_save_list.show()
-
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
             self.show_sorting_btns()
-            self.header_frame.show()
+            self.show_btns([self.header_frame, self.btn_edit_mode])
         else:
             header = 'There is no inventory file.'
             text = 'Create an inventory by reading in some orders!'
@@ -508,17 +533,20 @@ class MainWindow(QMainWindow):
         Parameter:
             section - str: name of category to display.
         '''
-
-        if 'looking at inventory' in self.header.text().lower():
-            self.fill_table(Inventory[section].get_items())
+        if self.in_edit_mode:
+            header = 'That feature is disable in "Edit Mode".'
+            self.disable_feature_msg(header=header)
         else:
-            data = get_ordersheet(self.is_sheet_open)
-            sorted = {}
-            keys = Inventory.keys()
-            for i, key in enumerate(keys):
-                sorted[key] = data[i]
-            self.fill_table(sorted[section].reset_index(drop=True))
-        self.sub_header.setText(section)
+            if 'looking at inventory' in self.header.text().lower():
+                self.fill_table(Inventory[section].get_items())
+            else:
+                data = get_ordersheet(self.is_sheet_open)
+                sorted = {}
+                keys = Inventory.keys()
+                for i, key in enumerate(keys):
+                    sorted[key] = data[i]
+                self.fill_table(sorted[section].reset_index(drop=True))
+            self.sub_header.setText(section)
 
     def refresh_opensheet(self, filename=None):
         '''
@@ -526,13 +554,17 @@ class MainWindow(QMainWindow):
             used for when a user is looking a specific category.
 
         '''
-        filename = self.is_sheet_open
-        if 'looking at inventory' in self.header.text().lower():
-            self.open_inventory()
+        if self.in_edit_mode:
+            header = 'That feature is disable in "Edit Mode".'
+            self.disable_feature_msg(header=header)
         else:
-            data = get_ordersheet(filename)
-            self.fill_table(data)
-            self.sub_header.setText('')
+            filename = self.is_sheet_open
+            if 'looking at inventory' in self.header.text().lower():
+                self.open_inventory()
+            else:
+                data = get_ordersheet(filename)
+                self.fill_table(data)
+                self.sub_header.setText('')
 
     def save_list(self, called_from=None):
         '''
@@ -921,6 +953,61 @@ class MainWindow(QMainWindow):
         # else:
         #     data = self.get_table_data()
         #     print(data.iloc[index])
+
+    def edit_mode(self):
+        '''
+        Function to update the Project inventory when the table is in edit mode.
+        '''
+        if not self.in_edit_mode:
+            self.in_edit_mode = True
+            self.btn_edit_mode.setText('Exit Edit Mode')
+            text = f'Editting Inventory'
+            self.header.setText(text)
+            self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
+            self.table.itemChanged.connect(self.get_editted)
+        else:
+            self.in_edit_mode = False
+            self.btn_edit_mode.setText('Edit Mode')
+            text = 'Looking at Inventory'
+            self.header.setText(text)
+            self.table.itemChanged.disconnect(self.get_editted)
+            self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+
+    def get_editted(self, item):
+        '''
+        Function to get the item that has been editted.
+        '''
+
+        try:
+            '''
+            Need this try block to stop an error when user is in edit more and look at 
+            sub sections of the project.
+            '''
+            data = self.get_table_data()
+        except Exception:
+            return
+
+        column_name = data.keys()[item.column()]
+        row_index = item.row()
+        row = pd.DataFrame(data.iloc[row_index]).T
+
+        if column_name in ['Unit Price', 'Quantity']:
+            # checking if there is any letter in the editted price or quantity.
+            if any(char.isalpha() for char in item.text()):
+                # user entered a string into number cells.
+                print('letter in cell!!!!')
+                return
+
+        # getting the editted data and category
+        data = None
+        category = None
+        for i, df in enumerate(sort_order(row)):
+            if not df.empty:
+                data = df
+                category = list(Inventory.keys())[i]
+                break
+        self.inventory_saved = False
+        Inventory[category].get_items().update(data)
 
 
 if __name__ == "__main__":
