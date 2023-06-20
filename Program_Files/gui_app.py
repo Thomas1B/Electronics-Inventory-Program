@@ -521,17 +521,18 @@ class MainWindow(QMainWindow):
                         )
                         if user == QtWidgets.QMessageBox.No:
                             return
+                    # putting orders into one dataframe.
                     order = get_ordersheet(self.is_sheet_open)
                     for section in order:
                         if not section.empty:
                             for i in range(section.shape[0]):
                                 data.append(section.iloc[i])
-
+            
+            # converting orders into a dataframe.
             data = pd.DataFrame(data).reset_index(drop=True)
             self.fill_table(data)
             text = 'New Orders: {:s}'.format(', '.join
                                              (names))
-            print(text)
             self.header.setText(text)
             self.header_frame.show()
 
