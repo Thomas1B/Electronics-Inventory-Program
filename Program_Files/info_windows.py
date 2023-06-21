@@ -33,6 +33,13 @@ class User_Info_Window(QMainWindow):
 
         self.show()
 
+class Add_Item_Window(QMainWindow):
+    def __init__(self):
+        super(Add_Item_Window, self).__init__()
+        uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
+        
+        self.show()
+
 
 if __name__ == "__main__":
     # runnning program

@@ -12,7 +12,7 @@ import os
 import shutil
 import inspect
 
-from .info_windows import Info_Window, User_Info_Window
+from .info_windows import Info_Window, User_Info_Window, Add_Item_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
         self.toolbar.setStyleSheet(
             '''
             QToolButton {
-                padding: 5px;                
+                padding: 5px;
             }
              QToolButton:hover {
                 background-color: rgb(200, 200, 200);
@@ -1043,8 +1043,9 @@ class MainWindow(QMainWindow):
         '''
         Function to read user's input as an item and add it to the nessecary section
         '''
-        pass
-
+        
+        self.add_item_window = Add_Item_Window()
+        self.add_item_window.show()
 
 if __name__ == "__main__":
     # runnning program
