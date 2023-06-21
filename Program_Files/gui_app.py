@@ -980,7 +980,6 @@ class MainWindow(QMainWindow):
         '''
 
         # buttons to disable in edit mode.
-
         btns = [self.btn_add_to_inventory, self.btn_add_item_manually]
 
         if not self.in_edit_mode:
