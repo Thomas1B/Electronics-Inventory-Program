@@ -92,6 +92,8 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_add_to_inventory')
         self.btn_edit_mode = self.findChild(
             QtWidgets.QPushButton, 'btn_edit_mode')
+        self.btn_add_item_manually = self.findChild(
+            QtWidgets.QPushButton, 'btn_add_item_manually')
 
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
@@ -137,7 +139,7 @@ class MainWindow(QMainWindow):
         self.action_open_projects.triggered.connect(self.open_project_lists)
         self.action_create_project.triggered.connect(self.create_project)
         self.action_open_past_orders.triggered.connect(self.open_past_order)
-        self.action_export_file.triggered.connect(self.export_file)
+        self.action_export_file.triggered.connect(lambda: self.export_file(autoname=True))
         self.toolbar.setStyleSheet(
             '''
             QToolButton {
@@ -148,7 +150,6 @@ class MainWindow(QMainWindow):
             }
             '''
         )
-
 
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
@@ -163,6 +164,7 @@ class MainWindow(QMainWindow):
         # buttons
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
+        self.btn_add_item_manually.clicked.connect(self.add_item_manually)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -194,16 +196,14 @@ class MainWindow(QMainWindow):
             self.btn_save_list,
             self.btn_add_to_inventory,
             self.header_frame,
-            self.btn_edit_mode
+            self.btn_edit_mode,
+            self.btn_add_item_manually
         ])
         self.hide_sorting_btns()
 
         self.project_window = Project_Window(self)
 
-
         self.show()  # needs to here in order to work
-
-
 
     def closeEvent(self, event):
         '''
@@ -455,7 +455,8 @@ class MainWindow(QMainWindow):
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
             self.show_sorting_btns()
-            self.show_btns([self.header_frame, self.btn_edit_mode])
+            self.show_btns(
+                [self.header_frame, self.btn_edit_mode, self.btn_add_item_manually])
         else:
             header = 'There is no inventory file.'
             text = 'Create an inventory by reading in some orders!'
@@ -467,13 +468,13 @@ class MainWindow(QMainWindow):
         '''
         Function to open an order
         '''
-        self.sub_header.setText('')
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
         filetype = filename.split('.')[-1]
         if filetype:
             if filetype in ['csv', 'xlsx']:
+                self.sub_header.setText('')
                 self.is_sheet_open = filename
                 order_name = filename.split('/')[-1]
 
@@ -500,6 +501,8 @@ class MainWindow(QMainWindow):
                     self.btn_save_list.clicked.connect(
                         lambda: self.save_list('save_order')
                     )
+                    self.hide_btns(
+                        [self.btn_add_item_manually, self.btn_edit_mode])
                     self.show_btns(
                         [self.btn_save_list, self.btn_add_to_inventory])
                     self.show_sorting_btns()
@@ -523,6 +526,13 @@ class MainWindow(QMainWindow):
             filetype = filename.split(".")[-1]
             name = filename.split('/')[-1]
             if filetype in ['csv', 'xlsx']:
+                self.hide_btns([
+                    self.btn_add_item_manually,
+                    self.btn_edit_mode,
+                    self.btn_add_to_inventory,
+                    self.btn_save_list
+                ])
+
                 self.is_sheet_open = filename
                 self.header.setText(f'Past Order: {name}')
                 self.fill_table(get_ordersheet(filename))
@@ -1028,6 +1038,12 @@ class MainWindow(QMainWindow):
             lambda: self.save_list('edited')
         )
         self.btn_save_list.show()
+
+    def add_item_manually(self):
+        '''
+        Function to read user's input as an item and add it to the nessecary section
+        '''
+        pass
 
 
 if __name__ == "__main__":

@@ -72,23 +72,8 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="3">
-        <widget class="QPushButton" name="btn_add_to_inventory">
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Add to Inventory</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
         <widget class="QPushButton" name="btn_save_list">
          <property name="font">
           <font>
@@ -107,7 +92,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
+       <item>
         <widget class="QPushButton" name="btn_edit_mode">
          <property name="font">
           <font>
@@ -123,6 +108,36 @@ background-color: rgb(255, 255, 255);</string>
          <property name="icon">
           <iconset>
            <normaloff>Icons/edit-writing-mode.png</normaloff>Icons/edit-writing-mode.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_add_to_inventory">
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Add to Inventory</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/briefcase--plus.png</normaloff>Icons/briefcase--plus.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_add_item_manually">
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Add Item</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>Icons/blueprint--plus.png</normaloff>Icons/blueprint--plus.png</iconset>
          </property>
         </widget>
        </item>
