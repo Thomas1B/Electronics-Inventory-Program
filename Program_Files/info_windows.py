@@ -19,7 +19,7 @@ class Info_Window(QMainWindow):
         super(Info_Window, self).__init__(parent)
 
         # loading ui file
-        uic.loadUi('Program_Files/info_window.ui', self)
+        uic.loadUi('Program_Files/UI_Files/info_window.ui', self)
         # self.adjustSize()
 
         self.show()
@@ -29,7 +29,7 @@ class User_Info_Window(QMainWindow):
     def __init__(self):
         super(User_Info_Window, self).__init__()
 
-        uic.loadUi('Program_Files/how_to_use.ui', self)
+        uic.loadUi('Program_Files/UI_Files/how_to_use.ui', self)
 
         self.show()
 
