@@ -47,6 +47,11 @@ class Add_Item_Window(QMainWindow):
         self.frame6 = self.findChild(QtWidgets.QFrame, 'frame_6')
         self.frame7 = self.findChild(QtWidgets.QFrame, 'frame_7')
 
+        self.btn_add_to_inventory = self.findChild(
+            QtWidgets.QPushButton, 'btn_add_to_inventory')
+
+        self.btn_add_to_inventory.clicked.connect(self.read_textedits)
+
         # adding stylesheet to sub frames 2-7
         frames = [self.frame2, self.frame3, self.frame4,
                   self.frame5, self.frame6, self.frame7]
@@ -62,4 +67,34 @@ class Add_Item_Window(QMainWindow):
                 '''
             )
 
+        self.part_number = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_part_number')
+        self.manu_part_number = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_manu_part_number')
+        self.description = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_description')
+        self.customer_ref = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_customer_ref')
+
+        self.unit_price = self.findChild(
+            QtWidgets.QDoubleSpinBox, 'SpinBox_unit_price')
+        self.quantity = self.findChild(
+            QtWidgets.QSpinBox, 'spinBox_quantity')
+
         self.show()
+
+    def read_textedits(self):
+        '''
+        Function to get in the plainTextEdits.
+        '''
+
+        part_number = self.part_number.toPlainText()
+        manu_part_number = self.manu_part_number.toPlainText()
+        description = self.description.toPlainText()
+        customer_ref = self.customer_ref.toPlainText()
+        unit_price = self.unit_price.value()
+        quantity = self.quantity.value()
+        k = [part_number, manu_part_number, description,
+             customer_ref, unit_price, quantity]
+        for i in k:
+            print(i, type(i))
