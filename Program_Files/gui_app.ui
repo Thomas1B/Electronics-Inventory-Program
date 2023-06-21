@@ -314,7 +314,7 @@ background-color: rgb(255, 255, 255);</string>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="section_frame">
+     <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
