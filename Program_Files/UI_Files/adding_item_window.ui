@@ -41,7 +41,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="title">
             <property name="font">
              <font>
               <family>Terminal</family>
@@ -49,7 +49,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Adding Item to inventory manually</string>
+             <string>Adding Item to the inventory manually</string>
             </property>
            </widget>
           </item>
