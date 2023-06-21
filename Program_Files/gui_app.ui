@@ -73,171 +73,22 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="0">
-        <widget class="QPushButton" name="btn_edit_mode">
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Edit Mode</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/edit-writing-mode.png</normaloff>Icons/edit-writing-mode.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="btn_export">
+       <item row="1" column="3">
+        <widget class="QPushButton" name="btn_add_to_inventory">
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;
 background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Export File</string>
+          <string>Add to Inventory</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>Icons/blue-folder-export.png</normaloff>Icons/blue-folder-export.png</iconset>
+           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="btn_open_past_order">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-           <pointsize>8</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Open Past Orders</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="btn_open_project_lists">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Open Projects</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="btn_open_new_order">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-           <pointsize>8</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Open New Order</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/book-open.png</normaloff>Icons/book-open.png</iconset>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="btn_open_inventory">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Open Inventory</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/book-open-list.png</normaloff>Icons/book-open-list.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
+       <item row="1" column="1">
         <widget class="QPushButton" name="btn_save_list">
          <property name="font">
           <font>
@@ -256,33 +107,22 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="btn_add_to_inventory">
+       <item row="1" column="2">
+        <widget class="QPushButton" name="btn_edit_mode">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
          <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Add to Inventory</string>
+          <string>Edit Mode</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>Icons/book--plus.png</normaloff>Icons/book--plus.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="btn_create_project">
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Create Project</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>Icons/book--pencil.png</normaloff>Icons/book--pencil.png</iconset>
+           <normaloff>Icons/edit-writing-mode.png</normaloff>Icons/edit-writing-mode.png</iconset>
          </property>
         </widget>
        </item>
@@ -715,7 +555,26 @@ background-color: rgb(255, 255, 255);</string>
     <addaction name="actionProgram_Info"/>
     <addaction name="actionHow_To_Use"/>
    </widget>
+   <widget class="QMenu" name="menuOpen">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_New_Order"/>
+    <addaction name="actionOpen_Past_Orders"/>
+    <addaction name="actionOpen_Inventory"/>
+    <addaction name="actionOpen_Projects"/>
+    <addaction name="actionExport_File"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionCreate_Inventory"/>
+    <addaction name="actionAdd_Item"/>
+   </widget>
    <addaction name="menuInfo"/>
+   <addaction name="menuOpen"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuLinks"/>
   </widget>
   <action name="actionDigiKey">
@@ -764,6 +623,69 @@ background-color: rgb(255, 255, 255);</string>
    </property>
    <property name="text">
     <string>How To Use</string>
+   </property>
+  </action>
+  <action name="actionOpen_New_Order">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/book-open-list.png</normaloff>Icons/book-open-list.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open New Order</string>
+   </property>
+  </action>
+  <action name="actionOpen_Past_Orders">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/databases.png</normaloff>Icons/databases.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Past Order</string>
+   </property>
+  </action>
+  <action name="actionOpen_Inventory">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/book-open.png</normaloff>Icons/book-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Inventory</string>
+   </property>
+  </action>
+  <action name="actionOpen_Projects">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/blue-folder-open.png</normaloff>Icons/blue-folder-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open Projects</string>
+   </property>
+  </action>
+  <action name="actionExport_File">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/blue-folder-export.png</normaloff>Icons/blue-folder-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export File</string>
+   </property>
+  </action>
+  <action name="actionCreate_Inventory">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/book--pencil.png</normaloff>Icons/book--pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create Project</string>
+   </property>
+  </action>
+  <action name="actionAdd_Item">
+   <property name="icon">
+    <iconset>
+     <normaloff>Icons/plus.png</normaloff>Icons/plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Item</string>
    </property>
   </action>
  </widget>
