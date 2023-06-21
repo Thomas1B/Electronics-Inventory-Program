@@ -95,6 +95,7 @@ class MainWindow(QMainWindow):
         self.btn_add_item_manually = self.findChild(
             QtWidgets.QPushButton, 'btn_add_item_manually')
 
+        self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet')
         self.btn_resistors = self.findChild(
@@ -139,7 +140,8 @@ class MainWindow(QMainWindow):
         self.action_open_projects.triggered.connect(self.open_project_lists)
         self.action_create_project.triggered.connect(self.create_project)
         self.action_open_past_orders.triggered.connect(self.open_past_order)
-        self.action_export_file.triggered.connect(lambda: self.export_file(autoname=True))
+        self.action_export_file.triggered.connect(
+            lambda: self.export_file(autoname=True))
         self.toolbar.setStyleSheet(
             '''
             QToolButton {
@@ -560,20 +562,16 @@ class MainWindow(QMainWindow):
         Parameter:
             section - str: name of category to display.
         '''
-        if self.in_edit_mode:
-            header = 'That feature is disable in "Edit Mode".'
-            self.disable_feature_msg(header=header)
+        if 'looking at inventory' in self.header.text().lower():
+            self.fill_table(Inventory[section].get_items())
         else:
-            if 'looking at inventory' in self.header.text().lower():
-                self.fill_table(Inventory[section].get_items())
-            else:
-                data = get_ordersheet(self.is_sheet_open)
-                sorted = {}
-                keys = Inventory.keys()
-                for i, key in enumerate(keys):
-                    sorted[key] = data[i]
-                self.fill_table(sorted[section].reset_index(drop=True))
-            self.sub_header.setText(section)
+            data = get_ordersheet(self.is_sheet_open)
+            sorted = {}
+            keys = Inventory.keys()
+            for i, key in enumerate(keys):
+                sorted[key] = data[i]
+            self.fill_table(sorted[section].reset_index(drop=True))
+        self.sub_header.setText(section)
 
     def refresh_opensheet(self, filename=None):
         '''
@@ -581,17 +579,14 @@ class MainWindow(QMainWindow):
             used for when a user is looking a specific category.
 
         '''
-        if self.in_edit_mode:
-            header = 'That feature is disable in "Edit Mode".'
-            self.disable_feature_msg(header=header)
+
+        filename = self.is_sheet_open
+        if 'looking at inventory' in self.header.text().lower():
+            self.open_inventory()
         else:
-            filename = self.is_sheet_open
-            if 'looking at inventory' in self.header.text().lower():
-                self.open_inventory()
-            else:
-                data = get_ordersheet(filename)
-                self.fill_table(data)
-                self.sub_header.setText('')
+            data = get_ordersheet(filename)
+            self.fill_table(data)
+            self.sub_header.setText('')
 
     def save_list(self, called_from=None):
         '''
@@ -983,20 +978,48 @@ class MainWindow(QMainWindow):
         '''
         Function to update the Project inventory when the table is in edit mode.
         '''
+
+        # buttons to disable in edit mode.
+
+        btns = [self.btn_add_to_inventory, self.btn_add_item_manually]
+
         if not self.in_edit_mode:
             self.in_edit_mode = True
             self.btn_edit_mode.setText('Exit Edit Mode')
             text = f'Editting Inventory'
             self.header.setText(text)
+            self.header.setStyleSheet('color: red;')
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
+            self.toggled_btns(disabled=True, btns=btns)
         else:
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
             text = 'Looking at Inventory'
             self.header.setText(text)
+            self.header.setStyleSheet('color: black;')
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+            self.toggled_btns(disabled=False, btns=btns)
+
+    def toggled_btns(self, disabled=True, btns=None):
+        '''
+        Function to toggle disabling/enabling buttons when in edit mode.
+        '''
+        if disabled:
+            for btn in btns:
+                btn.setEnabled(False)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(False)
+            for action in self.toolbar.findChildren(QtWidgets.QAction):
+                action.setEnabled(False)
+        else:
+            for btn in btns:
+                btn.setEnabled(True)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(True)
+            for action in self.toolbar.findChildren(QtWidgets.QAction):
+                action.setEnabled(True)
 
     def get_editted(self, item):
         '''
@@ -1043,9 +1066,10 @@ class MainWindow(QMainWindow):
         '''
         Function to read user's input as an item and add it to the nessecary section
         '''
-        
+
         self.add_item_window = Add_Item_Window()
         self.add_item_window.show()
+
 
 if __name__ == "__main__":
     # runnning program

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>886</height>
+    <width>748</width>
+    <height>723</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -314,7 +314,7 @@ background-color: rgb(255, 255, 255);</string>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frame">
+     <widget class="QFrame" name="section_frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -566,7 +566,7 @@ background-color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>797</width>
+     <width>748</width>
      <height>25</height>
     </rect>
    </property>
