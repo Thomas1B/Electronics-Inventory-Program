@@ -52,7 +52,7 @@ class Add_Item_Window(QMainWindow):
             frame.setStyleSheet(
                 '''
                 QFrame {
-                    border: 2px solid black;
+                    border: 1px solid black;
                 }
                 QLabel {
                     border: none;
