@@ -1010,14 +1010,14 @@ class MainWindow(QMainWindow):
                 btn.setEnabled(False)
             for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
                 btn.setEnabled(False)
-            for action in self.toolbar.findChildren(QtWidgets.QAction):
+            for action in self.toolbar.actions():
                 action.setEnabled(False)
         else:
             for btn in btns:
                 btn.setEnabled(True)
             for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
                 btn.setEnabled(True)
-            for action in self.toolbar.findChildren(QtWidgets.QAction):
+            for action in self.toolbar.actions():
                 action.setEnabled(True)
 
     def get_editted(self, item):
