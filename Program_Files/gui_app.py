@@ -64,6 +64,8 @@ class MainWindow(QMainWindow):
         self.action_open_BCrobotics = self.findChild(
             QtWidgets.QAction, 'actionBC_Robotics')
 
+        # toolbar
+        self.toolbar = self.findChild(QtWidgets.QToolBar, 'toolBar')
         self.action_open_new_order = self.findChild(
             QtWidgets.QAction, 'actionOpen_New_Order')
         self.action_open_past_orders = self.findChild(
@@ -129,12 +131,24 @@ class MainWindow(QMainWindow):
         self.action_open_program_info.triggered.connect(self.show_program_info)
         self.action_how_to_use.triggered.connect(self.show_how_to_use)
 
-        self.action_open_new_order.triggered.connect(self.open_new_order)
-        self.action_open_past_orders.triggered.connect(self.open_past_order)
+        # toolbar
         self.action_open_inventory.triggered.connect(self.open_inventory)
+        self.action_open_new_order.triggered.connect(self.open_new_order)
         self.action_open_projects.triggered.connect(self.open_project_lists)
-        self.action_export_file.triggered.connect(self.export_file)
         self.action_create_project.triggered.connect(self.create_project)
+        self.action_open_past_orders.triggered.connect(self.open_past_order)
+        self.action_export_file.triggered.connect(self.export_file)
+        self.toolbar.setStyleSheet(
+            '''
+            QToolButton {
+                padding: 5px;                
+            }
+             QToolButton:hover {
+                background-color: rgb(200, 200, 200);
+            }
+            '''
+        )
+
 
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
@@ -186,7 +200,10 @@ class MainWindow(QMainWindow):
 
         self.project_window = Project_Window(self)
 
+
         self.show()  # needs to here in order to work
+
+
 
     def closeEvent(self, event):
         '''
