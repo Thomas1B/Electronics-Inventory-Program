@@ -91,6 +91,8 @@ class MainWindow(QMainWindow):
         self.btn_edit_mode = self.findChild(
             QtWidgets.QPushButton, 'btn_edit_mode')
 
+        self.btn_refresh_opensheet = self.findChild(
+            QtWidgets.QPushButton, 'btn_refresh_opensheet')
         self.btn_resistors = self.findChild(
             QtWidgets.QPushButton, 'btn_resistors')
         self.btn_capacitors = self.findChild(
@@ -115,9 +117,6 @@ class MainWindow(QMainWindow):
             QtWidgets.QPushButton, 'btn_modules')
         self.btn_other = self.findChild(
             QtWidgets.QPushButton, 'btn_other')
-
-        self.btn_refresh_opensheet = self.findChild(
-            QtWidgets.QPushButton, 'btn_refresh_opensheet')
 
         '''
             Attaching Functions to buttons and other clicked things.
@@ -149,9 +148,6 @@ class MainWindow(QMainWindow):
 
         # buttons
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
-        self.btn_export.clicked.connect(
-            lambda: self.export_file(autoname=True))
-        self.btn_create_project.clicked.connect(self.create_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
 
         self.btn_resistors.clicked.connect(

@@ -569,7 +569,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionCreate_Inventory"/>
+    <addaction name="actionCreate_Project"/>
     <addaction name="actionAdd_Item"/>
    </widget>
    <addaction name="menuInfo"/>
@@ -670,7 +670,7 @@ background-color: rgb(255, 255, 255);</string>
     <string>Export File</string>
    </property>
   </action>
-  <action name="actionCreate_Inventory">
+  <action name="actionCreate_Project">
    <property name="icon">
     <iconset>
      <normaloff>Icons/book--pencil.png</normaloff>Icons/book--pencil.png</iconset>
