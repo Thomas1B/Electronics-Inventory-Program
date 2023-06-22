@@ -49,6 +49,10 @@ class Project_Window(QMainWindow):
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         self.move(1050, 50)
 
+
+        self.how_to_use_window = How_To_Use_Program_Window()
+
+
         # variable to see if project has been loaded.
         self.project_loaded = False
 
@@ -172,7 +176,6 @@ class Project_Window(QMainWindow):
         '''
         Function to show the "how to use" window.
         '''
-        self.how_to_use_window = How_To_Use_Program_Window()
         self.how_to_use_window.show()
 
     def open_website(self, website=''):
