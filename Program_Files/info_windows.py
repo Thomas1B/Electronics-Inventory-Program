@@ -35,3 +35,6 @@ class User_Info_Window(QMainWindow):
         uic.loadUi('Program_Files/UI_Files/how_to_use.ui', self)
 
         self.show()
+
+class Add_Item_Manually_Window(QMainWindow):
+    pass
