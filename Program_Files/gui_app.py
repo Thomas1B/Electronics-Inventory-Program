@@ -31,6 +31,12 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.move(50, 50)
 
+        # Other Windows used in the program.
+        self.project_window = Project_Window(self)
+        self.add_item_window = Add_Item_Window(self)
+        self.window_program_info = Program_Info()
+        self.how_to_use_window = How_To_Use_Program_Window()
+
         # variable to keep track if a table is opened.
         # Used for getting openning sorted parts
         self.is_sheet_open = False
@@ -169,7 +175,7 @@ class MainWindow(QMainWindow):
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item_manually.clicked.connect(
-            self.add_item_manually_window)
+            self.open_add_manually_window)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -206,8 +212,6 @@ class MainWindow(QMainWindow):
         ])
         self.hide_sorting_btns()
 
-        self.project_window = Project_Window(self)
-
         self.show()  # needs to here in order to work
 
     def closeEvent(self, event):
@@ -217,6 +221,9 @@ class MainWindow(QMainWindow):
 
         if self.inventory_saved:
             event.accept()
+            for window in [self.project_window, self.add_item_window]:
+                window.close()
+
         else:
             event.ignore()  # dont let window close.
 
@@ -255,14 +262,12 @@ class MainWindow(QMainWindow):
 
         Opens a second window
         '''
-        self.window_program_info = Program_Info()
         self.window_program_info.show()
 
     def show_how_to_use(self):
         '''
         Function to show the "how to use" window for the user.
         '''
-        self.how_to_use_window = How_To_Use_Program_Window()
         self.how_to_use_window.show()
 
     def open_website(self, website=''):
@@ -1064,11 +1069,10 @@ class MainWindow(QMainWindow):
         )
         self.btn_save_list.show()
 
-    def add_item_manually_window(self):
+    def open_add_manually_window(self):
         '''
         Function to show "add item manually" window.
         '''
-        self.add_item_window = Add_Item_Window()
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
 
@@ -1077,7 +1081,7 @@ class MainWindow(QMainWindow):
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
         '''
-        self.inventory_saved = False
+        # self.inventory_saved = False
         self.btn_save_list.setText('Save Inventory')
         self.btn_save_list.clicked.connect(
             lambda: self.save_list('edited')
@@ -1088,7 +1092,7 @@ class MainWindow(QMainWindow):
         data.columns = labels
 
         data = sort_order(data)
-        add_order_to_Inventory(data)
+        # add_order_to_Inventory(data)
         self.fill_table(Inventory)
 
         print(data)

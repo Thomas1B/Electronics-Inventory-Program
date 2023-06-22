@@ -10,15 +10,15 @@ from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 import sys
-from .info_windows import Add_Item_Manually_Window
+from .info_windows import How_Add_Item_Manually_Window
 
 
 class Add_Item_Window(QMainWindow):
     data_sent = pyqtSignal(list)
 
-    def __init__(self):
+    def __init__(self, parent=None):
 
-        super(Add_Item_Window, self).__init__()
+        super(Add_Item_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
 
         # menu
@@ -84,22 +84,23 @@ class Add_Item_Window(QMainWindow):
         self.action_how_to_use.triggered.connect(self.how_to_use)
         self.btn_add_to_inventory.clicked.connect(self.send_to_main_window)
 
-        self.show()
-
     def how_to_use(self):
         '''
         Function to how to use window.
         '''
-        self.how_add_manually_window = Add_Item_Manually_Window()
+        self.how_add_manually_window = How_Add_Item_Manually_Window()
         self.how_add_manually_window.show()
 
-    def send_to_main_window(self):
+    def closeEvent(self, event):
         '''
-        Function to read in the plainTextEdits and send to the main window.
-
-        Data must be emitted at a "list"
+        Function to handle closing event.
         '''
+        event.accept()
 
+    def read_user_entries(self):
+        '''
+        Function to read in the user entries and check if they meant the requirments
+        '''
         part_number = self.part_number.toPlainText()
         manu_part_number = self.manu_part_number.toPlainText()
         description = self.description.toPlainText()
@@ -107,8 +108,56 @@ class Add_Item_Window(QMainWindow):
         unit_price = self.unit_price.value()
         quantity = self.quantity.value()
 
-        # List must be in the same order as "labels" in data_handling.py
-        item_info = [part_number, manu_part_number,
-                     description, customer_ref, unit_price, quantity]
+        if not description:
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("Entry Needed")
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
 
-        self.data_sent.emit(item_info)
+            msg.setText("Item description is nessecary!")
+            text = 'This is used to sort items into their respective category.'
+            msg.setInformativeText(text)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+            return
+        elif unit_price == 0:
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("No Price")
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Warning)
+
+            header = 'Unit Price is recommended!'
+            msg.setText(header)
+            text = "Only leave blank if you are sure you do not need this field."
+            msg.setInformativeText(text)
+            msg.setStandardButtons(
+                QtWidgets.QMessageBox.Ok |
+                QtWidgets.QMessageBox.Cancel
+            )
+            user = msg.exec_()
+            if user == QtWidgets.QMessageBox.Cancel:
+                return
+
+        # List must be in the same order as "labels" in data_handling.py
+        item_info = [part_number,
+                     manu_part_number,
+                     description,
+                     customer_ref,
+                     unit_price,
+                     quantity]
+
+        return item_info
+
+    def send_to_main_window(self):
+        '''
+        Function to read in the plainTextEdits and send to the main window.
+
+        Data must be emitted at a "list"
+        '''
+        item_info = self.read_user_entries()
+        if item_info:
+            self.data_sent.emit(item_info)
