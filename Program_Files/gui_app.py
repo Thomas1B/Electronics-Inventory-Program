@@ -1110,7 +1110,7 @@ class MainWindow(QMainWindow):
         '''
         Function to show "add item manually" window.
         '''
-        
+
         # connecting function to 2nd window
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
@@ -1120,12 +1120,6 @@ class MainWindow(QMainWindow):
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
         '''
-        # self.inventory_saved = False
-        self.btn_save_list.setText('Save Inventory')
-        self.btn_save_list.clicked.connect(
-            lambda: self.save_list('edited')
-        )
-        self.btn_save_list.show()
 
         data = pd.DataFrame(pd.Series(data)).T
         data.columns = labels
@@ -1133,8 +1127,14 @@ class MainWindow(QMainWindow):
         data = sort_order(data)
         # add_order_to_Inventory(data)
         self.fill_table(Inventory)
-
         print(data)
+
+        # self.inventory_saved = False
+        self.btn_save_list.setText('Save Inventory')
+        self.btn_save_list.clicked.connect(
+            lambda: self.save_list('edited')
+        )
+        self.btn_save_list.show()
 
 
 if __name__ == "__main__":
