@@ -68,7 +68,7 @@ class Category:
 
     def remove_duplicates(self, update_info=True):
         '''
-        Function to remove duplicates and can update the quantities and unit prices of items.
+        Function to remove duplicates (Part Number) and can update the quantities and unit prices of items.
 
         Parameters:
             update_quantity - bool, default True: if "False" doesn't update quantities and unit prices.
