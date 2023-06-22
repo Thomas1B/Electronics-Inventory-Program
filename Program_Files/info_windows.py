@@ -1,9 +1,5 @@
 '''
-
-Script to run the info_window.ui
-
-Shows the user information about the program
-
+Script to show pop up information windows.
 '''
 
 
