@@ -201,7 +201,7 @@
              <bool>false</bool>
             </property>
             <property name="placeholderText">
-             <string>311-1.00KCRCT-ND</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -250,7 +250,7 @@
              <string/>
             </property>
             <property name="placeholderText">
-             <string>10K Resistor</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -307,7 +307,7 @@ font: 11pt &quot;Timesw New Romanl&quot;;</string>
              <double>1000000.000000000000000</double>
             </property>
             <property name="value">
-             <double>0.040000000000000</double>
+             <double>0.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -356,7 +356,7 @@ font: 11pt &quot;Timesw New Romanl&quot;;</string>
              <string/>
             </property>
             <property name="placeholderText">
-             <string>RC0805FR-071KL</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -405,7 +405,7 @@ font: 11pt &quot;Timesw New Romanl&quot;;</string>
              <string/>
             </property>
             <property name="placeholderText">
-             <string>RES 10K OHM 1% 1/4W 0805</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -453,7 +453,7 @@ font: 11pt &quot;Timesw New Romanl&quot;;</string>
              <number>1000000</number>
             </property>
             <property name="value">
-             <number>1</number>
+             <number>0</number>
             </property>
            </widget>
           </item>
