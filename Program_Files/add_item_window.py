@@ -9,6 +9,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 import sys
+from .info_windows import Add_Item_Manually_Window
 
 
 class Add_Item_Window(QMainWindow):
@@ -87,4 +88,5 @@ class Add_Item_Window(QMainWindow):
         '''
         Function to how to use window.
         '''
-        pass
+        self.how_add_manually_window = Add_Item_Manually_Window()
+        self.how_add_manually_window.show()

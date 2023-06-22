@@ -48,6 +48,6 @@ class Add_Item_Manually_Window(QMainWindow):
     '''
     def __init__(self):
         super(Add_Item_Manually_Window, self).__init__()
-        uic.loadUi('Program_Files/UI_Files/program_information.ui', self)
+        uic.loadUi('Program_Files/UI_Files/how_to_use_add_manually.ui', self)
 
         self.show()
