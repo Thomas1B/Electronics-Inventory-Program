@@ -32,6 +32,18 @@ class Add_Item_Window(QMainWindow):
         self.btn_add_to_inventory = self.findChild(
             QtWidgets.QPushButton, 'btn_add_to_inventory')
 
+        self.btn_add_to_inventory.setStyleSheet(
+            '''
+            QPushButton {
+                background-color: white;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgb(200, 255, 200);
+            }
+            '''
+        )
+
         # adding stylesheet to sub frames 2-7
         frames = [self.frame2, self.frame3, self.frame4,
                   self.frame5, self.frame6, self.frame7]
@@ -39,7 +51,10 @@ class Add_Item_Window(QMainWindow):
             frame.setStyleSheet(
                 '''
                 QFrame {
-                    border: 1px solid black;
+                    background-color: rgb(236, 236, 236);
+                    border: 1px solid rgb(169, 169, 169);
+                    border-radius: 4px;
+                    padding: 4px;
                 }
                 QLabel {
                     border: none;
