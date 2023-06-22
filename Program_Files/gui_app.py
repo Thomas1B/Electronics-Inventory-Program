@@ -255,41 +255,43 @@ class MainWindow(QMainWindow):
         Function to detect when user closes the window.
         '''
 
-        if self.inventory_saved:
-            event.accept()
+        if self.inventory_saved:  # inventory has been saved
+            # closing other windows.
             for window in [self.project_window, self.add_item_window]:
                 window.close()
+            event.accept()  # close this window.
 
-        else:
-            event.ignore()  # dont let window close.
+        else:  # inventory has NOT been saved
+            event.ignore()  # stopping window closing.
 
-            title = "Closing Program"
-            text = f'Inventory has been editted!\n\nWould you like to save before closing the program?'
+            # Pop up telling user that the inventory has not been saved yet.
             user = QtWidgets.QMessageBox()
-            user.setWindowTitle(title)
             pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
             icon = self.style().standardIcon(pixmapi)
             user.setWindowIcon(icon)
             user.setIcon(QtWidgets.QMessageBox.Warning)
-            user.setText(text)
             user.setStandardButtons(
                 QtWidgets.QMessageBox.Yes |
                 QtWidgets.QMessageBox.No |
                 QtWidgets.QMessageBox.Cancel
             )
             user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            header = 'Inventory has been editted!'
+            text = 'Would you like to save before closing the program?'
+            user.setWindowTitle("Closing Program")
+            user.setText(header)
+            user.setInformativeText(text)
             user = user.exec_()
 
-            match user:  # checking user's response:
+            # checking user's response:
+            match user:
                 case QtWidgets.QMessageBox.Yes:
-                    # user accepts to save.
-                    # self.save_project()
+                    self.save_list('editted')
                     event.accept()
                 case QtWidgets.QMessageBox.No:
                     # user declines to save.
                     event.accept()
-                case _:
-                    # user cancels selection.
+                case _:  # Cancel
                     event.ignore()
 
     def show_program_info(self):
