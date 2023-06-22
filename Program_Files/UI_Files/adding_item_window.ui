@@ -429,7 +429,7 @@
    </property>
    <widget class="QMenu" name="menuInfo">
     <property name="title">
-     <string>About</string>
+     <string>Info</string>
     </property>
     <addaction name="actionHow_to_Use"/>
    </widget>
