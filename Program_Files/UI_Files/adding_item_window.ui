@@ -424,8 +424,16 @@
      <x>0</x>
      <y>0</y>
      <width>775</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <widget class="QMenu" name="menuInfo">
     <property name="title">
@@ -439,6 +447,11 @@
   <action name="actionHow_to_Use">
    <property name="text">
     <string>How to Use</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Terminal</family>
+    </font>
    </property>
   </action>
  </widget>
