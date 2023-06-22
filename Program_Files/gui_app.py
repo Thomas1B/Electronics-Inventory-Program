@@ -29,8 +29,6 @@ from .data_handling import (Inventory,
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-
-        # Loading .ui file
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
         self.move(50, 50)
 

@@ -17,7 +17,6 @@ class Add_Item_Window(QMainWindow):
     data_sent = pyqtSignal(list)
 
     def __init__(self, parent=None):
-
         super(Add_Item_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
 

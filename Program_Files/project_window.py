@@ -45,7 +45,6 @@ Project = {
 class Project_Window(QMainWindow):
     def __init__(self, parent=None):
         super(Project_Window, self).__init__(parent)
-        # loading ui file
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         self.move(1050, 50)
 
