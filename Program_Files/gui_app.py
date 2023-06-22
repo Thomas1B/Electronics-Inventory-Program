@@ -29,6 +29,9 @@ from .data_handling import (Inventory,
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+
+        # Loading .ui file
+        uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
         self.move(50, 50)
 
         # Other Windows used in the program.
@@ -46,9 +49,6 @@ class MainWindow(QMainWindow):
 
         # keeping track if the program is in edit mode.
         self.in_edit_mode = False
-
-        # Loading .ui file
-        uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
 
         # Setting default table column widths
         self.table.setColumnWidth(0, 175)
@@ -800,8 +800,7 @@ class MainWindow(QMainWindow):
         '''
         items = dataframe
         if type(dataframe) == dict:
-            items = pd.concat([dataframe[cat].get_items()
-                               for cat in dataframe]).reset_index(drop=True)
+            items = dict_to_dataframe(dataframe)
         elif type(dataframe) == list:
             items = pd.concat(dataframe)
 
