@@ -163,7 +163,7 @@ class Add_Item_Window(QMainWindow):
 
     def send_data(self):
         '''
-        Function to read in the plainTextEdits and send to the main window.
+        Function to send data to the main window.
 
         Data must be emitted at a "list"
         '''
