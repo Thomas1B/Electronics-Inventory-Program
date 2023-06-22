@@ -12,7 +12,7 @@ import os
 import shutil
 import inspect
 
-from .info_windows import Program_Info, How_To_Use_Program_Window
+from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
         # Other Windows used in the program.
         self.project_window = Project_Window(self)
         self.add_item_window = Add_Item_Window(self)
-        self.window_program_info = Program_Info()
+        self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
 
         # variable to keep track if a table is opened.

@@ -14,13 +14,13 @@ from PyQt5.QtGui import QIcon
 import sys
 
 
-class Program_Info(QMainWindow):
+class Program_Info_Window(QMainWindow):
     '''
     Class to run overview of program information window.
     '''
 
     def __init__(self, parent=None):
-        super(Program_Info, self).__init__(parent)
+        super(Program_Info_Window, self).__init__(parent)
 
         # loading ui file
         uic.loadUi('Program_Files/UI_Files/program_information.ui', self)
