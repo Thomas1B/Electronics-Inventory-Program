@@ -390,6 +390,12 @@ def add_order_to_Inventory(filename):
 def get_subtotal(dictionary):
     '''
     Function to get the subtotal of the entire Dictionary of classes. 
+
+    Parameter:
+        dictionary - dict: dictionary of category class.
+
+    Returns:
+        float
     '''
     subtotal = 0
     for section in dictionary.keys():
