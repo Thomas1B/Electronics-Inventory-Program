@@ -83,6 +83,13 @@ class Add_Item_Window(QMainWindow):
 
         self.show()
 
+    def how_to_use(self):
+        '''
+        Function to how to use window.
+        '''
+        self.how_add_manually_window = Add_Item_Manually_Window()
+        self.how_add_manually_window.show()
+
     def read_textedits(self):
         '''
         Function to get in the plainTextEdits.
@@ -98,10 +105,3 @@ class Add_Item_Window(QMainWindow):
              customer_ref, unit_price, quantity]
         for i in k:
             print(i, type(i))
-
-    def how_to_use(self):
-        '''
-        Function to how to use window.
-        '''
-        self.how_add_manually_window = Add_Item_Manually_Window()
-        self.how_add_manually_window.show()
