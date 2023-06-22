@@ -26,8 +26,6 @@ class Program_Info(QMainWindow):
         uic.loadUi('Program_Files/UI_Files/program_information.ui', self)
         # self.adjustSize()
 
-        self.show()
-
 
 class How_To_Use_Program_Window(QMainWindow):
     '''
@@ -39,15 +37,12 @@ class How_To_Use_Program_Window(QMainWindow):
 
         uic.loadUi('Program_Files/UI_Files/how_to_use_program.ui', self)
 
-        self.show()
-
 
 class Add_Item_Manually_Window(QMainWindow):
     '''
     Class to run how to use "Add item Manually" window.
     '''
+
     def __init__(self):
         super(Add_Item_Manually_Window, self).__init__()
         uic.loadUi('Program_Files/UI_Files/how_to_use_add_manually.ui', self)
-
-        self.show()
