@@ -593,7 +593,7 @@ background-color: rgb(255, 255, 255);</string>
      </font>
     </property>
     <property name="title">
-     <string>Info</string>
+     <string>About</string>
     </property>
     <addaction name="actionProgram_Info"/>
     <addaction name="actionHow_To_Use"/>
