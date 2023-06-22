@@ -371,9 +371,15 @@ def get_ordersheet(filepath):
 def add_order_to_Inventory(filename):
     '''
     Function to add a new order to the inventory
+
+    Parameter:
+        filename - str: filepath of order to add.
+        filename can also be a list of dataframes (see sort_order).
     '''
 
-    orders = get_ordersheet(filename)
+    orders = filename
+    if type(filename) == str:
+        orders = get_ordersheet(filename)
 
     for order, section in zip(orders, Inventory.keys()):
         if len(order) > 0:
