@@ -8,12 +8,16 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSignal
 import sys
 from .info_windows import Add_Item_Manually_Window
 
 
 class Add_Item_Window(QMainWindow):
+    data_sent = pyqtSignal(list)
+
     def __init__(self):
+
         super(Add_Item_Window, self).__init__()
         uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
 
@@ -78,8 +82,7 @@ class Add_Item_Window(QMainWindow):
 
         # attaching functions
         self.action_how_to_use.triggered.connect(self.how_to_use)
-
-        self.btn_add_to_inventory.clicked.connect(self.read_textedits)
+        self.btn_add_to_inventory.clicked.connect(self.send_to_main_window)
 
         self.show()
 
@@ -90,19 +93,9 @@ class Add_Item_Window(QMainWindow):
         self.how_add_manually_window = Add_Item_Manually_Window()
         self.how_add_manually_window.show()
 
-    def read_textedits(self):
+    def send_to_main_window(self):
         '''
         Function to get in the plainTextEdits.
         '''
 
-        part_number = self.part_number.toPlainText()
-        manu_part_number = self.manu_part_number.toPlainText()
-        description = self.description.toPlainText()
-        customer_ref = self.customer_ref.toPlainText()
-        unit_price = self.unit_price.value()
-        quantity = self.quantity.value()
-        k = [part_number, manu_part_number, description,
-             customer_ref, unit_price, quantity]
-             
-        for i in k:
-            print(i, type(i))
+        self.data_sent.emit([22])

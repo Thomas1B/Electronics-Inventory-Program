@@ -167,7 +167,8 @@ class MainWindow(QMainWindow):
         # buttons
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
-        self.btn_add_item_manually.clicked.connect(self.add_item_manually_window)
+        self.btn_add_item_manually.clicked.connect(
+            self.add_item_manually_window)
 
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors'))
@@ -1064,13 +1065,17 @@ class MainWindow(QMainWindow):
 
     def add_item_manually_window(self):
         '''
-        Function to read user's input as an item and add it to the nessecary section
+        Function to show add item manually window.
         '''
         self.add_item_window = Add_Item_Window()
+        self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
-        self.add_item_window.btn_add_to_inventory.clicked.connect(
-            self.add_item_window.read_textedits
-        )
+
+    def receive_add_item_manually(self, data):
+        '''
+        Function to read user's input when adding an item manually.
+        '''
+        print(data)
 
 
 if __name__ == "__main__":
