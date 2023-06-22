@@ -97,6 +97,13 @@ class Project_Window(QMainWindow):
         self.btn_edit_mode = self.findChild(
             QtWidgets.QPushButton, 'btn_edit_mode'
         )
+        self.btn_add_item = self.findChild(
+            QtWidgets.QPushButton, 'btn_add_item_manually'
+        )
+        self.btn_remove_item  = self.findChild(
+            QtWidgets.QPushButton, 'btn_remove_item'
+        )
+
 
         # Sorting buttons
         self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
@@ -165,6 +172,8 @@ class Project_Window(QMainWindow):
         self.btn_open_project.clicked.connect(self.open_project)
         self.btn_create_project.clicked.connect(self.create_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
+        # self.btn_add_item.clicked.connect()
+        # self.btn_remove_item.clicked.connect(self.remove_item)
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
@@ -205,6 +214,11 @@ class Project_Window(QMainWindow):
         self.btn_other.clicked.connect(
             lambda: self.show_sorted_section('Other')
         )
+        
+        btns = [self.btn_add_item, self.btn_remove_item]
+        for btn in btns:
+            btn.hide()
+
 
     def closeEvent(self, event):
         '''
@@ -665,7 +679,9 @@ class Project_Window(QMainWindow):
         btns = [self.btn_open_project,
                 self.btn_create_project,
                 self.btn_export_project,
-                self.btn_save_project
+                self.btn_save_project,
+                self.btn_add_item,
+                self.btn_remove_item
                 ]
 
         if not self.in_edit_mode:
