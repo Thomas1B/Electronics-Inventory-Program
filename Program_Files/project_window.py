@@ -24,7 +24,7 @@ from .data_handling import (
     get_subtotal
 )
 
-from .info_windows import User_Info_Window
+from .info_windows import How_To_Use_Program_Window
 
 Project = {
     'Resistors': Category("Resistors"),
@@ -172,7 +172,7 @@ class Project_Window(QMainWindow):
         '''
         Function to show the "how to use" window.
         '''
-        self.how_to_use_window = User_Info_Window()
+        self.how_to_use_window = How_To_Use_Program_Window()
         self.how_to_use_window.show()
 
     def open_website(self, website=''):

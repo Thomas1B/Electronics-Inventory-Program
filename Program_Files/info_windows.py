@@ -16,8 +16,9 @@ import sys
 
 class Program_Info(QMainWindow):
     '''
-    Class to run 
+    Class to run program information window.
     '''
+
     def __init__(self, parent=None):
         super(Program_Info, self).__init__(parent)
 
@@ -28,13 +29,24 @@ class Program_Info(QMainWindow):
         self.show()
 
 
-class User_Info_Window(QMainWindow):
-    def __init__(self):
-        super(User_Info_Window, self).__init__()
+class How_To_Use_Program_Window(QMainWindow):
+    '''
+    Class to run program how to use program window.
+    '''
 
-        uic.loadUi('Program_Files/UI_Files/how_to_use.ui', self)
+    def __init__(self):
+        super(How_To_Use_Program_Window, self).__init__()
+
+        uic.loadUi('Program_Files/UI_Files/how_to_use_program.ui', self)
 
         self.show()
 
+
 class Add_Item_Manually_Window(QMainWindow):
+    '''
+    Class to run how to use "Add item Manually" window.
+    '''
+
+    # super(User_Info_Window, self).__init__()
+
     pass
