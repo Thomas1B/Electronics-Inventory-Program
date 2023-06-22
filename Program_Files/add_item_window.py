@@ -103,5 +103,6 @@ class Add_Item_Window(QMainWindow):
         quantity = self.quantity.value()
         k = [part_number, manu_part_number, description,
              customer_ref, unit_price, quantity]
+             
         for i in k:
             print(i, type(i))
