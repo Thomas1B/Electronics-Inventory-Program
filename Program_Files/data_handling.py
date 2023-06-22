@@ -394,7 +394,7 @@ def get_subtotal(dictionary):
     subtotal = 0
     for section in dictionary.keys():
         subtotal += dictionary[section].get_subtotal()
-    return round(subtotal, 2)
+    return subtotal
 
 
 if __name__ == "__main__":
