@@ -12,7 +12,7 @@ import os
 import shutil
 import inspect
 
-from .info_windows import Info_Window, User_Info_Window
+from .info_windows import Program_Info, User_Info_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
@@ -253,8 +253,8 @@ class MainWindow(QMainWindow):
 
         Opens a second window
         '''
-        self.info_window = Info_Window()
-        self.info_window.show()
+        self.window_program_info = Program_Info()
+        self.window_program_info.show()
 
     def show_how_to_use(self):
         '''

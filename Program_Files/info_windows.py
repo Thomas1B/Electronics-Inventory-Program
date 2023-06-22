@@ -14,12 +14,15 @@ from PyQt5.QtGui import QIcon
 import sys
 
 
-class Info_Window(QMainWindow):
+class Program_Info(QMainWindow):
+    '''
+    Class to run 
+    '''
     def __init__(self, parent=None):
-        super(Info_Window, self).__init__(parent)
+        super(Program_Info, self).__init__(parent)
 
         # loading ui file
-        uic.loadUi('Program_Files/UI_Files/info_window.ui', self)
+        uic.loadUi('Program_Files/UI_Files/program_information.ui', self)
         # self.adjustSize()
 
         self.show()
