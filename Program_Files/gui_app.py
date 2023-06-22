@@ -545,17 +545,18 @@ class MainWindow(QMainWindow):
                 if new_order:
                     text = f'Looking at new order: {order_name}'
                     self.header.setText(text)
-                    self.btn_save_list.setText('Save Order')
-                    self.btn_save_list.clicked.connect(
-                        lambda: self.save_list('save_order')
-                    )
-                    self.hide_btns(
-                        [self.btn_add_item_manually, self.btn_edit_mode])
-                    self.show_btns(
-                        [self.btn_save_list, self.btn_add_to_inventory])
-                    self.show_sorting_btns()
                     self.header_frame.show()
                     self.fill_table(new_order)
+                    self.save_list('save_order')
+
+                    self.hide_btns([
+                        self.btn_add_item_manually,
+                        self.btn_edit_mode
+                    ])
+                    self.show_btns(
+                        [self.btn_add_to_inventory])
+                    self.show_sorting_btns()
+
             else:
                 self.wrong_filetype_msg()
 
