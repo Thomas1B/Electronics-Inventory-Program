@@ -492,6 +492,10 @@ font: 11pt &quot;Timesw New Romanl&quot;;</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionHow_to_Use">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Icons/question.png</normaloff>../Icons/question.png</iconset>
+   </property>
    <property name="text">
     <string>How to Use</string>
    </property>
