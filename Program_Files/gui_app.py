@@ -12,7 +12,7 @@ import os
 import shutil
 import inspect
 
-from .info_windows import Program_Info, User_Info_Window
+from .info_windows import Program_Info, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
@@ -260,7 +260,7 @@ class MainWindow(QMainWindow):
         '''
         Function to show the "how to use" window for the user.
         '''
-        self.how_to_use_window = User_Info_Window()
+        self.how_to_use_window = How_To_Use_Program_Window()
         self.how_to_use_window.show()
 
     def open_website(self, website=''):
