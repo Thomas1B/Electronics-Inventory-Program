@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>401</height>
+    <width>657</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,6 +31,31 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>10</number>
+       </property>
+       <property name="rightMargin">
+        <number>10</number>
+       </property>
+       <property name="bottomMargin">
+        <number>15</number>
+       </property>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item>
         <widget class="QLabel" name="label">
          <property name="maximumSize">
@@ -64,7 +89,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>10</height>
+           <height>25</height>
           </size>
          </property>
         </spacer>
@@ -82,8 +107,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>515</width>
-            <height>282</height>
+            <width>598</width>
+            <height>370</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -96,7 +121,7 @@
               </font>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To add an item manually fill in the respective fields.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Item description&lt;/span&gt; is nessecary since the software uses this to sort the components into categories, such as resistor, capacitor, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To add an item manually fill in the respective fields. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;br/&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Part Number &lt;/span&gt;is a field that is specific to DigiKey.&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Manufacturer Part Number &lt;/span&gt;is given by the manufacturer.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;- Description&lt;/span&gt; is nessecary since the software uses this to sort the components into categories, such as resistor, capacitor, etc. This field normally given by the saler, in the software it is assumed to be given by Digikey.&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Customer Reference &lt;/span&gt;is another field specific to DigiKey, it helps the buyer identify items. For example when buying a 10000pF capacitor, the buyer may put a reference &amp;quot;10000pF/10nF/0.01uF&amp;quot;.&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Unit Price &lt;/span&gt;is the price of an individual item.&lt;/p&gt;&lt;p&gt;- &lt;span style=&quot; font-weight:600;&quot;&gt;Quantity &lt;/span&gt;is the amount of the item.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -120,12 +145,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>555</width>
+     <width>657</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
