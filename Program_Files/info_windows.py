@@ -46,7 +46,8 @@ class Add_Item_Manually_Window(QMainWindow):
     '''
     Class to run how to use "Add item Manually" window.
     '''
+    def __init__(self):
+        super(Add_Item_Manually_Window, self).__init__()
+        uic.loadUi('Program_Files/UI_Files/program_information.ui', self)
 
-    # super(User_Info_Window, self).__init__()
-
-    pass
+        self.show()
