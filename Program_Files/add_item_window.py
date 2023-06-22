@@ -95,7 +95,20 @@ class Add_Item_Window(QMainWindow):
 
     def send_to_main_window(self):
         '''
-        Function to get in the plainTextEdits.
+        Function to read in the plainTextEdits and send to the main window.
+
+        Data must be emitted at a "list"
         '''
 
-        self.data_sent.emit([22])
+        part_number = self.part_number.toPlainText()
+        manu_part_number = self.manu_part_number.toPlainText()
+        description = self.description.toPlainText()
+        customer_ref = self.customer_ref.toPlainText()
+        unit_price = self.unit_price.value()
+        quantity = self.quantity.value()
+
+        # List must be in the same order as "labels" in data_handling.py
+        item_info = [part_number, manu_part_number,
+                     description, customer_ref, unit_price, quantity]
+
+        self.data_sent.emit(item_info)

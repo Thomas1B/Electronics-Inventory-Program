@@ -17,6 +17,7 @@ from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
+                            labels,
                             load_Inventory,
                             get_ordersheet,
                             add_order_to_Inventory,
@@ -1065,7 +1066,7 @@ class MainWindow(QMainWindow):
 
     def add_item_manually_window(self):
         '''
-        Function to show add item manually window.
+        Function to show "add item manually" window.
         '''
         self.add_item_window = Add_Item_Window()
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
@@ -1074,7 +1075,16 @@ class MainWindow(QMainWindow):
     def receive_add_item_manually(self, data):
         '''
         Function to read user's input when adding an item manually.
+            Triggered when btn "Add to inventory" clicked.
         '''
+
+        # self.inventory_saved = False
+
+        data = pd.DataFrame(pd.Series(data)).T
+        data.columns = labels
+
+        data = sort_order(data)
+
         print(data)
 
 
