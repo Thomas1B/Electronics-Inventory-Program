@@ -21,6 +21,9 @@ class Add_Item_Window(QMainWindow):
         super(Add_Item_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
 
+        # info window
+        self.how_to_use_window = How_Add_Item_Manually_Window()
+
         # menu
         self.action_how_to_use = self.findChild(
             QtWidgets.QAction, 'actionHow_to_Use')
@@ -88,8 +91,7 @@ class Add_Item_Window(QMainWindow):
         '''
         Function to how to use window.
         '''
-        self.how_add_manually_window = How_Add_Item_Manually_Window()
-        self.how_add_manually_window.show()
+        self.how_to_use_window.show()
 
     def closeEvent(self, event):
         '''
