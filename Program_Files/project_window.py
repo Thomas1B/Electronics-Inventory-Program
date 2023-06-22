@@ -205,6 +205,44 @@ class Project_Window(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
+    def closeEvent(self, event):
+        '''
+        Function to detect when user closes the window.
+        '''
+        if self.editted_saved:  # if editted project has been saved already.
+            event.accept()  # let the window close.
+        else:  # popup to warning user editted project has not been saved.
+            title = "Electronics Inventory Program - Saving Project"
+            text = 'Project has been editted!\n\nWould you like to save?'
+            event.ignore()  # dont let window close.
+
+            user = QtWidgets.QMessageBox()
+            user.setWindowTitle(title)
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            user.setText(text)
+            user.setStandardButtons(
+                QtWidgets.QMessageBox.Yes |
+                QtWidgets.QMessageBox.No |
+                QtWidgets.QMessageBox.Cancel
+            )
+            user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            user = user.exec_()
+
+            match user:  # checking user's response:
+                case QtWidgets.QMessageBox.Yes:
+                    # user accepts to save.
+                    self.save_project()
+                    event.accept()
+                case QtWidgets.QMessageBox.No:
+                    # user declines to save.
+                    event.accept()
+                case _:
+                    # user cancels selection.
+                    event.ignore()
+
     def show_how_to_use(self):
         '''
         Function to show the "how to use" window.
@@ -590,44 +628,6 @@ class Project_Window(QMainWindow):
                 Project[section].remove_duplicates()
         self.editted_saved = False
         self.fill_table(Project)
-
-    def closeEvent(self, event):
-        '''
-        Function to detect when user closes the window.
-        '''
-        if self.editted_saved:  # if editted project has been saved already.
-            event.accept()  # let the window close.
-        else:  # popup to warning user editted project has not been saved.
-            title = "Electronics Inventory Program - Saving Project"
-            text = 'Project has been editted!\n\nWould you like to save?'
-            event.ignore()  # dont let window close.
-
-            user = QtWidgets.QMessageBox()
-            user.setWindowTitle(title)
-            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
-            icon = self.style().standardIcon(pixmapi)
-            user.setWindowIcon(icon)
-            user.setIcon(QtWidgets.QMessageBox.Warning)
-            user.setText(text)
-            user.setStandardButtons(
-                QtWidgets.QMessageBox.Yes |
-                QtWidgets.QMessageBox.No |
-                QtWidgets.QMessageBox.Cancel
-            )
-            user.setDefaultButton(QtWidgets.QMessageBox.Yes)
-            user = user.exec_()
-
-            match user:  # checking user's response:
-                case QtWidgets.QMessageBox.Yes:
-                    # user accepts to save.
-                    self.save_project()
-                    event.accept()
-                case QtWidgets.QMessageBox.No:
-                    # user declines to save.
-                    event.accept()
-                case _:
-                    # user cancels selection.
-                    event.ignore()
 
     def update_subtotal(self, item):
         '''
