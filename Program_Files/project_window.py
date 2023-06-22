@@ -49,9 +49,7 @@ class Project_Window(QMainWindow):
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         self.move(1050, 50)
 
-
         self.how_to_use_window = How_To_Use_Program_Window()
-
 
         # variable to see if project has been loaded.
         self.project_loaded = False
@@ -658,7 +656,7 @@ class Project_Window(QMainWindow):
                 data = df
                 category = list(Project.keys())[i]
                 break
-        
+
         self.editted_saved = False
         Project[category].get_items().update(data)
         self.update_subtotal(item)
