@@ -99,6 +99,7 @@ class Project_Window(QMainWindow):
         )
 
         # Sorting buttons
+        self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet'
         )
@@ -634,29 +635,60 @@ class Project_Window(QMainWindow):
         Function to update the subtotal of the project.
         '''
         subtotal = get_subtotal(Project)
-        self.subtotal.setText(f'Project Subtotal: ${str(subtotal)}')
+        text = 'Subtotal: ${:.2f}'.format(subtotal)
+        self.subtotal.setText(text)
+
+    def toggled_btns(self, disabled=True, btns=None):
+        '''
+        Function to toggle disabling/enabling buttons when in edit mode.
+        '''
+        if disabled:
+            for btn in btns:
+                btn.setEnabled(False)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(False)
+            # for action in self.toolbar.actions():
+            #     action.setEnabled(False)
+        else:
+            for btn in btns:
+                btn.setEnabled(True)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(True)
+            # for action in self.toolbar.actions():
+                # action.setEnabled(True)
 
     def edit_mode(self):
         '''
         Function to update the Project inventory when the table is in edit mode.
         '''
+
+        btns = [self.btn_open_project,
+                self.btn_create_project,
+                self.btn_export_project,
+                self.btn_save_project
+                ]
+
         if not self.in_edit_mode:
             self.in_edit_mode = True
             self.btn_edit_mode.setText('Exit Edit Mode')
             project_name = self.header.text().split(':')[-1].strip()
             text = f'Editting project: {project_name}'
             self.header.setText(text)
+            self.header.setStyleSheet('color: red;')
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
+            self.toggled_btns(disabled=True, btns=btns)
         else:
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
             project_name = self.header.text().split(':')[-1].strip()
             text = f'Project: {project_name}'
             self.header.setText(text)
+            self.header.setStyleSheet('color: black;')
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             self.table.itemChanged.connect(self.update_subtotal)
+            self.toggled_btns(disabled=False, btns=btns)
 
     def get_editted(self, item):
         '''
