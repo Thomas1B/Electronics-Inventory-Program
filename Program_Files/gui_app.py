@@ -38,52 +38,50 @@ class MainWindow(QMainWindow):
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
 
-        # variable to keep track if a table is opened.
-        # Used for getting openning sorted parts
-        self.is_sheet_open = False
+        # variable to keep track of States:
+        self.is_sheet_open = False  # what sheet is opened.
+        self.inventory_saved = True  # if inventory has been saveed.
+        self.in_edit_mode = False  # if in edit mode.
 
-        # variable to keep track if the inventory was been editted.
-        self.inventory_saved = True  # used for saving
+        ''' Defining Widgets'''
 
-        # keeping track if the program is in edit mode.
-        self.in_edit_mode = False
-
-        # Setting default table column widths
-        self.table.setColumnWidth(0, 175)
-        self.table.setColumnWidth(1, 175)
-        self.table.setColumnWidth(2, 175)
-        self.table.setColumnWidth(3, 175)
-        self.table.setColumnWidth(4, 75)
-        self.table.setColumnWidth(5, 75)
-
-        ''' defining widgets'''
         # Menu Bar
         self.action_open_program_info = self.findChild(
-            QtWidgets.QAction, 'actionProgram_Info')
+            QtWidgets.QAction, 'actionProgram_Info'
+        )
         self.action_how_to_use = self.findChild(
-            QtWidgets.QAction, 'actionHow_To_Use')
-
+            QtWidgets.QAction, 'actionHow_To_Use'
+        )
         self.action_open_Digikey = self.findChild(
-            QtWidgets.QAction, 'actionDigiKey')
+            QtWidgets.QAction, 'actionDigiKey'
+        )
         self.action_open_adafruit = self.findChild(
-            QtWidgets.QAction, 'actionAdafruit')
+            QtWidgets.QAction, 'actionAdafruit'
+        )
         self.action_open_BCrobotics = self.findChild(
-            QtWidgets.QAction, 'actionBC_Robotics')
+            QtWidgets.QAction, 'actionBC_Robotics'
+        )
 
-        # toolbar
+        # Toolbar
         self.toolbar = self.findChild(QtWidgets.QToolBar, 'toolBar')
         self.action_open_new_order = self.findChild(
-            QtWidgets.QAction, 'actionOpen_New_Order')
+            QtWidgets.QAction, 'actionOpen_New_Order'
+        )
         self.action_open_past_orders = self.findChild(
-            QtWidgets.QAction, 'actionOpen_Past_Orders')
+            QtWidgets.QAction, 'actionOpen_Past_Orders'
+        )
         self.action_open_inventory = self.findChild(
-            QtWidgets.QAction, 'actionOpen_Inventory')
+            QtWidgets.QAction, 'actionOpen_Inventory'
+        )
         self.action_open_projects = self.findChild(
-            QtWidgets.QAction, 'actionOpen_Projects')
+            QtWidgets.QAction, 'actionOpen_Projects'
+        )
         self.action_export_file = self.findChild(
-            QtWidgets.QAction, 'actionExport_File')
+            QtWidgets.QAction, 'actionExport_File'
+        )
         self.action_create_project = self.findChild(
-            QtWidgets.QAction, 'actionCreate_Project')
+            QtWidgets.QAction, 'actionCreate_Project'
+        )
 
         # Info Labels
         self.header_frame = self.findChild(QtWidgets.QFrame, 'header_frame')
@@ -93,72 +91,67 @@ class MainWindow(QMainWindow):
 
         # Buttons
         self.btn_save_list = self.findChild(
-            QtWidgets.QPushButton, 'btn_save_list')
+            QtWidgets.QPushButton, 'btn_save_list'
+        )
         self.btn_add_to_inventory = self.findChild(
-            QtWidgets.QPushButton, 'btn_add_to_inventory')
+            QtWidgets.QPushButton, 'btn_add_to_inventory'
+        )
         self.btn_edit_mode = self.findChild(
-            QtWidgets.QPushButton, 'btn_edit_mode')
+            QtWidgets.QPushButton, 'btn_edit_mode'
+        )
         self.btn_add_item_manually = self.findChild(
-            QtWidgets.QPushButton, 'btn_add_item_manually')
+            QtWidgets.QPushButton, 'btn_add_item_manually'
+        )
 
+        # Sorting Buttons
         self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
         self.btn_refresh_opensheet = self.findChild(
-            QtWidgets.QPushButton, 'btn_refresh_opensheet')
+            QtWidgets.QPushButton, 'btn_refresh_opensheet'
+        )
         self.btn_resistors = self.findChild(
-            QtWidgets.QPushButton, 'btn_resistors')
+            QtWidgets.QPushButton, 'btn_resistors'
+        )
         self.btn_capacitors = self.findChild(
-            QtWidgets.QPushButton, 'btn_capacitors')
+            QtWidgets.QPushButton, 'btn_capacitors'
+        )
         self.btn_inductors = self.findChild(
             QtWidgets.QPushButton, 'btn_inductors')
         self.btn_transistors = self.findChild(
-            QtWidgets.QPushButton, 'btn_transistors')
+            QtWidgets.QPushButton, 'btn_transistors'
+        )
         self.btn_diodes = self.findChild(
-            QtWidgets.QPushButton, 'btn_diodes')
+            QtWidgets.QPushButton, 'btn_diodes'
+        )
         self.btn_ics = self.findChild(
-            QtWidgets.QPushButton, 'btn_ics')
+            QtWidgets.QPushButton, 'btn_ics'
+        )
         self.btn_leds = self.findChild(
-            QtWidgets.QPushButton, 'btn_leds')
+            QtWidgets.QPushButton, 'btn_leds'
+        )
         self.btn_buttons = self.findChild(
-            QtWidgets.QPushButton, 'btn_buttons')
+            QtWidgets.QPushButton, 'btn_buttons'
+        )
         self.btn_connectors = self.findChild(
-            QtWidgets.QPushButton, 'btn_connectors')
+            QtWidgets.QPushButton, 'btn_connectors'
+        )
         self.btn_displays = self.findChild(
-            QtWidgets.QPushButton, 'btn_displays')
+            QtWidgets.QPushButton, 'btn_displays'
+        )
         self.btn_modules = self.findChild(
-            QtWidgets.QPushButton, 'btn_modules')
+            QtWidgets.QPushButton, 'btn_modules'
+        )
         self.btn_other = self.findChild(
-            QtWidgets.QPushButton, 'btn_other')
+            QtWidgets.QPushButton, 'btn_other'
+        )
 
-        '''
-            Attaching Functions to buttons and other clicked things.
-        '''
+        ''' Attaching Functions to Widgets '''
 
-        # connecting functions to table
+        # Table
         self.table.cellClicked.connect(self.get_clicked_row)
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
         self.action_how_to_use.triggered.connect(self.show_how_to_use)
-
-        # toolbar
-        self.action_open_inventory.triggered.connect(self.open_inventory)
-        self.action_open_new_order.triggered.connect(self.open_new_order)
-        self.action_open_projects.triggered.connect(self.open_project_lists)
-        self.action_create_project.triggered.connect(self.create_project)
-        self.action_open_past_orders.triggered.connect(self.open_past_order)
-        self.action_export_file.triggered.connect(
-            lambda: self.export_file(autoname=True))
-        self.toolbar.setStyleSheet(
-            '''
-            QToolButton {
-                padding: 5px;
-            }
-             QToolButton:hover {
-                background-color: rgb(200, 200, 200);
-            }
-            '''
-        )
-
         self.action_open_Digikey.triggered.connect(
             lambda: self.open_website('Digikey')
         )
@@ -169,38 +162,83 @@ class MainWindow(QMainWindow):
             lambda: self.open_website('BC Robotics')
         )
 
-        # buttons
+        # toolbar
+        self.action_open_inventory.triggered.connect(self.open_inventory)
+        self.action_open_new_order.triggered.connect(self.open_new_order)
+        self.action_open_projects.triggered.connect(self.open_project_lists)
+        self.action_create_project.triggered.connect(self.create_project)
+        self.action_open_past_orders.triggered.connect(self.open_past_order)
+        self.action_export_file.triggered.connect(
+            lambda: self.export_file(autoname=True))
+
+        # Command Buttons
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item_manually.clicked.connect(
-            self.open_add_manually_window)
+            self.open_add_manually_window
+        )
 
-        self.btn_resistors.clicked.connect(
-            lambda: self.show_sorted_section('Resistors'))
-        self.btn_capacitors.clicked.connect(
-            lambda: self.show_sorted_section('Capacitors'))
-        self.btn_inductors.clicked.connect(
-            lambda: self.show_sorted_section('Inductors'))
-        self.btn_transistors.clicked.connect(
-            lambda: self.show_sorted_section('Transistors'))
-        self.btn_diodes.clicked.connect(
-            lambda: self.show_sorted_section('Diodes'))
-        self.btn_ics.clicked.connect(lambda: self.show_sorted_section('ICs'))
-        self.btn_leds.clicked.connect(lambda: self.show_sorted_section('LEDs'))
-        self.btn_buttons.clicked.connect(
-            lambda: self.show_sorted_section('Buttons'))
-        self.btn_connectors.clicked.connect(
-            lambda: self.show_sorted_section('Connectors'))
-        self.btn_displays.clicked.connect(
-            lambda: self.show_sorted_section('Displays'))
-        self.btn_modules.clicked.connect(
-            lambda: self.show_sorted_section('Modules'))
-        self.btn_other.clicked.connect(
-            lambda: self.show_sorted_section('Other'))
-
+        # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: self.refresh_opensheet(self.is_sheet_open))
+            lambda: self.refresh_opensheet(self.is_sheet_open)
+        )
+        self.btn_resistors.clicked.connect(
+            lambda: self.show_sorted_section('Resistors')
+        )
+        self.btn_capacitors.clicked.connect(
+            lambda: self.show_sorted_section('Capacitors')
+        )
+        self.btn_inductors.clicked.connect(
+            lambda: self.show_sorted_section('Inductors')
+        )
+        self.btn_transistors.clicked.connect(
+            lambda: self.show_sorted_section('Transistors')
+        )
+        self.btn_diodes.clicked.connect(
+            lambda: self.show_sorted_section('Diodes')
+        )
+        self.btn_ics.clicked.connect(
+            lambda: self.show_sorted_section('ICs')
+        )
+        self.btn_leds.clicked.connect(
+            lambda: self.show_sorted_section('LEDs')
+        )
+        self.btn_buttons.clicked.connect(
+            lambda: self.show_sorted_section('Buttons')
+        )
+        self.btn_connectors.clicked.connect(
+            lambda: self.show_sorted_section('Connectors')
+        )
+        self.btn_displays.clicked.connect(
+            lambda: self.show_sorted_section('Displays')
+        )
+        self.btn_modules.clicked.connect(
+            lambda: self.show_sorted_section('Modules')
+        )
+        self.btn_other.clicked.connect(
+            lambda: self.show_sorted_section('Other')
+        )
 
+        # Styles
+        self.table.setColumnWidth(0, 175)  # Default columns widths
+        self.table.setColumnWidth(1, 175)
+        self.table.setColumnWidth(2, 175)
+        self.table.setColumnWidth(3, 175)
+        self.table.setColumnWidth(4, 75)
+        self.table.setColumnWidth(5, 75)
+
+        self.toolbar.setStyleSheet(  # Toolbar styles
+            '''
+            QToolButton {
+                padding: 5px;
+            }
+             QToolButton:hover {
+                background-color: rgb(200, 200, 200);
+            }
+            '''
+        )
+
+        # Hidiing some buttons for initial start.
         self.hide_btns([
             self.btn_save_list,
             self.btn_add_to_inventory,
@@ -210,7 +248,7 @@ class MainWindow(QMainWindow):
         ])
         self.hide_sorting_btns()
 
-        self.show()  # needs to here in order to work
+        self.show()  # showing window
 
     def closeEvent(self, event):
         '''
