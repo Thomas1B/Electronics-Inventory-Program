@@ -15,7 +15,7 @@ from .info_windows import How_Add_Item_Manually_Window
 
 class Add_Item_Window(QMainWindow):
     # Signal for sending data (see function send_data).
-    data_sent = pyqtSignal(list) 
+    data_sent = pyqtSignal(list)
 
     def __init__(self, parent=None):
         super(Add_Item_Window, self).__init__(parent)
@@ -110,6 +110,8 @@ class Add_Item_Window(QMainWindow):
         '''
         Function to read in the user entries and check if they meant the requirments
         '''
+
+        # reading the plainTextEdits
         part_number = self.part_number.toPlainText()
         manu_part_number = self.manu_part_number.toPlainText()
         description = self.description.toPlainText()
@@ -117,6 +119,7 @@ class Add_Item_Window(QMainWindow):
         unit_price = self.unit_price.value()
         quantity = self.quantity.value()
 
+        # Condition the user must meet when adding an item
         if not description:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle("Entry Needed")
@@ -124,13 +127,13 @@ class Add_Item_Window(QMainWindow):
             icon = self.style().standardIcon(pixmapi)
             msg.setWindowIcon(icon)
             msg.setIcon(QtWidgets.QMessageBox.Critical)
-
             msg.setText("Item description is nessecary!")
             text = 'This is used to sort items into their respective category.'
             msg.setInformativeText(text)
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             _ = msg.exec_()
             return
+
         elif unit_price == 0:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle("No Price")
@@ -138,7 +141,6 @@ class Add_Item_Window(QMainWindow):
             icon = self.style().standardIcon(pixmapi)
             msg.setWindowIcon(icon)
             msg.setIcon(QtWidgets.QMessageBox.Warning)
-
             header = 'Unit Price is recommended!'
             msg.setText(header)
             text = "Only leave blank if you are sure you do not need this field."
