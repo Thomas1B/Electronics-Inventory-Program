@@ -1110,6 +1110,8 @@ class MainWindow(QMainWindow):
         '''
         Function to show "add item manually" window.
         '''
+        
+        # connecting function to 2nd window
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
 
