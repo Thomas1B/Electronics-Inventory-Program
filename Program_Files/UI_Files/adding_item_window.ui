@@ -185,6 +185,9 @@
             <property name="maximum">
              <double>1000000.000000000000000</double>
             </property>
+            <property name="value">
+             <double>0.040000000000000</double>
+            </property>
            </widget>
           </item>
          </layout>
@@ -228,11 +231,23 @@
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);</string>
             </property>
+            <property name="tabChangesFocus">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
             <property name="plainText">
              <string/>
             </property>
+            <property name="overwriteMode">
+             <bool>false</bool>
+            </property>
             <property name="backgroundVisible">
              <bool>false</bool>
+            </property>
+            <property name="placeholderText">
+             <string>311-1.00KCRCT-ND</string>
             </property>
            </widget>
           </item>
@@ -277,6 +292,9 @@
             <property name="plainText">
              <string/>
             </property>
+            <property name="placeholderText">
+             <string>RC0805FR-071KL</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -320,6 +338,9 @@
             <property name="plainText">
              <string/>
             </property>
+            <property name="placeholderText">
+             <string>RES 10K OHM 1% 1/4W 0805</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -362,6 +383,9 @@
             </property>
             <property name="plainText">
              <string/>
+            </property>
+            <property name="placeholderText">
+             <string>10K Resistor</string>
             </property>
            </widget>
           </item>
