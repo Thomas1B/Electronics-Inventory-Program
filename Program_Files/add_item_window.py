@@ -23,9 +23,28 @@ class Add_Item_Window(QMainWindow):
         # info window
         self.how_to_use_window = How_Add_Item_Manually_Window()
 
-        # menu
+        # Menu
         self.action_how_to_use = self.findChild(
             QtWidgets.QAction, 'actionHow_to_Use')
+
+        # Buttons
+        self.btn_add_to_inventory = self.findChild(
+            QtWidgets.QPushButton, 'btn_add_to_inventory'
+        )
+
+        # plainTextEdits
+        self.part_number = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_part_number')
+        self.manu_part_number = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_manu_part_number')
+        self.description = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_description')
+        self.customer_ref = self.findChild(
+            QtWidgets.QPlainTextEdit, 'plainTextEdit_customer_ref')
+        self.unit_price = self.findChild(
+            QtWidgets.QDoubleSpinBox, 'SpinBox_unit_price')
+        self.quantity = self.findChild(
+            QtWidgets.QSpinBox, 'spinBox_quantity')
 
         # frames for plainTextEdit Boxes
         self.frame2 = self.findChild(QtWidgets.QFrame, 'frame_2')
@@ -35,8 +54,14 @@ class Add_Item_Window(QMainWindow):
         self.frame6 = self.findChild(QtWidgets.QFrame, 'frame_6')
         self.frame7 = self.findChild(QtWidgets.QFrame, 'frame_7')
 
-        self.btn_add_to_inventory = self.findChild(
-            QtWidgets.QPushButton, 'btn_add_to_inventory')
+        ''' Attaching Functions '''
+        # Menu
+        self.action_how_to_use.triggered.connect(self.how_to_use)
+
+        # Buttons
+        self.btn_add_to_inventory.clicked.connect(self.send_to_main_window)
+
+        ''' Styling '''
 
         self.btn_add_to_inventory.setStyleSheet(
             '''
@@ -67,24 +92,6 @@ class Add_Item_Window(QMainWindow):
                 }
                 '''
             )
-
-        self.part_number = self.findChild(
-            QtWidgets.QPlainTextEdit, 'plainTextEdit_part_number')
-        self.manu_part_number = self.findChild(
-            QtWidgets.QPlainTextEdit, 'plainTextEdit_manu_part_number')
-        self.description = self.findChild(
-            QtWidgets.QPlainTextEdit, 'plainTextEdit_description')
-        self.customer_ref = self.findChild(
-            QtWidgets.QPlainTextEdit, 'plainTextEdit_customer_ref')
-
-        self.unit_price = self.findChild(
-            QtWidgets.QDoubleSpinBox, 'SpinBox_unit_price')
-        self.quantity = self.findChild(
-            QtWidgets.QSpinBox, 'spinBox_quantity')
-
-        # attaching functions
-        self.action_how_to_use.triggered.connect(self.how_to_use)
-        self.btn_add_to_inventory.clicked.connect(self.send_to_main_window)
 
     def how_to_use(self):
         '''
