@@ -644,93 +644,8 @@ class MainWindow(QMainWindow):
         '''
 
         if called_from.lower() == 'save_order':  # if new order is being saved.
-            # popup to ask user if they where they want to save the order.
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('Saving New Order')
-            pixmapi = getattr(QtWidgets.QStyle, "SP_DialogSaveButton")
-            icon = self.style().standardIcon(pixmapi)
-            msg.setWindowIcon(icon)
-            msg.setIcon(QtWidgets.QMessageBox.Question)
-
-            text = 'Would you like save the order to the "Past Orders" folder or elsewhere?'
-            info_text = "Note: Orders should be added the inventory first."
-            msg.setText(text)
-            msg.setInformativeText(info_text)
-            msg.setStandardButtons(
-                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Save | QtWidgets.QMessageBox.Cancel)
-            msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
-            user = msg.exec_()
-
-            filename = self.is_sheet_open.split('/')[-1]
-
-            if user == QtWidgets.QMessageBox.Yes:  # user want to save to "Past Order" Folder
-                destination_folder = 'Saved_Lists/Past Orders'
-                shutil.copy2(self.is_sheet_open, destination_folder)
-
-                # displays successfully save popup
-                if os.path.exists(destination_folder+f'/{filename}'):
-                    msg = QtWidgets.QMessageBox()
-                    msg.setWindowTitle('Filed Saved Successfully')
-                    pixmapi = getattr(QtWidgets.QStyle,
-                                      "SP_DialogApplyButton")
-                    icon = self.style().standardIcon(pixmapi)
-                    msg.setWindowIcon(icon)
-                    msg.setIcon(QtWidgets.QMessageBox.Information)
-                    msg.setText(
-                        'The new order was successfully saved.')
-                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    _ = msg.exec_()
-                # displays unsuccessfully save popup
-                else:
-                    msg = QtWidgets.QMessageBox()
-                    msg.setWindowTitle('Unsuccessfully saved!')
-                    pixmapi = getattr(QtWidgets.QStyle,
-                                      "SP_MessageBoxCritical")
-                    icon = self.style().standardIcon(pixmapi)
-                    user.setWindowIcon(icon)
-                    msg.setIcon(QtWidgets.QMessageBox.Critical)
-                    msg.setText(
-                        'The new order was unsuccessfully copied to "Past Orders".')
-                    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    _ = msg.exec_()
-            # user want to save to elsewhere.
-            elif user == QtWidgets.QMessageBox.Save:
-                destination_folder = QtWidgets.QFileDialog.getExistingDirectory(
-                    self, 'Select Destination Folder')
-                if destination_folder:  # user picks a location.
-                    location = f'{destination_folder}/{filename}'
-                    try:
-                        shutil.copy2(self.is_sheet_open, location)
-                    except Exception as err:
-                        print(err)
-                    if os.path.exists(destination_folder+f'/{filename}'):
-                        # displays successfully save popup
-                        msg = QtWidgets.QMessageBox()
-                        msg.setWindowTitle('Filed Saved Successfully')
-                        pixmapi = getattr(QtWidgets.QStyle,
-                                          "SP_DialogApplyButton")
-                        icon = self.style().standardIcon(pixmapi)
-                        user.setWindowIcon(icon)
-
-                        msg.setIcon(QtWidgets.QMessageBox.Information)
-                        msg.setText(
-                            'The new order was successfully saved.'
-                        )
-                        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                        _ = msg.exec_()
-                    else:
-                        # displays unsuccessfully save popup
-                        msg = QtWidgets.QMessageBox()
-                        msg.setWindowTitle('Unsuccessfully saved!')
-                        pixmapi = getattr(QtWidgets.QStyle,
-                                          "SP_MessageBoxCritical")
-                        icon = self.style().standardIcon(pixmapi)
-                        msg.setWindowIcon(icon)
-                        msg.setIcon(QtWidgets.QMessageBox.Critical)
-                        msg.setText(
-                            'The new order was unsuccessfully copied to "Past Orders".')
-                        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                        _ = msg.exec_()
+            destination_folder = 'Saved_Lists/Past Orders'
+            shutil.copy2(self.is_sheet_open, destination_folder)
 
             # automatically called when an order is added to the inventory.
         elif called_from.lower() == 'add_to_inventory' or 'edited':
@@ -752,6 +667,8 @@ class MainWindow(QMainWindow):
                 'Inventory saved was successfully.')
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             _ = msg.exec_()
+
+        self.btn_save_list.hide()
 
     def add_to_inventory(self):
         '''
@@ -851,7 +768,7 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
                 items['Manufacturer Part Number'][row]))
             self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-                items['Description'][row]))
+                items['Description'].astype(str)[row]))
             self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
                 items['Customer Reference'].fillna('')[row]))
             self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
