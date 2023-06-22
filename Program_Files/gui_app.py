@@ -12,7 +12,8 @@ import os
 import shutil
 import inspect
 
-from .info_windows import Info_Window, User_Info_Window, Add_Item_Window
+from .info_windows import Info_Window, User_Info_Window
+from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
