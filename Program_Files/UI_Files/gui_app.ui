@@ -84,7 +84,7 @@
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Save New Order</string>
+          <string>Save Inventory</string>
          </property>
          <property name="icon">
           <iconset>

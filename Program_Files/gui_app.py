@@ -494,7 +494,6 @@ class MainWindow(QMainWindow):
         self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             if not self.inventory_saved:
-                self.btn_save_list.setText('Save Inventory')
                 self.btn_save_list.clicked.connect(
                     lambda: self.save_list('add_to_inventory')
                 )
@@ -1018,7 +1017,6 @@ class MainWindow(QMainWindow):
                 break
         self.inventory_saved = False
         Inventory[category].get_items().update(data)
-        self.btn_save_list.setText('Save Inventory')
         self.btn_save_list.clicked.connect(
             lambda: self.save_list('edited')
         )
