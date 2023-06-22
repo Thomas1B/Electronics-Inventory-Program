@@ -1077,13 +1077,19 @@ class MainWindow(QMainWindow):
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
         '''
-
-        # self.inventory_saved = False
+        self.inventory_saved = False
+        self.btn_save_list.setText('Save Inventory')
+        self.btn_save_list.clicked.connect(
+            lambda: self.save_list('edited')
+        )
+        self.btn_save_list.show()
 
         data = pd.DataFrame(pd.Series(data)).T
         data.columns = labels
 
         data = sort_order(data)
+        add_order_to_Inventory(data)
+        self.fill_table(Inventory)
 
         print(data)
 
