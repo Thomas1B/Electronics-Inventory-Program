@@ -260,7 +260,7 @@ def sort_order(order):
     (i.e: Resistors, Capacitors, etc...)
 
     Parameter
-        order: dataframe.
+        order - DataFrame: dataframe of items.
 
     Return list of dataframe for each category.
     '''
@@ -284,7 +284,7 @@ def sort_order(order):
     leds, connectors, buttons = [], [], []
     displays, modules, other = [], [], []
 
-    # THIS NEEDS TO BE IN THE SAME ORDER AS THE CATEGORY CLASS!
+    # THIS NEEDS TO BE IN THE SAME ORDER AS THE INVENTORY DICTIONARY!
     # Otherwise when showing a category it will display an unintended one.
     sections = [resistors, capacitors, inductors, transistors, diodes,
                 ics, connectors, displays, buttons, leds, modules, other]
