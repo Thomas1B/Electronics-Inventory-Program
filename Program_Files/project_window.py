@@ -81,18 +81,20 @@ class Project_Window(QMainWindow):
             QtWidgets.QAction, 'actionBC_Robotics'
         )
 
+        # ToolBar
+        self.actionExport_Project = self.findChild(
+            QtWidgets.QAction, 'actionExport_Project'
+        )
+        self.actionOpen_Project = self.findChild(
+            QtWidgets.QAction, 'actionOpen_Project'
+        )
+        self.actionCreate_Project = self.findChild(
+            QtWidgets.QAction, 'actionCreate_Project'
+        )
+
         # Command Buttons
         self.btn_save_project = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project'
-        )
-        self.btn_export_project = self.findChild(
-            QtWidgets.QPushButton, 'btn_export_project'
-        )
-        self.btn_open_project = self.findChild(
-            QtWidgets.QPushButton, 'btn_open_project'
-        )
-        self.btn_create_project = self.findChild(
-            QtWidgets.QPushButton, 'btn_create_project'
         )
         self.btn_edit_mode = self.findChild(
             QtWidgets.QPushButton, 'btn_edit_mode'
@@ -100,10 +102,9 @@ class Project_Window(QMainWindow):
         self.btn_add_item = self.findChild(
             QtWidgets.QPushButton, 'btn_add_item_manually'
         )
-        self.btn_remove_item  = self.findChild(
+        self.btn_remove_item = self.findChild(
             QtWidgets.QPushButton, 'btn_remove_item'
         )
-
 
         # Sorting buttons
         self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
@@ -164,13 +165,15 @@ class Project_Window(QMainWindow):
             lambda: self.open_website('BC Robotics')
         )
 
-        # Command Buttons
-        self.btn_save_project.clicked.connect(self.save_project)
-        self.btn_export_project.clicked.connect(
+        # ToolBar
+        self.actionExport_Project.triggered.connect(
             lambda: self.export_project(autoname=True)
         )
-        self.btn_open_project.clicked.connect(self.open_project)
-        self.btn_create_project.clicked.connect(self.create_project)
+        self.actionOpen_Project.triggered.connect(self.open_project)
+        self.actionCreate_Project.triggered.connect(self.create_project)
+
+        # Command Buttons
+        self.btn_save_project.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         # self.btn_add_item.clicked.connect()
         # self.btn_remove_item.clicked.connect(self.remove_item)
@@ -214,11 +217,10 @@ class Project_Window(QMainWindow):
         self.btn_other.clicked.connect(
             lambda: self.show_sorted_section('Other')
         )
-        
+
         btns = [self.btn_add_item, self.btn_remove_item]
         for btn in btns:
             btn.hide()
-
 
     def closeEvent(self, event):
         '''
@@ -676,9 +678,9 @@ class Project_Window(QMainWindow):
         Function to update the Project inventory when the table is in edit mode.
         '''
 
-        btns = [self.btn_open_project,
-                self.btn_create_project,
-                self.btn_export_project,
+        btns = [self.actionOpen_Project,
+                self.actionCreate_Project,
+                self.actionExport_Project,
                 self.btn_save_project,
                 self.btn_add_item,
                 self.btn_remove_item
