@@ -24,7 +24,9 @@ from .data_handling import (
     get_subtotal
 )
 
+from .data_handling import labels
 from .info_windows import How_To_Use_Program_Window
+from .add_item_window import Add_Item_Window
 
 Project = {
     'Resistors': Category("Resistors"),
@@ -50,8 +52,9 @@ class Project_Window(QMainWindow):
 
         ''' Finding/Declaring variables and Widgets '''
 
-        # info window
+        # Other windows used
         self.how_to_use_window = How_To_Use_Program_Window()
+        self.add_item_window = Add_Item_Window()
 
         # vairable to keep track of States:
         self.project_loaded = False  # if project has been loaded.
@@ -175,7 +178,7 @@ class Project_Window(QMainWindow):
         # Command Buttons
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
-        # self.btn_add_item.clicked.connect()
+        self.btn_add_item.clicked.connect(self.open_add_manually_window)
         # self.btn_remove_item.clicked.connect(self.remove_item)
 
         # Sorting Buttons
@@ -218,7 +221,7 @@ class Project_Window(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
-        btns = [self.btn_add_item, self.btn_remove_item]
+        btns = [self.btn_remove_item]
         for btn in btns:
             btn.hide()
 
@@ -543,6 +546,22 @@ class Project_Window(QMainWindow):
             self.project_loaded = True
         self.fill_table(Project)
 
+    def add_to_project(self, items):
+        '''
+        Function to add items to the project dictionary
+
+        Parameter:
+            items - list: list of SORTED Category classes, can also take unsorted dataframe.
+        '''
+        if type(items) == pd.DataFrame:
+            items = sort_order(items)
+
+        for item, section in zip(items, Project.keys()):
+            if len(item) > 0:  # if the list
+                Project[section].add_item(item)
+                Project[section].remove_duplicates()
+                self.editted_saved = False
+
     def fill_table(self, dataframe):
         '''
         Function to fill in table.
@@ -637,13 +656,12 @@ class Project_Window(QMainWindow):
     def item_from_main_window(self, items):
         '''
         Function to get items from the Main UI Window.
+
+        Parameter:
+            items - DataFrame of items
         '''
         items = sort_order(items)
-        for item, section in zip(items, Project.keys()):
-            if len(item) > 0:
-                Project[section].add_item(item)
-                Project[section].remove_duplicates()
-        self.editted_saved = False
+        self.add_to_project(items)
         self.fill_table(Project)
 
     def update_subtotal(self, item):
@@ -745,6 +763,31 @@ class Project_Window(QMainWindow):
         self.editted_saved = False
         Project[category].get_items().update(data)
         self.update_subtotal(item)
+
+    def open_add_manually_window(self):
+        '''
+        Function to show "add item manually" window.
+        '''
+
+        # connecting function to 2nd window
+        self.add_item_window.data_sent.connect(self.receive_add_item_manually)
+        self.add_item_window.show()
+
+    def receive_add_item_manually(self, data):
+        '''
+        Function to read user's input when adding an item manually.
+            Triggered when btn "Add External Item" clicked.
+        '''
+
+        data = pd.DataFrame(pd.Series(data)).T
+        data.columns = labels
+
+        data = sort_order(data)
+        # add_order_to_Inventory(data)
+        self.fill_table(Project)
+        print(data)
+
+        self.editted_saved = False
 
 
 if __name__ == "__main__":
