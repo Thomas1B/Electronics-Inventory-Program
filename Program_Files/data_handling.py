@@ -374,8 +374,8 @@ def add_order_to_Inventory(filename):
     Function to add a new order to the inventory
 
     Parameter:
-        filename - str: filepath of order to add.
-        filename can also be a list of dataframes (see sort_order).
+        filename - str: filepath of order to add, can also be a list of dataframes
+                        (see sort_order).
     '''
 
     orders = filename
