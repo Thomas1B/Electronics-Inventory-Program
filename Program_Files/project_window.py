@@ -811,7 +811,7 @@ class Project_Window(QMainWindow):
 
             menu = menu.exec_(event.globalPos())  # showing menu
 
-    def remove_item(self, row_index, remove_all=False):
+    def remove_item(self, row_index, remove_all):
         '''
         Function to remove an item from the project
 
@@ -826,10 +826,13 @@ class Project_Window(QMainWindow):
         item = pd.DataFrame(item).T
         item.columns = labels
 
-        if not remove_all:
-            item['Quantity'] = item['Quantity'].astype(int) - 1
-        else:
+        quantity = item['Quantity'].astype(int)[0]
+
+        if remove_all:
             item['Quantity'] = 0
+        else:
+            if quantity > 0:
+                item['Quantity'] = quantity - 1
 
         tmp_item = None
         category = None
