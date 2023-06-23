@@ -14,7 +14,7 @@ from .info_windows import How_Add_Item_Manually_Window
 
 
 class Add_Item_Window(QMainWindow):
-    # Signal for sending data (see function send_data).
+    # Signal for sending data (see function send_item_info).
     data_sent = pyqtSignal(list)
 
     def __init__(self, parent=None):
@@ -60,7 +60,7 @@ class Add_Item_Window(QMainWindow):
         self.action_how_to_use.triggered.connect(self.how_to_use)
 
         # Buttons
-        self.btn_add_to_inventory.clicked.connect(self.send_data)
+        self.btn_add_to_inventory.clicked.connect(self.send_item_info)
 
         ''' Styling '''
 
@@ -163,7 +163,7 @@ class Add_Item_Window(QMainWindow):
 
         return item_info
 
-    def send_data(self):
+    def send_item_info(self):
         '''
         Function to send data to the main window.
 
