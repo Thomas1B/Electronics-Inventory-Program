@@ -24,7 +24,6 @@ from .data_handling import (
     get_subtotal
 )
 
-from .data_handling import labels
 from .info_windows import How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 
@@ -775,16 +774,16 @@ class Project_Window(QMainWindow):
 
     def receive_add_item_manually(self, data):
         '''
-        Function to read user's input when adding an item manually.
+        Function to receive item from the other window.
             Triggered when btn "Add External Item" clicked.
+
+        Parameter:
+            data - DataFrame of item.
+
         '''
-
-        item = pd.DataFrame(pd.Series(data)).T
-        item.columns = labels
-
-        item = sort_order(item)
-        self.add_to_project(item)
-        self.fill_table(Project)
+        item = sort_order(data)  # sorting item.
+        self.add_to_project(item)  # adding to project.
+        self.fill_table(Project)  # updating table.
 
 
 if __name__ == "__main__":
