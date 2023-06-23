@@ -779,15 +779,12 @@ class Project_Window(QMainWindow):
             Triggered when btn "Add External Item" clicked.
         '''
 
-        data = pd.DataFrame(pd.Series(data)).T
-        data.columns = labels
+        item = pd.DataFrame(pd.Series(data)).T
+        item.columns = labels
 
-        data = sort_order(data)
-        # add_order_to_Inventory(data)
+        item = sort_order(item)
+        self.add_to_project(item)
         self.fill_table(Project)
-        print(data)
-
-        self.editted_saved = False
 
 
 if __name__ == "__main__":
