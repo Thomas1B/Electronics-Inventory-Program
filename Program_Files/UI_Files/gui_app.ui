@@ -75,6 +75,9 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="3">
         <widget class="QPushButton" name="btn_remove_item">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;
 background-color: rgb(255, 255, 255);</string>
@@ -95,6 +98,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -114,6 +120,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -128,6 +137,9 @@ background-color: rgb(255, 255, 255);</string>
        </item>
        <item row="0" column="3">
         <widget class="QPushButton" name="btn_add_item_manually">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;
 background-color: rgb(255, 255, 255);</string>
@@ -143,6 +155,9 @@ background-color: rgb(255, 255, 255);</string>
        </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="btn_add_to_inventory">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">font: 8pt &quot;Terminal&quot;;
 background-color: rgb(255, 255, 255);</string>
@@ -344,6 +359,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -369,6 +387,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -383,6 +404,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -399,6 +423,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -413,6 +440,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -429,6 +459,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -443,6 +476,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -459,6 +495,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -473,6 +512,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -489,6 +531,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -503,6 +548,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -519,6 +567,9 @@ background-color: rgb(255, 255, 255);</string>
            <family>Terminal</family>
           </font>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
@@ -533,6 +584,9 @@ background-color: rgb(255, 255, 255);</string>
           <font>
            <family>Terminal</family>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(255, 255, 255);</string>
