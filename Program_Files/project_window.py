@@ -16,6 +16,7 @@ import shutil
 
 
 from .data_handling import (
+    labels,
     Category,
     sort_order,
     get_ordersheet,
@@ -104,9 +105,6 @@ class Project_Window(QMainWindow):
         self.btn_add_item = self.findChild(
             QtWidgets.QPushButton, 'btn_add_item_manually'
         )
-        self.btn_remove_item = self.findChild(
-            QtWidgets.QPushButton, 'btn_remove_item'
-        )
 
         # Sorting buttons
         self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
@@ -178,7 +176,6 @@ class Project_Window(QMainWindow):
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item.clicked.connect(self.open_add_manually_window)
-        self.btn_remove_item.clicked.connect(self.remove_item)
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
@@ -696,7 +693,6 @@ class Project_Window(QMainWindow):
                 self.actionExport_Project,
                 self.btn_save_project,
                 self.btn_add_item,
-                self.btn_remove_item
                 ]
 
         if not self.in_edit_mode:
@@ -724,6 +720,9 @@ class Project_Window(QMainWindow):
     def get_editted(self, item):
         '''
         Function to get the item that has been editted.
+
+        Parameter:
+            item 0 
         '''
 
         try:
@@ -787,12 +786,10 @@ class Project_Window(QMainWindow):
         '''
         # getting table geometry
         pos = self.table.viewport().mapFromGlobal(event.globalPos())
-        row = self.table.rowAt(pos.y())
+        row_index = self.table.rowAt(pos.y())
 
-        if row >= 0:
-
-            row = self.get_table_data().iloc[row]
-            # print(f"Row {row}")
+        # if right click on a row_index, row_index >= 0
+        if row_index >= 0:
 
             # Creating Menu
             menu = QtWidgets.QMenu()
@@ -801,19 +798,51 @@ class Project_Window(QMainWindow):
             delete_all_action = QtWidgets.QAction("Remove All")
 
             # Attaching Functions to actions
-            # delete_action.triggered.connect(self.)
-            # delete_all_action.triggered.connect(self.)
+            delete_action.triggered.connect(
+                lambda: self.remove_item(row_index, False)
+            )
+            delete_all_action.triggered.connect(
+                lambda: self.remove_item(row_index, True)
+            )
 
             # Adding to actions to menu
             menu.addAction(delete_action)
             menu.addAction(delete_all_action)
 
-            menu.exec_(event.globalPos())  # showing menu
+            menu = menu.exec_(event.globalPos())  # showing menu
 
-    def remove_item(self, data):
+    def remove_item(self, row_index, remove_all=False):
         '''
         Function to remove an item from the project
+
+        Parameter:
+            row_index - int: index to row that was clicked.
+            remove_all - bool: whether to remove the entire item or deduce quantity by 1.
+
         '''
+
+        # getting item that was clicked on
+        item = self.get_table_data().iloc[row_index]
+        item = pd.DataFrame(item).T
+        item.columns = labels
+
+        if not remove_all:
+            item['Quantity'] = item['Quantity'].astype(int) - 1
+        else:
+            item['Quantity'] = 0
+
+        tmp_item = None
+        category = None
+        for i, df in enumerate(sort_order(item)):
+            if not df.empty:
+                tmp_item = df
+                category = list(Project.keys())[i]
+                break
+
+        self.editted_saved = False
+        Project[category].get_items().update(tmp_item)
+        self.update_subtotal(item)
+        self.fill_table(Project)
 
 
 if __name__ == "__main__":
