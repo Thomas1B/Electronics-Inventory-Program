@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>608</height>
+    <width>779</width>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -274,6 +274,9 @@ background-color: rgb(255, 255, 255);</string>
              <bool>false</bool>
             </attribute>
             <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderStretchLastSection">
              <bool>false</bool>
             </attribute>
             <column>
@@ -598,7 +601,7 @@ background-color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>720</width>
+     <width>779</width>
      <height>25</height>
     </rect>
    </property>

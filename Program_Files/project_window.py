@@ -220,14 +220,6 @@ class Project_Window(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
-        ''' Styling '''
-        # self.table.horizontalHeader().setSectionResizeMode(
-        #     QtWidgets.QHeaderView.ResizeToContents
-        # )
-        # self.table.verticalHeader().setSectionResizeMode(
-        #     QtWidgets.QHeaderView.ResizeToContents
-        # )
-
     def closeEvent(self, event):
         '''
         Function to detect when user closes the window.
