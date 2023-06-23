@@ -262,7 +262,8 @@ def sort_order(order):
     Parameter
         order - DataFrame: dataframe of items.
 
-    Return list of dataframe for each category.
+    Returns:
+        list of dataframe for each category.
     '''
 
     ics_conds = ['ics', 'ic']
