@@ -823,16 +823,17 @@ class Project_Window(QMainWindow):
 
         # getting item that was clicked on
         item = self.get_table_data().iloc[row_index]
-        item = pd.DataFrame(item).T
+        item = pd.DataFrame(item).T.reset_index(drop=True)
         item.columns = labels
 
-        quantity = item['Quantity'].astype(int)[0]
+        quantity = item['Quantity']
+        print(quantity, type(quantity))
 
         if remove_all:
             item['Quantity'] = 0
         else:
-            if quantity > 0:
-                item['Quantity'] = quantity - 1
+            if item['Quantity'].astype(int)[0] > 0:
+                item['Quantity'] = item['Quantity'].astype(int) - 1
 
         tmp_item = None
         category = None
