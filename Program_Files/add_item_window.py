@@ -11,11 +11,13 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 import sys
 from .info_windows import How_Add_Item_Manually_Window
+from .data_handling import labels
+import pandas as pd
 
 
 class Add_Item_Window(QMainWindow):
     # Signal for sending data (see function send_item_info).
-    data_sent = pyqtSignal(list)
+    data_sent = pyqtSignal(pd.DataFrame)
 
     def __init__(self, parent=None):
         super(Add_Item_Window, self).__init__(parent)
@@ -106,9 +108,12 @@ class Add_Item_Window(QMainWindow):
         '''
         event.accept()
 
-    def read_user_entries(self):
+    def check_user_entries(self):
         '''
         Function to read in the user entries and check if they meant the requirments
+
+        Returns
+            list of item info
         '''
 
         # reading the plainTextEdits
@@ -167,8 +172,12 @@ class Add_Item_Window(QMainWindow):
         '''
         Function to send data to the main window.
 
-        Data must be emitted at a "list"
+        Data must be emitted at a "DataFrame"
         '''
-        item_info = self.read_user_entries()
+        item_info = self.check_user_entries()
+
         if item_info:
-            self.data_sent.emit(item_info)
+            # if there is item info, turn into a DataFrame.
+            item = pd.DataFrame(pd.Series(item_info)).T
+            item.columns = labels
+            self.data_sent.emit(item)  # sending data to another window.
