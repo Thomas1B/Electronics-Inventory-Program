@@ -178,7 +178,7 @@ class Project_Window(QMainWindow):
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item.clicked.connect(self.open_add_manually_window)
-        # self.btn_remove_item.clicked.connect(self.remove_item)
+        self.btn_remove_item.clicked.connect(self.remove_item)
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
@@ -220,9 +220,13 @@ class Project_Window(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
-        btns = [self.btn_remove_item]
-        for btn in btns:
-            btn.hide()
+        ''' Styling '''
+        # self.table.horizontalHeader().setSectionResizeMode(
+        #     QtWidgets.QHeaderView.ResizeToContents
+        # )
+        # self.table.verticalHeader().setSectionResizeMode(
+        #     QtWidgets.QHeaderView.ResizeToContents
+        # )
 
     def closeEvent(self, event):
         '''
@@ -784,6 +788,40 @@ class Project_Window(QMainWindow):
         item = sort_order(data)  # sorting item.
         self.add_to_project(item)  # adding to project.
         self.fill_table(Project)  # updating table.
+
+    def contextMenuEvent(self, event):
+        '''
+        Function to show a menu when right clicked on item in the table.
+        '''
+        # getting table geometry
+        pos = self.table.viewport().mapFromGlobal(event.globalPos())
+        row = self.table.rowAt(pos.y())
+
+        if row >= 0:
+
+            row = self.get_table_data().iloc[row]
+            # print(f"Row {row}")
+
+            # Creating Menu
+            menu = QtWidgets.QMenu()
+            menu = QtWidgets.QMenu(self)
+            delete_action = QtWidgets.QAction("Remove One")
+            delete_all_action = QtWidgets.QAction("Remove All")
+
+            # Attaching Functions to actions
+            # delete_action.triggered.connect(self.)
+            # delete_all_action.triggered.connect(self.)
+
+            # Adding to actions to menu
+            menu.addAction(delete_action)
+            menu.addAction(delete_all_action)
+
+            menu.exec_(event.globalPos())  # showing menu
+
+    def remove_item(self, data):
+        '''
+        Function to remove an item from the project
+        '''
 
 
 if __name__ == "__main__":

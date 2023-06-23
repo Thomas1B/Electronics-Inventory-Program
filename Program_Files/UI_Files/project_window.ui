@@ -270,6 +270,12 @@ background-color: rgb(255, 255, 255);</string>
             <property name="wordWrap">
              <bool>true</bool>
             </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
             <column>
              <property name="text">
               <string>Part Number</string>
