@@ -937,9 +937,6 @@ class MainWindow(QMainWindow):
 
             # passing item to project window.
             self.project_window.item_from_main_window(item)
-        # else:
-        #     data = self.get_table_data()
-        #     print(data.iloc[index])
 
     def edit_mode(self):
         '''
