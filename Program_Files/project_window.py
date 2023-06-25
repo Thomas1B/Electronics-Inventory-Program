@@ -250,6 +250,7 @@ class Project_Window(QMainWindow):
                     event.accept()
                 case QtWidgets.QMessageBox.No:
                     # user declines to save.
+                    self.editted_saved = True
                     event.accept()
                 case _:
                     # user cancels selection.
