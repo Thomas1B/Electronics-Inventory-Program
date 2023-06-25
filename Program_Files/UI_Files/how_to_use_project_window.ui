@@ -19,6 +19,18 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>20</number>
+    </property>
+    <property name="topMargin">
+     <number>15</number>
+    </property>
+    <property name="rightMargin">
+     <number>20</number>
+    </property>
+    <property name="bottomMargin">
+     <number>15</number>
+    </property>
     <item>
      <widget class="QScrollArea" name="scrollArea">
       <property name="styleSheet">
@@ -35,8 +47,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>521</width>
-         <height>446</height>
+         <width>499</width>
+         <height>434</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
