@@ -780,14 +780,7 @@ class Project_Window(QMainWindow):
             item 0 
         '''
 
-        try:
-            '''
-            Need this try block to stop an error when user is in edit more and look at 
-            sub sections of the project.
-            '''
-            data = self.get_table_data()
-        except Exception:
-            return
+        data = self.get_table_data()
 
         column_name = data.keys()[clicked_item.column()]
         row_index = clicked_item.row()
