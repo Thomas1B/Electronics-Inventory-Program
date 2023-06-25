@@ -763,6 +763,28 @@ class Project_Window(QMainWindow):
 
         self.update_subtotal(item)
 
+    def update_item(self, item):
+        '''
+        Function to update an item in the project dictionary.
+
+        Parameter:
+            item - dataframe of the item
+        '''
+
+        # getting item category
+        category = None
+        for i, df in enumerate(sort_order(item)):
+            if not df.empty:
+                category = list(Project.keys())[i]
+                break
+
+        # updating the item
+        category_items = Project[category].get_items()
+        for i in range(category_items.shape[0]):
+            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
+                self.editted_saved = False
+                Project[category].get_items().iloc[i] = item.iloc[0]
+
     def open_add_manually_window(self):
         '''
         Function to show "add item manually" window.
@@ -839,28 +861,6 @@ class Project_Window(QMainWindow):
         self.update_item(item)
         self.update_subtotal(item)
         self.fill_table(Project)
-
-    def update_item(self, item):
-        '''
-        Function to update an item in the project dictionary.
-
-        Parameter:
-            item - dataframe of the item
-        '''
-
-        # getting item category
-        category = None
-        for i, df in enumerate(sort_order(item)):
-            if not df.empty:
-                category = list(Project.keys())[i]
-                break
-
-        # updating the item
-        category_items = Project[category].get_items()
-        for i in range(category_items.shape[0]):
-            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-                self.editted_saved = False
-                Project[category].get_items().iloc[i] = item.iloc[0]
 
 
 if __name__ == "__main__":
