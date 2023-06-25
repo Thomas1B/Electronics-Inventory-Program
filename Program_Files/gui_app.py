@@ -1072,7 +1072,7 @@ class MainWindow(QMainWindow):
         data.columns = labels
 
         data = sort_order(data)
-        # add_order_to_Inventory(data)
+        add_order_to_Inventory(data)
         self.fill_table(Inventory)
         print(data)
 
