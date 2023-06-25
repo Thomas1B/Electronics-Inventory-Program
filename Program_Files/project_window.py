@@ -901,7 +901,7 @@ class Project_Window(QMainWindow):
         delete = False
         match remove_all:
             case False:
-                # minus 1 from quantity
+                # minus 1 from quantity, if quantity > 1 otherwise delete
                 if int(item['Quantity'].iloc[0]) > 1:
                     item['Quantity'] = item['Quantity'].astype(int) - 1
                 else:
@@ -913,8 +913,9 @@ class Project_Window(QMainWindow):
                 # add 1 to quantity
                 item['Quantity'] = item['Quantity'].astype(int) + 1
 
+        # updating project dictionary
         self.update_item(item, delete=delete)
-        self.update_subtotal(item)
+        self.update_subtotal(Project)
         self.fill_table(Project)
 
 
