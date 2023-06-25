@@ -760,7 +760,7 @@ class Project_Window(QMainWindow):
         print(f'Category = {category}')
 
         self.editted_saved = False
-        # Project[category].get_items().update(data) # this is the problem line!
+        Project[category].get_items().update(data) # this is the problem line!
         self.update_subtotal(item)
 
         print(Project[category].get_items())
