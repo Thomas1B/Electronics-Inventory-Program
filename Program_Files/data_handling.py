@@ -432,7 +432,7 @@ def get_item_category(item, dictionary):
 
 def update_item(self, item, dictionary, delete=False):
     '''
-    Function to update an item from a dictionary. 
+    Function to update an item from a dictionary of Category classes. 
     Triggered when item is editted (see get_editted()).
 
     Parameter:
