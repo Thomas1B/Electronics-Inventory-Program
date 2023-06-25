@@ -75,19 +75,23 @@ def toggled_widgets(self,
     Function to toggle disabling/enabling buttons when in edit mode.
 
         Parameters:
-            widgets - list of widgets to toggle.
-            enable - True -> enables widget, False -> disables widget.
+            widgets: list of widgets to toggle, (can be None).
+            enable: Tue -> enables widget, False -> disables widget.
+            toggle_sorting_frame: toggle sorting buttons.
+            toggle_toolbar: toggle ToolBar.
     """
 
     # toggling desired widgets
+    if widgets:
+        for btn in widgets:
+            btn.setEnabled(enable)
 
-    for btn in widgets:
-        btn.setEnabled(enable)
-
+    # toggling sorting buttons
     if toggle_sorting_frame:
         for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
             btn.setEnabled(enable)
 
+    # toggling toolbar
     if toggle_toolbar:
         for action in self.toolbar.actions():
             action.setEnabled(enable)
