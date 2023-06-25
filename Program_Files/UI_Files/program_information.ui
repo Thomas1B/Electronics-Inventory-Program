@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>Icons/information-white.png</normaloff>Icons/information-white.png</iconset>
+    <normaloff>../Icons/information-white.png</normaloff>../Icons/information-white.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>

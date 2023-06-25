@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>775</width>
-    <height>449</height>
+    <height>483</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../Icons/blueprint--plus.png</normaloff>../Icons/blueprint--plus.png</iconset>
+    <normaloff>../Icons/plus.png</normaloff>../Icons/plus.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -89,7 +89,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Item description is nessacary</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Item description is nessacary&lt;/p&gt;&lt;p&gt;Example: Cap 10uF&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

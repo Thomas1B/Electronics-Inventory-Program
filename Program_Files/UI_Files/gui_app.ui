@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>Icons/databases.png</normaloff>Icons/databases.png</iconset>
+    <normaloff>../Icons/databases.png</normaloff>../Icons/databases.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
