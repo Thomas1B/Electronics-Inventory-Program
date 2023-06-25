@@ -404,6 +404,18 @@ def get_subtotal(dictionary):
     return subtotal
 
 
+def drop_all_from_dict(dictionary):
+    '''
+    Function to drop all items from each category in a dictionary
+
+    Parameter:
+        dictionary - dict: dictionary of category classes.
+    '''
+
+    for section in dictionary.keys():
+        dictionary[section].drop_all_items()
+
+
 if __name__ == "__main__":
     print('Running check inventory file...')
     result = load_Inventory()
