@@ -369,23 +369,24 @@ def get_ordersheet(filepath):
         return order
 
 
-def add_order_to_Inventory(filename):
+def add_order_to_Inventory(order):
     '''
     Function to add a new order to the inventory
 
     Parameter:
-        filename - str: filepath of order to add, can also be a list of dataframes
-                        (see sort_order).
+        filename - str: filepath of order to add.
+          can also be a list of dataframes(see sort_order).
     '''
 
-    orders = filename
-    if type(filename) == str:
-        orders = get_ordersheet(filename)
-
-    for order, section in zip(orders, Inventory.keys()):
-        if len(order) > 0:
+    if type(order) == dict:
+        for section in Inventory.keys():
             Inventory[section].add_item(order)
             Inventory[section].remove_duplicates()
+    else:
+        for items, section in zip(order, Inventory.keys()):
+            if len(order) > 0:
+                Inventory[section].add_item(items)
+                Inventory[section].remove_duplicates()
 
 
 def get_subtotal(dictionary):
