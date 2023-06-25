@@ -628,6 +628,7 @@ class Project_Window(QMainWindow):
         if filetype == 'csv':
             data = dict_to_dataframe(Project)
             data.to_csv(self.is_sheet_open, index=False)
+            print(data)
         elif filetype == 'xlsx':
             with pd.ExcelWriter(self.is_sheet_open) as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
@@ -718,7 +719,7 @@ class Project_Window(QMainWindow):
             self.table.itemChanged.connect(self.update_subtotal)
             self.toggled_btns(disabled=False, btns=btns)
 
-    def get_editted(self, item):
+    def get_editted(self, clicked_item):
         '''
         Function to get the item that has been editted.
 
@@ -735,29 +736,34 @@ class Project_Window(QMainWindow):
         except Exception:
             return
 
-        column_name = data.keys()[item.column()]
-        row_index = item.row()
-        row = pd.DataFrame(data.iloc[row_index]).T
+        print(f'Table = \n{data}\n')
+
+        column_name = data.keys()[clicked_item.column()]
+        row_index = clicked_item.row()
+        item = pd.DataFrame(data.iloc[row_index]).T
 
         if column_name in ['Unit Price', 'Quantity']:
             # checking if there is any letter in the editted price or quantity.
-            if any(char.isalpha() for char in item.text()):
+            if any(char.isalpha() for char in clicked_item.text()):
                 # user entered a string into number cells.
                 print('letter in cell!!!!')
                 return
 
-        # getting the editted data and category
-        data = None
+        # getting category the item is in
         category = None
-        for i, df in enumerate(sort_order(row)):
+        sorted_items = sort_order(item)
+        for i, df in enumerate(sorted_items):
             if not df.empty:
-                data = df
                 category = list(Project.keys())[i]
                 break
 
+        print(f'Category = {category}')
+
         self.editted_saved = False
-        Project[category].get_items().update(data)
+        # Project[category].get_items().update(data) # this is the problem line
         self.update_subtotal(item)
+
+        print(Project[category].get_items())
 
     def open_add_manually_window(self):
         '''
