@@ -736,8 +736,6 @@ class Project_Window(QMainWindow):
         except Exception:
             return
 
-        print(f'Table = \n{data}\n')
-
         column_name = data.keys()[clicked_item.column()]
         row_index = clicked_item.row()
         item = pd.DataFrame(data.iloc[row_index]).T
@@ -757,13 +755,13 @@ class Project_Window(QMainWindow):
                 category = list(Project.keys())[i]
                 break
 
-        print(f'Category = {category}')
+        category_items = Project[category].get_items()
+        for i in range(category_items.shape[0]):
+            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
+                self.editted_saved = False
+                Project[category].get_items().iloc[i] = item.iloc[0]
 
-        self.editted_saved = False
-        Project[category].get_items().update(data) # this is the problem line!
         self.update_subtotal(item)
-
-        print(Project[category].get_items())
 
     def open_add_manually_window(self):
         '''
