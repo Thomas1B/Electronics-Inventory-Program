@@ -661,7 +661,7 @@ background-color: rgb(255, 255, 255);</string>
      <normaloff>../Icons/question.png</normaloff>../Icons/question.png</iconset>
    </property>
    <property name="text">
-    <string>How to use Project tool</string>
+    <string>How To Use</string>
    </property>
   </action>
   <action name="actionOpen_Project">
