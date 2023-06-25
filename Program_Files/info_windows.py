@@ -64,3 +64,30 @@ class How_Add_Item_Manually_Window(QMainWindow):
             }
             '''
         )
+
+
+def toggled_widgets(self,
+                    widgets: list,
+                    enable=False,
+                    toggle_sorting_frame=True,
+                    toggle_toolbar=True) -> None:
+    """
+    Function to toggle disabling/enabling buttons when in edit mode.
+
+        Parameters:
+            widgets - list of widgets to toggle.
+            enable - True -> enables widget, False -> disables widget.
+    """
+
+    # toggling desired widgets
+
+    for btn in widgets:
+        btn.setEnabled(enable)
+
+    if toggle_sorting_frame:
+        for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+            btn.setEnabled(enable)
+
+    if toggle_toolbar:
+        for action in self.toolbar.actions():
+            action.setEnabled(enable)

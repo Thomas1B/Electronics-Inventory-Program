@@ -11,7 +11,7 @@ import sys
 import os
 import shutil
 
-from .info_windows import Program_Info_Window, How_To_Use_Program_Window
+from .info_windows import Program_Info_Window, How_To_Use_Program_Window, toggled_widgets
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
@@ -968,25 +968,6 @@ class MainWindow(QMainWindow):
             # passing item to project window.
             self.project_window.item_from_main_window(item)
 
-    def toggled_btns(self, disabled=True, btns=None):
-        '''
-        Function to toggle disabling/enabling buttons when in edit mode.
-        '''
-        if disabled:
-            for btn in btns:
-                btn.setEnabled(False)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(False)
-            for action in self.toolbar.actions():
-                action.setEnabled(False)
-        else:
-            for btn in btns:
-                btn.setEnabled(True)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(True)
-            for action in self.toolbar.actions():
-                action.setEnabled(True)
-
     def edit_mode(self):
         '''
         Function to update the Project inventory when the table is in edit mode.
@@ -1006,7 +987,7 @@ class MainWindow(QMainWindow):
             self.header.setStyleSheet('color: red;')
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
-            self.toggled_btns(disabled=True, btns=btns)
+            toggled_widgets(self, widgets=btns, enable=False)
         else:
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
@@ -1015,7 +996,7 @@ class MainWindow(QMainWindow):
             self.header.setStyleSheet('color: black;')
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-            self.toggled_btns(disabled=False, btns=btns)
+            toggled_widgets(self, widgets=btns, enable=True)
 
     def get_editted(self, clicked_item):
         '''
