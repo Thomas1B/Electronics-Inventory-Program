@@ -744,6 +744,7 @@ class Project_Window(QMainWindow):
         Function to update the Project inventory when the table is in edit mode.
         '''
 
+        # buttons to toggle during edit mode.
         btns = [self.actionOpen_Project,
                 self.actionCreate_Project,
                 self.actionExport_Project,

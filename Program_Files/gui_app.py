@@ -992,7 +992,7 @@ class MainWindow(QMainWindow):
         Function to update the Project inventory when the table is in edit mode.
         '''
 
-        # buttons to disable in edit mode.
+        # buttons to toggle in edit mode.
         btns = [
             self.btn_add_to_inventory,
             self.btn_add_item_manually
