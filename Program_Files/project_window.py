@@ -273,27 +273,22 @@ class Project_Window(QMainWindow):
             menu = QtWidgets.QMenu(self)
             add_one_action = QtWidgets.QAction("Add One")
             delete_action = QtWidgets.QAction("Remove One")
-            delete_all_action = QtWidgets.QAction("Remove All")
             delete_item_action = QtWidgets.QAction("Delete")
 
             # Attaching Functions to actions
             add_one_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index)
+                lambda: self.change_item_quantity(row_index, remove_all=None)
             )
             delete_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, False)
-            )
-            delete_all_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, True)
+                lambda: self.change_item_quantity(row_index, remove_all=False)
             )
             delete_item_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, 'delete')
+                lambda: self.change_item_quantity(row_index, remove_all=True)
             )
 
             # Adding to actions to menu
             menu.addAction(add_one_action)
             menu.addAction(delete_action)
-            menu.addAction(delete_all_action)
             menu.addAction(delete_item_action)
 
             menu.exec_(event.globalPos())  # showing menuF
@@ -894,7 +889,7 @@ class Project_Window(QMainWindow):
 
         Parameter:
             row_index - int: index to row that was clicked.
-            remove_all - bool: False removes one, true removes all, None for increasing by one.
+            remove_all - bool: False removes one, true deletes item, None for increasing by one.
 
         '''
 
@@ -903,19 +898,22 @@ class Project_Window(QMainWindow):
         item = pd.DataFrame(item).T
 
         # conditions for updating item quantity
+        delete = False
         match remove_all:
             case False:
-                item['Quantity'] = item['Quantity'].astype(int) - 1
+                # minus 1 from quantity
+                if int(item['Quantity'].iloc[0]) > 1:
+                    item['Quantity'] = item['Quantity'].astype(int) - 1
+                else:
+                    delete = True
             case True:
-                item['Quantity'] = 0
+                # deleting item
+                delete = True
             case None:
+                # add 1 to quantity
                 item['Quantity'] = item['Quantity'].astype(int) + 1
 
-        if remove_all == 'delete':
-            self.update_item(item, delete=True)
-        else:
-            self.update_item(item)
-
+        self.update_item(item, delete=delete)
         self.update_subtotal(item)
         self.fill_table(Project)
 
