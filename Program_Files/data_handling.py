@@ -16,13 +16,16 @@ labels = ['Part Number', 'Manufacturer Part Number',
 class Category:
     '''
     Catergory Class for electronic part.
+
+    Attributes:
+        category: what type of category. Ex: Resistors, Capacitors...
     '''
 
     def __init__(self, category):
         # dataframe to store the data.
         self.items = pd.DataFrame()
         # type of component, i.e: Resistors, Capacitors, etc.
-        self.category = category
+        self.category = category.capitalize()
 
     def get_items(self):
         '''
