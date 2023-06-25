@@ -256,6 +256,37 @@ class Project_Window(QMainWindow):
                     # user cancels selection.
                     event.ignore()
 
+    def contextMenuEvent(self, event):
+        '''
+        Function to show a menu when right clicked on item in the table.
+        '''
+        # getting table geometry
+        pos = self.table.viewport().mapFromGlobal(event.globalPos())
+        row_index = self.table.rowAt(pos.y())
+
+        # if right click on a row_index, row_index >= 0
+        if row_index >= 0:
+
+            # Creating Menu
+            menu = QtWidgets.QMenu()
+            menu = QtWidgets.QMenu(self)
+            delete_action = QtWidgets.QAction("Remove One")
+            delete_all_action = QtWidgets.QAction("Remove All")
+
+            # Attaching Functions to actions
+            delete_action.triggered.connect(
+                lambda: self.remove_item(row_index, False)
+            )
+            delete_all_action.triggered.connect(
+                lambda: self.remove_item(row_index, True)
+            )
+
+            # Adding to actions to menu
+            menu.addAction(delete_action)
+            menu.addAction(delete_all_action)
+
+            menu.exec_(event.globalPos())  # showing menuF
+
     def show_how_to_use(self):
         '''
         Function to show the "how to use" window.
@@ -793,37 +824,6 @@ class Project_Window(QMainWindow):
         item = sort_order(data)  # sorting item.
         self.add_to_project(item)  # adding to project.
         self.fill_table(Project)  # updating table.
-
-    def contextMenuEvent(self, event):
-        '''
-        Function to show a menu when right clicked on item in the table.
-        '''
-        # getting table geometry
-        pos = self.table.viewport().mapFromGlobal(event.globalPos())
-        row_index = self.table.rowAt(pos.y())
-
-        # if right click on a row_index, row_index >= 0
-        if row_index >= 0:
-
-            # Creating Menu
-            menu = QtWidgets.QMenu()
-            menu = QtWidgets.QMenu(self)
-            delete_action = QtWidgets.QAction("Remove One")
-            delete_all_action = QtWidgets.QAction("Remove All")
-
-            # Attaching Functions to actions
-            delete_action.triggered.connect(
-                lambda: self.remove_item(row_index, False)
-            )
-            delete_all_action.triggered.connect(
-                lambda: self.remove_item(row_index, True)
-            )
-
-            # Adding to actions to menu
-            menu.addAction(delete_action)
-            menu.addAction(delete_all_action)
-
-            menu.exec_(event.globalPos())  # showing menu
 
     def remove_item(self, row_index, remove_all):
         '''
