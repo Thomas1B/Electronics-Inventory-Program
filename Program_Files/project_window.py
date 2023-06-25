@@ -814,6 +814,26 @@ class Project_Window(QMainWindow):
                 self.toggled_btns(disabled=True, btns=btns)
                 return
 
+        # checking if user left empty description
+        if item['Description'].iloc[0] == '':
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('User Error')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+            msg.setText('You cannot have a blank item description!')
+            text = 'Fix before continuing.'
+            msg.setInformativeText(text)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+
+            self.editted_saved = 'error'
+            btns = [self.btn_save_project, self.btn_edit_mode]
+            self.toggled_btns(disabled=True, btns=btns)
+            return
+
         # enabling button if they were disable from user error.
         btns = [self.btn_save_project, self.btn_edit_mode]
         self.toggled_btns(disabled=False, btns=btns)
