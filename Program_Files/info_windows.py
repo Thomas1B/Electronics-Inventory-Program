@@ -34,6 +34,17 @@ class How_To_Use_Program_Window(QMainWindow):
         uic.loadUi('Program_Files/UI_Files/how_to_use_program.ui', self)
 
 
+class How_To_Use_Project_Window(QMainWindow):
+    '''
+    Class to run program how to use program window.
+    '''
+
+    def __init__(self):
+        super(How_To_Use_Project_Window, self).__init__()
+
+        uic.loadUi('Program_Files/UI_Files/how_to_use_project_window.ui', self)
+
+
 class How_Add_Item_Manually_Window(QMainWindow):
     '''
     Class to run how to use "Add item Manually" window.

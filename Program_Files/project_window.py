@@ -25,7 +25,7 @@ from .data_handling import (
     get_subtotal
 )
 
-from .info_windows import How_To_Use_Program_Window
+from .info_windows import How_To_Use_Project_Window
 from .add_item_window import Add_Item_Window
 
 Project = {
@@ -53,7 +53,7 @@ class Project_Window(QMainWindow):
         ''' Finding/Declaring variables and Widgets '''
 
         # Other windows used
-        self.how_to_use_window = How_To_Use_Program_Window()
+        self.how_to_use_window = How_To_Use_Project_Window()
         self.add_item_window = Add_Item_Window()
 
         # vairable to keep track of States:
