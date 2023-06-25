@@ -274,6 +274,7 @@ class Project_Window(QMainWindow):
             add_one_action = QtWidgets.QAction("Add One")
             delete_action = QtWidgets.QAction("Remove One")
             delete_all_action = QtWidgets.QAction("Remove All")
+            delete_item_action = QtWidgets.QAction("Delete")
 
             # Attaching Functions to actions
             add_one_action.triggered.connect(
@@ -285,11 +286,15 @@ class Project_Window(QMainWindow):
             delete_all_action.triggered.connect(
                 lambda: self.change_item_quantity(row_index, True)
             )
+            delete_item_action.triggered.connect(
+                lambda: self.change_item_quantity(row_index, 'delete')
+            )
 
             # Adding to actions to menu
             menu.addAction(add_one_action)
             menu.addAction(delete_action)
             menu.addAction(delete_all_action)
+            menu.addAction(delete_item_action)
 
             menu.exec_(event.globalPos())  # showing menuF
 
@@ -835,12 +840,13 @@ class Project_Window(QMainWindow):
         self.update_item(item)
         self.update_subtotal(item)
 
-    def update_item(self, item):
+    def update_item(self, item, delete=False):
         '''
         Function to update an item in the project dictionary.
 
         Parameter:
-            item - dataframe of the item
+            item - dataframe of the item.
+            delete - bool: drop item (default false).
         '''
 
         # getting item category
@@ -855,7 +861,10 @@ class Project_Window(QMainWindow):
         for i in range(category_items.shape[0]):
             if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
                 self.editted_saved = False
-                Project[category].get_items().iloc[i] = item.iloc[0]
+                if delete:
+                    Project[category].get_items().drop(index=i, inplace=True)
+                else:
+                    Project[category].get_items().iloc[i] = item.iloc[0]
 
     def open_add_manually_window(self):
         '''
@@ -902,8 +911,11 @@ class Project_Window(QMainWindow):
             case None:
                 item['Quantity'] = item['Quantity'].astype(int) + 1
 
-        # updating item and table
-        self.update_item(item)
+        if remove_all == 'delete':
+            self.update_item(item, delete=True)
+        else:
+            self.update_item(item)
+
         self.update_subtotal(item)
         self.fill_table(Project)
 
