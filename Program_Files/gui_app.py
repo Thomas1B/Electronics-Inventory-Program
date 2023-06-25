@@ -531,6 +531,7 @@ class MainWindow(QMainWindow):
                 )
                 self.btn_save_list.show()
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
+            self.sub_header.setText('')
             self.header.setText('Looking at Inventory')
             self.fill_table(Inventory)
             self.show_sorting_btns()
@@ -991,7 +992,10 @@ class MainWindow(QMainWindow):
         '''
 
         # buttons to disable in edit mode.
-        btns = [self.btn_add_to_inventory, self.btn_add_item_manually]
+        btns = [
+            self.btn_add_to_inventory,
+            self.btn_add_item_manually
+        ]
 
         if not self.in_edit_mode:
             self.in_edit_mode = True
@@ -1012,45 +1016,92 @@ class MainWindow(QMainWindow):
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             self.toggled_btns(disabled=False, btns=btns)
 
-    def get_editted(self, item):
+    def get_editted(self, clicked_item):
         '''
         Function to get the item that has been editted.
         '''
 
-        try:
-            '''
-            Need this try block to stop an error when user is in edit more and look at
-            sub sections of the project.
-            '''
-            data = self.get_table_data()
-        except Exception:
-            return
+        data = self.get_table_data()
 
-        column_name = data.keys()[item.column()]
-        row_index = item.row()
-        row = pd.DataFrame(data.iloc[row_index]).T
+        column_name = data.keys()[clicked_item.column()]
+        row_index = clicked_item.row()
+        item = pd.DataFrame(data.iloc[row_index]).T
 
+        # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
-            # checking if there is any letter in the editted price or quantity.
-            if any(char.isalpha() for char in item.text()):
-                # user entered a string into number cells.
-                print('letter in cell!!!!')
+            if any(char.isalpha() for char in clicked_item.text()):
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('User Error')
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                icon = self.style().standardIcon(pixmapi)
+                msg.setWindowIcon(icon)
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+                msg.setText('You can only enter numbers!')
+                text = 'Fix before continuing.'
+                msg.setInformativeText(text)
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
+
+                self.editted_saved = 'error'
+                btns = [self.btn_save_list, self.btn_edit_mode]
+                self.toggled_btns(disabled=True, btns=btns)
                 return
 
-        # getting the editted data and category
-        data = None
-        category = None
-        for i, df in enumerate(sort_order(row)):
-            if not df.empty:
-                data = df
-                category = list(Inventory.keys())[i]
-                break
+        # checking if user left empty description
+        if item['Description'].iloc[0] == '':
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('User Error')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+            msg.setText('You cannot have a blank item description!')
+            text = 'Fix before continuing.'
+            msg.setInformativeText(text)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+
+            self.editted_saved = 'error'
+            btns = [self.btn_save_list, self.btn_edit_mode]
+            self.toggled_btns(disabled=True, btns=btns)
+            return
+
         self.inventory_saved = False
-        Inventory[category].get_items().update(data)
         self.btn_save_list.clicked.connect(
-            lambda: self.save_list('edited')
+            lambda: self.save_list(called_from='editted')
         )
         self.btn_save_list.show()
+
+        # updating project
+        self.update_item(item)
+
+    def update_item(self, item, delete=False):
+        '''
+        Function to update an item in the project dictionary.
+
+        Parameter:
+            item - dataframe of the item.
+            delete - bool: drop item (default false).
+        '''
+
+        # getting item category
+        category = None
+        for i, df in enumerate(sort_order(item)):
+            if not df.empty:
+                category = list(Inventory.keys())[i]
+                break
+
+        # updating the item
+        category_items = Inventory[category].get_items()
+        for i in range(category_items.shape[0]):
+            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
+                self.editted_saved = False
+                if delete:
+                    Inventory[category].get_items().drop(index=i, inplace=True)
+                else:
+                    Inventory[category].get_items().iloc[i] = item.iloc[0]
 
     def open_add_manually_window(self):
         '''
