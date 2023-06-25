@@ -747,20 +747,7 @@ class Project_Window(QMainWindow):
                 print('letter in cell!!!!')
                 return
 
-        # getting category the item is in
-        category = None
-        sorted_items = sort_order(item)
-        for i, df in enumerate(sorted_items):
-            if not df.empty:
-                category = list(Project.keys())[i]
-                break
-
-        category_items = Project[category].get_items()
-        for i in range(category_items.shape[0]):
-            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-                self.editted_saved = False
-                Project[category].get_items().iloc[i] = item.iloc[0]
-
+        self.update_item(item)
         self.update_subtotal(item)
 
     def update_item(self, item):
