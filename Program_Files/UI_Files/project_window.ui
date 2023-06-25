@@ -610,7 +610,7 @@ background-color: rgb(255, 255, 255);</string>
    </widget>
    <widget class="QMenu" name="menuInfo">
     <property name="title">
-     <string>Info</string>
+     <string>About</string>
     </property>
     <addaction name="actionHow_to_use_Project_tool"/>
    </widget>
