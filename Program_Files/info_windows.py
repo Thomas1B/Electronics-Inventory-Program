@@ -36,7 +36,7 @@ class How_To_Use_Program_Window(QMainWindow):
 
 class How_To_Use_Project_Window(QMainWindow):
     '''
-    Class to run program how to use program window.
+    Class to run program how to use project window.
     '''
 
     def __init__(self):
