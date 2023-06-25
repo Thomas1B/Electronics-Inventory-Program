@@ -786,6 +786,10 @@ class Project_Window(QMainWindow):
         row_index = clicked_item.row()
         item = pd.DataFrame(data.iloc[row_index]).T
 
+        # buttons to toggle if user entries has an error.
+        btns = [self.btn_save_project, self.btn_edit_mode]
+
+
         # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
             if any(char.isalpha() for char in clicked_item.text()):
@@ -803,7 +807,6 @@ class Project_Window(QMainWindow):
                 _ = msg.exec_()
 
                 self.editted_saved = 'error'
-                btns = [self.btn_save_project, self.btn_edit_mode]
                 self.toggled_btns(disabled=True, btns=btns)
                 return
 
@@ -823,13 +826,12 @@ class Project_Window(QMainWindow):
             _ = msg.exec_()
 
             self.editted_saved = 'error'
-            btns = [self.btn_save_project, self.btn_edit_mode]
             self.toggled_btns(disabled=True, btns=btns)
             return
 
         # enabling button if they were disable from user error.
-        btns = [self.btn_save_project, self.btn_edit_mode]
-        self.toggled_btns(disabled=False, btns=btns)
+        if self.editted_saved == 'error':
+            self.toggled_btns(disabled=False, btns=btns)
 
         # updating project
         update_item(self, item, Project)
