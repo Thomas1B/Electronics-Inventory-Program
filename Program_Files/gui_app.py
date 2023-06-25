@@ -1030,7 +1030,6 @@ class MainWindow(QMainWindow):
         # buttons to toggle if user entries has an error.
         btns = [self.btn_save_list, self.btn_edit_mode]
 
-
         # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
             if any(char.isalpha() for char in clicked_item.text()):
@@ -1069,9 +1068,11 @@ class MainWindow(QMainWindow):
             self.inventory_saved = 'error'
             self.toggled_btns(disabled=True, btns=btns)
             return
-        
+
         if self.inventory_saved == 'error':
             self.toggled_btns(disabled=False, btns=btns)
+            for action in self.toolbar.actions():
+                action.setEnabled(False)
 
         self.inventory_saved = False
         self.btn_save_list.clicked.connect(
