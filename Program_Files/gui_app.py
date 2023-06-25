@@ -24,7 +24,8 @@ from .data_handling import (Category,
                             dict_to_dataframe,
                             sort_order,
                             get_inventory,
-                            drop_all_from_dict)
+                            drop_all_from_dict,
+                            update_item)
 
 
 # dictionary used a temporary holder for opening files.
@@ -58,7 +59,7 @@ class MainWindow(QMainWindow):
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
-        self.inventory_saved = True  # if inventory has been saveed.
+        self.editted_saved = True  # if inventory has been saveed.
         self.in_edit_mode = False  # if in edit mode.
 
         ''' Defining Widgets'''
@@ -278,7 +279,7 @@ class MainWindow(QMainWindow):
         Function to detect when user closes the window.
         '''
 
-        if self.inventory_saved:  # inventory has been saved
+        if self.editted_saved:  # inventory has been saved
             # closing other windows.
             for window in [self.project_window, self.add_item_window]:
                 window.close()
@@ -525,7 +526,7 @@ class MainWindow(QMainWindow):
         '''
         self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
-            if not self.inventory_saved:
+            if not self.editted_saved:
                 self.btn_save_list.clicked.connect(
                     lambda: self.save_list('add_to_inventory')
                 )
@@ -683,7 +684,7 @@ class MainWindow(QMainWindow):
 
             # automatically called when an order is added to the inventory.
         elif called_from.lower() == 'add_to_inventory' or 'edited':
-            self.inventory_saved = True
+            self.editted_saved = True
             new_inventory = get_inventory()
             with pd.ExcelWriter(f'Saved_Lists/Inventory.xlsx') as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
@@ -778,7 +779,7 @@ class MainWindow(QMainWindow):
                     text = '{:>3}: {:s}\n'.format(line_count+1, filename)
                     file.write(text)
             case _:
-                self.inventory_saved = False
+                self.editted_saved = False
 
     def fill_table(self, dataframe):
         '''
@@ -1046,7 +1047,7 @@ class MainWindow(QMainWindow):
                 msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 _ = msg.exec_()
 
-                self.inventory_saved = 'error'
+                self.editted_saved = 'error'
                 self.toggled_btns(disabled=True, btns=btns)
                 return
 
@@ -1065,49 +1066,23 @@ class MainWindow(QMainWindow):
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             _ = msg.exec_()
 
-            self.inventory_saved = 'error'
+            self.editted_saved = 'error'
             self.toggled_btns(disabled=True, btns=btns)
             return
 
-        if self.inventory_saved == 'error':
+        if self.editted_saved == 'error':
             self.toggled_btns(disabled=False, btns=btns)
             for action in self.toolbar.actions():
                 action.setEnabled(False)
 
-        self.inventory_saved = False
+        self.editted_saved = False
         self.btn_save_list.clicked.connect(
             lambda: self.save_list(called_from='editted')
         )
         self.btn_save_list.show()
 
         # updating project
-        self.update_item(item)
-
-    def update_item(self, item, delete=False):
-        '''
-        Function to update an item in the project dictionary.
-
-        Parameter:
-            item - dataframe of the item.
-            delete - bool: drop item (default false).
-        '''
-
-        # getting item category
-        category = None
-        for i, df in enumerate(sort_order(item)):
-            if not df.empty:
-                category = list(Inventory.keys())[i]
-                break
-
-        # updating the item
-        category_items = Inventory[category].get_items()
-        for i in range(category_items.shape[0]):
-            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-                self.inventory_saved = False
-                if delete:
-                    Inventory[category].get_items().drop(index=i, inplace=True)
-                else:
-                    Inventory[category].get_items().iloc[i] = item.iloc[0]
+        update_item(self, item, Inventory)
 
     def open_add_manually_window(self):
         '''
@@ -1132,7 +1107,7 @@ class MainWindow(QMainWindow):
         self.fill_table(Inventory)
         print(data)
 
-        # self.inventory_saved = False
+        # self.editted_saved = False
         self.btn_save_list.setText('Save Inventory')
         self.btn_save_list.clicked.connect(
             lambda: self.save_list('edited')

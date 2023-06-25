@@ -417,6 +417,33 @@ def drop_all_from_dict(dictionary):
         dictionary[section].drop_all_items()
 
 
+def update_item(self, item, dictionary, delete=False):
+    '''
+    Function to update an item from a dictionary. Triggered when item is editted (see get_editted()).
+
+    Parameter:
+        item - dataframe of the item.
+        delete - bool: drop item (default false).
+    '''
+
+    # getting item category
+    category = None
+    for i, df in enumerate(sort_order(item)):
+        if not df.empty:
+            category = list(dictionary.keys())[i]
+            break
+
+    # updating the item
+    category_items = dictionary[category].get_items()
+    for i in range(category_items.shape[0]):
+        if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
+            self.inventory_saved = False
+            if delete:
+                dictionary[category].get_items().drop(index=i, inplace=True)
+            else:
+                dictionary[category].get_items().iloc[i] = item.iloc[0]
+
+
 if __name__ == "__main__":
     print('Running check inventory file...')
     result = load_Inventory()
