@@ -793,8 +793,8 @@ class Project_Window(QMainWindow):
         row_index = clicked_item.row()
         item = pd.DataFrame(data.iloc[row_index]).T
 
+        # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
-            # checking if there is any letter in the editted price or quantity.
             if any(char.isalpha() for char in clicked_item.text()):
                 msg = QtWidgets.QMessageBox()
                 msg.setWindowTitle('User Error')
@@ -808,9 +808,17 @@ class Project_Window(QMainWindow):
                 msg.setInformativeText(text)
                 msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 _ = msg.exec_()
+
                 self.editted_saved = 'error'
+                btns = [self.btn_save_project, self.btn_edit_mode]
+                self.toggled_btns(disabled=True, btns=btns)
                 return
 
+        # enabling button if they were disable from user error.
+        btns = [self.btn_save_project, self.btn_edit_mode]
+        self.toggled_btns(disabled=False, btns=btns)
+
+        # updating project
         self.update_item(item)
         self.update_subtotal(item)
 
