@@ -419,10 +419,12 @@ def drop_all_from_dict(dictionary):
 
 def update_item(self, item, dictionary, delete=False):
     '''
-    Function to update an item from a dictionary. Triggered when item is editted (see get_editted()).
+    Function to update an item from a dictionary. 
+    Triggered when item is editted (see get_editted()).
 
     Parameter:
-        item - dataframe of the item.
+        item - DataFrame: dataframe of the item.
+        dictionary - dict: dictionary of Category classes.
         delete - bool: drop item (default false).
     '''
 
@@ -433,9 +435,10 @@ def update_item(self, item, dictionary, delete=False):
             category = list(dictionary.keys())[i]
             break
 
-    # updating the item
+    # updating the item in the dictionary
     category_items = dictionary[category].get_items()
     for i in range(category_items.shape[0]):
+        # checking if item's description matches any in each category.
         if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
             self.inventory_saved = False
             if delete:
