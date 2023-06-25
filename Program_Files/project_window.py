@@ -661,6 +661,23 @@ class Project_Window(QMainWindow):
         '''
         Function to save the project.
         '''
+
+        if self.editted_saved == 'error':
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('Project Error')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+            msg.setText(
+                'There are letters in the "Unit Price" or "Quantity" columns.')
+            text = 'Project cannot be saved until this is fixed.'
+            msg.setInformativeText(text)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+            return
+
         filetype = self.is_sheet_open.split('.')[-1]
         if filetype == 'csv':
             data = dict_to_dataframe(Project)
@@ -779,8 +796,19 @@ class Project_Window(QMainWindow):
         if column_name in ['Unit Price', 'Quantity']:
             # checking if there is any letter in the editted price or quantity.
             if any(char.isalpha() for char in clicked_item.text()):
-                # user entered a string into number cells.
-                print('letter in cell!!!!')
+                msg = QtWidgets.QMessageBox()
+                msg.setWindowTitle('User Error')
+                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+                icon = self.style().standardIcon(pixmapi)
+                msg.setWindowIcon(icon)
+                msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+                msg.setText('You can only enter numbers!')
+                text = 'Fix before continuing.'
+                msg.setInformativeText(text)
+                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+                _ = msg.exec_()
+                self.editted_saved = 'error'
                 return
 
         self.update_item(item)
