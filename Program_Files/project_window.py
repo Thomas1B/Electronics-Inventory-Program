@@ -809,7 +809,7 @@ class Project_Window(QMainWindow):
             menu.addAction(delete_action)
             menu.addAction(delete_all_action)
 
-            menu = menu.exec_(event.globalPos())  # showing menu
+            menu.exec_(event.globalPos())  # showing menu
 
     def remove_item(self, row_index, remove_all):
         '''
@@ -823,28 +823,30 @@ class Project_Window(QMainWindow):
 
         # getting item that was clicked on
         item = self.get_table_data().iloc[row_index]
-        item = pd.DataFrame(item).T.reset_index(drop=True)
-        item.columns = labels
+        item = pd.DataFrame(item).T
 
-        quantity = item['Quantity']
-        print(quantity, type(quantity))
-
-        if remove_all:
-            item['Quantity'] = 0
-        else:
-            if item['Quantity'].astype(int)[0] > 0:
+        match remove_all:
+            case False:
                 item['Quantity'] = item['Quantity'].astype(int) - 1
+            case True:
+                item['Quantity'] = 0
 
-        tmp_item = None
+        # getting what category the item belongs to.
         category = None
         for i, df in enumerate(sort_order(item)):
             if not df.empty:
-                tmp_item = df
                 category = list(Project.keys())[i]
                 break
 
-        self.editted_saved = False
-        Project[category].get_items().update(tmp_item)
+        # data for comparing
+        category_items = Project[category].get_items()
+
+        # updating the item
+        for i in range(category_items.shape[0]):
+            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
+                self.editted_saved = False
+                Project[category].get_items().iloc[i] = item.iloc[0]
+
         self.update_subtotal(item)
         self.fill_table(Project)
 
