@@ -17,13 +17,32 @@ from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
 from .data_handling import (Inventory,
+                            Category,
                             labels,
                             load_Inventory,
                             get_ordersheet,
                             add_order_to_Inventory,
                             dict_to_dataframe,
                             sort_order,
-                            get_inventory)
+                            get_inventory,
+                            drop_all_from_dict)
+
+
+# dictionary used a temporary holder for opening files.
+Items = {
+    'Resistors': Category("Resistors"),
+    'Capacitors': Category("Capacitors"),
+    'Inductors': Category("Inductors"),
+    'Transistors': Category("Transistors"),
+    'Diodes': Category('Diodes'),
+    "ICs": Category('ICs'),
+    "Connectors": Category('Connectors'),
+    'Displays': Category('Displays'),
+    "Buttons": Category('Buttons'),
+    'LEDs': Category('LEDs'),
+    'Modules': Category('Modules'),
+    'Other': Category("Other"),
+}
 
 
 class MainWindow(QMainWindow):
@@ -491,11 +510,20 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
+    def load_Items(self, new_order):
+        '''
+        Function to load items into the Item dictionary.
+        '''
+        drop_all_from_dict(Items)
+        for order, section in zip(new_order, Items.keys()):
+            if len(order) > 0:
+                Items[section].add_item(order)
+                Items[section].remove_duplicates()
+
     def open_inventory(self):
         '''
         Function to open the inventory
         '''
-        self.sub_header.setText('')
         self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             if not self.inventory_saved:
@@ -518,18 +546,19 @@ class MainWindow(QMainWindow):
 
     def open_new_order(self):
         '''
-        Function to open an order
+        Function to open a new order.
         '''
+
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
         filename, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'Opening New Order', downloads_path, 'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)')
         filetype = filename.split('.')[-1]
-        if filetype:
-            if filetype in ['csv', 'xlsx']:
-                self.sub_header.setText('')
-                self.is_sheet_open = filename
-                order_name = filename.split('/')[-1]
 
+        if filetype:
+            # checking filetype
+            if filetype in ['csv', 'xlsx']:
+
+                # checking if excel file
                 if filetype == 'xlsx':
                     '''
                     only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
@@ -546,21 +575,22 @@ class MainWindow(QMainWindow):
                         return
 
                 new_order = get_ordersheet(filename)
-                if new_order:
-                    text = f'Looking at new order: {order_name}'
-                    self.header.setText(text)
-                    self.header_frame.show()
-                    self.fill_table(new_order)
-                    self.save_list('save_order')
+                self.load_Items(new_order)
 
-                    self.hide_btns([
-                        self.btn_add_item_manually,
-                        self.btn_edit_mode
-                    ])
-                    self.show_btns(
-                        [self.btn_add_to_inventory])
-                    self.show_sorting_btns()
+                self.is_sheet_open = filename
+                text = f'Looking at new order: {filename.split("/")[-1]}'
+                self.header.setText(text)
+                self.sub_header.setText('')
+                self.header_frame.show()
 
+                self.fill_table(Items)
+                self.hide_btns([
+                    self.btn_add_item_manually,
+                    self.btn_edit_mode
+                ])
+                self.show_btns(
+                    [self.btn_add_to_inventory])
+                self.show_sorting_btns()
             else:
                 self.wrong_filetype_msg()
 
@@ -579,6 +609,16 @@ class MainWindow(QMainWindow):
             filetype = filename.split(".")[-1]
             name = filename.split('/')[-1]
             if filetype in ['csv', 'xlsx']:
+                self.sub_header.setText('')
+                self.header.setText(f'Past Order: {name}')
+                self.header_frame.show()
+
+                self.is_sheet_open = filename
+                past_order = get_ordersheet(filename)
+                self.load_Items(past_order)
+                self.fill_table(Items)
+
+                self.show_sorting_btns()
                 self.hide_btns([
                     self.btn_add_item_manually,
                     self.btn_edit_mode,
@@ -586,12 +626,7 @@ class MainWindow(QMainWindow):
                     self.btn_save_list
                 ])
 
-                self.is_sheet_open = filename
-                self.header.setText(f'Past Order: {name}')
-                self.fill_table(get_ordersheet(filename))
-                self.show_sorting_btns()
-                self.header_frame.show()
-            elif filetype:
+            elif filetype not in ['csv', 'xlsx']:
                 self.wrong_filetype_msg()
             else:
                 pass
@@ -616,12 +651,7 @@ class MainWindow(QMainWindow):
         if 'looking at inventory' in self.header.text().lower():
             self.fill_table(Inventory[section].get_items())
         else:
-            data = get_ordersheet(self.is_sheet_open)
-            sorted = {}
-            keys = Inventory.keys()
-            for i, key in enumerate(keys):
-                sorted[key] = data[i]
-            self.fill_table(sorted[section].reset_index(drop=True))
+            self.fill_table(Items[section].get_items())
         self.sub_header.setText(section)
 
     def refresh_opensheet(self, filename=None):
@@ -635,9 +665,8 @@ class MainWindow(QMainWindow):
         if 'looking at inventory' in self.header.text().lower():
             self.open_inventory()
         else:
-            data = get_ordersheet(filename)
-            self.fill_table(data)
-            self.sub_header.setText('')
+            self.fill_table(Items)
+        self.sub_header.setText('')
 
     def save_list(self, called_from=None):
         '''
@@ -712,7 +741,7 @@ class MainWindow(QMainWindow):
                 return
 
         # using function from data_handling.py
-        add_order_to_Inventory(self.is_sheet_open)
+        add_order_to_Inventory(Items)
 
         # popup to ask user if wants to save the "new" inventory.
         user = QtWidgets.QMessageBox()
@@ -720,7 +749,6 @@ class MainWindow(QMainWindow):
         pixmapi = getattr(QtWidgets.QStyle, "SP_DialogSaveButton")
         icon = self.style().standardIcon(pixmapi)
         user.setWindowIcon(icon)
-
         user.setIcon(QtWidgets.QMessageBox.Question)
         user.setText('Would you like to save the new inventory?')
         user.setStandardButtons(
@@ -730,6 +758,7 @@ class MainWindow(QMainWindow):
         user.setDefaultButton(QtWidgets.QMessageBox.Yes)
         user = user.exec_()
 
+        # checking user's response
         match user:
             case QtWidgets.QMessageBox.Yes:
                 # saving to inventory
