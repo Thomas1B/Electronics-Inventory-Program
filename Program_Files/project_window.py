@@ -22,7 +22,8 @@ from .data_handling import (
     get_ordersheet,
     dict_to_dataframe,
     sort_order,
-    get_subtotal
+    get_subtotal,
+    update_item
 )
 
 from .info_windows import How_To_Use_Project_Window
@@ -682,7 +683,6 @@ class Project_Window(QMainWindow):
         if filetype == 'csv':
             data = dict_to_dataframe(Project)
             data.to_csv(self.is_sheet_open, index=False)
-            print(data)
         elif filetype == 'xlsx':
             with pd.ExcelWriter(self.is_sheet_open) as writer:
                 # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
@@ -832,34 +832,8 @@ class Project_Window(QMainWindow):
         self.toggled_btns(disabled=False, btns=btns)
 
         # updating project
-        self.update_item(item)
+        update_item(self, item, Project)
         self.update_subtotal(item)
-
-    def update_item(self, item, delete=False):
-        '''
-        Function to update an item in the project dictionary.
-
-        Parameter:
-            item - dataframe of the item.
-            delete - bool: drop item (default false).
-        '''
-
-        # getting item category
-        category = None
-        for i, df in enumerate(sort_order(item)):
-            if not df.empty:
-                category = list(Project.keys())[i]
-                break
-
-        # updating the item
-        category_items = Project[category].get_items()
-        for i in range(category_items.shape[0]):
-            if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-                self.editted_saved = False
-                if delete:
-                    Project[category].get_items().drop(index=i, inplace=True)
-                else:
-                    Project[category].get_items().iloc[i] = item.iloc[0]
 
     def open_add_manually_window(self):
         '''
