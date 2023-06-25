@@ -1027,6 +1027,10 @@ class MainWindow(QMainWindow):
         row_index = clicked_item.row()
         item = pd.DataFrame(data.iloc[row_index]).T
 
+        # buttons to toggle if user entries has an error.
+        btns = [self.btn_save_list, self.btn_edit_mode]
+
+
         # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
             if any(char.isalpha() for char in clicked_item.text()):
@@ -1043,8 +1047,7 @@ class MainWindow(QMainWindow):
                 msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
                 _ = msg.exec_()
 
-                self.editted_saved = 'error'
-                btns = [self.btn_save_list, self.btn_edit_mode]
+                self.inventory_saved = 'error'
                 self.toggled_btns(disabled=True, btns=btns)
                 return
 
@@ -1063,10 +1066,12 @@ class MainWindow(QMainWindow):
             msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
             _ = msg.exec_()
 
-            self.editted_saved = 'error'
-            btns = [self.btn_save_list, self.btn_edit_mode]
+            self.inventory_saved = 'error'
             self.toggled_btns(disabled=True, btns=btns)
             return
+        
+        if self.inventory_saved == 'error':
+            self.toggled_btns(disabled=False, btns=btns)
 
         self.inventory_saved = False
         self.btn_save_list.clicked.connect(
@@ -1097,7 +1102,7 @@ class MainWindow(QMainWindow):
         category_items = Inventory[category].get_items()
         for i in range(category_items.shape[0]):
             if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-                self.editted_saved = False
+                self.inventory_saved = False
                 if delete:
                     Inventory[category].get_items().drop(index=i, inplace=True)
                 else:
