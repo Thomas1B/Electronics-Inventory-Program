@@ -893,6 +893,7 @@ class Project_Window(QMainWindow):
         item = self.get_table_data().iloc[row_index]
         item = pd.DataFrame(item).T
 
+        # conditions for updating item quantity
         match remove_all:
             case False:
                 item['Quantity'] = item['Quantity'].astype(int) - 1
@@ -901,6 +902,7 @@ class Project_Window(QMainWindow):
             case None:
                 item['Quantity'] = item['Quantity'].astype(int) + 1
 
+        # updating item and table
         self.update_item(item)
         self.update_subtotal(item)
         self.fill_table(Project)
