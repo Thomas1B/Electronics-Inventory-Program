@@ -724,8 +724,7 @@ class Project_Window(QMainWindow):
         btns = [self.actionOpen_Project,
                 self.actionCreate_Project,
                 self.actionExport_Project,
-                self.btn_save_project,
-                self.btn_add_item,
+                self.btn_add_item
                 ]
 
         if not self.in_edit_mode:
