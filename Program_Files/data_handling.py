@@ -417,6 +417,19 @@ def drop_all_from_dict(dictionary):
         dictionary[section].drop_all_items()
 
 
+def get_item_category(item, dictionary):
+    '''
+    Function to get the item's category from a dictionary.
+    '''
+    category = None
+    for i, df in enumerate(sort_order(item)):
+        if not df.empty:
+            category = list(dictionary.keys())[i]
+            break
+
+    return category
+
+
 def update_item(self, item, dictionary, delete=False):
     '''
     Function to update an item from a dictionary. 
@@ -429,11 +442,7 @@ def update_item(self, item, dictionary, delete=False):
     '''
 
     # getting item category
-    category = None
-    for i, df in enumerate(sort_order(item)):
-        if not df.empty:
-            category = list(dictionary.keys())[i]
-            break
+    category = get_item_category(item, dictionary)
 
     # updating the item in the dictionary
     category_items = dictionary[category].get_items()
