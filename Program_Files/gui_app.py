@@ -966,6 +966,25 @@ class MainWindow(QMainWindow):
             # passing item to project window.
             self.project_window.item_from_main_window(item)
 
+    def toggled_btns(self, disabled=True, btns=None):
+        '''
+        Function to toggle disabling/enabling buttons when in edit mode.
+        '''
+        if disabled:
+            for btn in btns:
+                btn.setEnabled(False)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(False)
+            for action in self.toolbar.actions():
+                action.setEnabled(False)
+        else:
+            for btn in btns:
+                btn.setEnabled(True)
+            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
+                btn.setEnabled(True)
+            for action in self.toolbar.actions():
+                action.setEnabled(True)
+
     def edit_mode(self):
         '''
         Function to update the Project inventory when the table is in edit mode.
@@ -992,25 +1011,6 @@ class MainWindow(QMainWindow):
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             self.toggled_btns(disabled=False, btns=btns)
-
-    def toggled_btns(self, disabled=True, btns=None):
-        '''
-        Function to toggle disabling/enabling buttons when in edit mode.
-        '''
-        if disabled:
-            for btn in btns:
-                btn.setEnabled(False)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(False)
-            for action in self.toolbar.actions():
-                action.setEnabled(False)
-        else:
-            for btn in btns:
-                btn.setEnabled(True)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(True)
-            for action in self.toolbar.actions():
-                action.setEnabled(True)
 
     def get_editted(self, item):
         '''
