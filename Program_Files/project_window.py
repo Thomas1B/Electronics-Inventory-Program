@@ -260,6 +260,7 @@ class Project_Window(QMainWindow):
         '''
         Function to show a menu when right clicked on item in the table.
         '''
+
         # getting table geometry
         pos = self.table.viewport().mapFromGlobal(event.globalPos())
         row_index = self.table.rowAt(pos.y())
@@ -270,18 +271,23 @@ class Project_Window(QMainWindow):
             # Creating Menu
             menu = QtWidgets.QMenu()
             menu = QtWidgets.QMenu(self)
+            add_one_action = QtWidgets.QAction("Add One")
             delete_action = QtWidgets.QAction("Remove One")
             delete_all_action = QtWidgets.QAction("Remove All")
 
             # Attaching Functions to actions
+            add_one_action.triggered.connect(
+                lambda: self.change_item_quantity(row_index)
+            )
             delete_action.triggered.connect(
-                lambda: self.remove_item(row_index, False)
+                lambda: self.change_item_quantity(row_index, False)
             )
             delete_all_action.triggered.connect(
-                lambda: self.remove_item(row_index, True)
+                lambda: self.change_item_quantity(row_index, True)
             )
 
             # Adding to actions to menu
+            menu.addAction(add_one_action)
             menu.addAction(delete_action)
             menu.addAction(delete_all_action)
 
@@ -824,13 +830,13 @@ class Project_Window(QMainWindow):
         self.add_to_project(item)  # adding to project.
         self.fill_table(Project)  # updating table.
 
-    def remove_item(self, row_index, remove_all):
+    def change_item_quantity(self, row_index, remove_all=None):
         '''
-        Function to remove an item from the project
+        Function to change an item's quantity. Triggered by contextMenuEvent actions.
 
         Parameter:
             row_index - int: index to row that was clicked.
-            remove_all - bool: whether to remove the entire item or deduce quantity by 1.
+            remove_all - bool: False removes one, true removes all, None for increasing by one.
 
         '''
 
@@ -843,6 +849,8 @@ class Project_Window(QMainWindow):
                 item['Quantity'] = item['Quantity'].astype(int) - 1
             case True:
                 item['Quantity'] = 0
+            case None:
+                item['Quantity'] = item['Quantity'].astype(int) + 1
 
         self.update_item(item)
         self.update_subtotal(item)
