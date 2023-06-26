@@ -337,6 +337,61 @@ class MainWindow(QMainWindow):
                 case _:  # Cancel
                     event.ignore()
 
+    def contextMenuEvent(self, event) -> None:
+        '''
+        Function to show a menu when right clicked on item in the table.
+
+            Parameters:
+                event: QtGui.QCloseEvent.
+        '''
+
+        # getting table geometry
+        pos = self.table.viewport().mapFromGlobal(event.globalPos())
+        row_index = self.table.rowAt(pos.y())
+
+        # if right click on a row_index, row_index >= 0
+        if row_index >= 0:
+
+            # Creating Menu
+            menu = QtWidgets.QMenu()
+            menu = QtWidgets.QMenu(self)
+            add_one_action = QtWidgets.QAction("Add One")
+            delete_action = QtWidgets.QAction("Remove One")
+            delete_item_action = QtWidgets.QAction("Delete")
+
+            # Attaching Functions to actions
+            # add_one_action.triggered.connect(
+            #     lambda: change_item_quantity(
+            #         self,
+            #         Items,
+            #         row_index,
+            #         remove_all=None
+            #     )
+            # )
+            # delete_action.triggered.connect(
+            #     lambda: change_item_quantity(
+            #         self,
+            #         Items,
+            #         row_index,
+            #         remove_all=False
+            #     )
+            # )
+            # delete_item_action.triggered.connect(
+            #     lambda: change_item_quantity(
+            #         self,
+            #         Items,
+            #         row_index,
+            #         remove_all=True
+            #     )
+            # )
+
+            # Adding to actions to menu
+            menu.addAction(add_one_action)
+            menu.addAction(delete_action)
+            menu.addAction(delete_item_action)
+
+            menu.exec_(event.globalPos())  # showing menu
+
     def show_program_info(self) -> None:
         '''
         Function to show user the program info.
