@@ -51,6 +51,7 @@ dictionary used a temporary holder for opening files.
 '''
 Items = {key: Category(key) for key in Inventory.keys()}
 
+
 class MainWindow(QMainWindow):
     '''
     Class to run the main window of the program.
@@ -166,6 +167,7 @@ class MainWindow(QMainWindow):
         self.btn_displays = self.findChild(
             QtWidgets.QPushButton, 'btn_displays'
         )
+        self.btn_audio = self.findChild(QtWidgets.QPushButton, 'btn_audio')
         self.btn_modules = self.findChild(
             QtWidgets.QPushButton, 'btn_modules'
         )
@@ -240,6 +242,9 @@ class MainWindow(QMainWindow):
         )
         self.btn_displays.clicked.connect(
             lambda: self.show_sorted_section('Displays')
+        )
+        self.btn_audio.clicked.connect(
+            lambda: self.show_sorted_section('Audio')
         )
         self.btn_modules.clicked.connect(
             lambda: self.show_sorted_section('Modules')

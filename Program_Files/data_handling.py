@@ -178,7 +178,13 @@ class Category:
         return subtotal
 
 
-# Dictionary of categories for the inventory.
+'''
+Dictionary of categories for the inventory.
+
+Rememeber when adding new categories to add the nessecary conditions
+in sort_order().
+
+'''
 Inventory = {
     'Resistors': Category("Resistors"),
     'Capacitors': Category("Capacitors"),
@@ -190,6 +196,7 @@ Inventory = {
     'Displays': Category('Displays'),
     "Buttons": Category('Buttons'),
     'LEDs': Category('LEDs'),
+    'Audio': Category('Audio'),
     'Modules': Category('Modules'),
     'Other': Category("Other"),
 }
@@ -270,7 +277,7 @@ def sort_order(order: pd.DataFrame) -> list:
         Returns:
             list of dataframe for each category.
     '''
-
+    audio_conds = ['speaker', 'audio']
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
@@ -285,6 +292,7 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # empty lists for parts to be added.
     # if adding new sections, dont forget to add
+    audio = []
     resistors, capacitors, inductors = [], [], []
     transistors, diodes, ics = [], [], []
     leds, connectors, buttons = [], [], []
@@ -292,15 +300,28 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # THIS NEEDS TO BE IN THE SAME ORDER AS THE INVENTORY DICTIONARY!
     # Otherwise when showing a category it will display an unintended one.
-    sections = [resistors, capacitors, inductors, transistors, diodes,
-                ics, connectors, displays, buttons, leds, modules, other]
+    sections = [resistors,
+                capacitors,
+                inductors,
+                transistors,
+                diodes,
+                ics,
+                connectors,
+                displays,
+                buttons,
+                leds,
+                audio,
+                modules,
+                other]
 
     # sorting the order into categories by checking if any words from
     # the conditions are in the item description.
     for i, line in enumerate(order['Description']):
         line = line.lower().split()
 
-        if any(word.lower() in line for word in ics_conds):
+        if any(word.lower() in line for word in audio_conds):
+            audio.append(order.iloc[i])
+        elif any(word.lower() in line for word in ics_conds):
             ics.append(order.iloc[i])
         elif any(word.lower() in line for word in diodes_conds):
             diodes.append(order.iloc[i])
