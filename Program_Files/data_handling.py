@@ -195,41 +195,40 @@ Inventory = {
 }
 
 
-def dict_to_dataframe(dictionary):
+def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
     '''
-    Function to convert a dictionary into a dataframe.
+    Function to convert a category dictionary into a dataframe.
 
+        Parameters:
+            dictionary: dict of Category classes.
+
+        Returns:
+            single dataframe of entire dictionary.
     '''
     items = pd.concat([dictionary[cat].get_items()
                       for cat in dictionary]).reset_index(drop=True)
     return items
 
 
-def dataframe_to_dict(dataframes=[]):
+def dataframe_to_dict(dataframes=[]) -> dict:
     '''
-    Function to convert a list of dataframes into a dictionary, the keys 
-    are the type of category.
+    Function to convert a list of dataframes into a category dictionary.
 
-    Returns dictionary of categories.
+            Parameter:
+                dataframes: list of dataframes
+
+            Returns:
+                dictionary of categories.
     '''
 
     new_dict = {}
-    keys = get_category_types()
+    keys = list(Inventory.keys())
     for dataframe, key in zip(dataframes, keys):
         new_dict[key] = dataframe
     return new_dict
 
 
-def get_category_types():
-    '''
-    Function return a list of keys from the Iventory class.
-
-
-    '''
-    return Inventory.keys()
-
-
-def load_Inventory():
+def load_Inventory() -> None:
     '''
     Function to check if inventory exists, if it does then load the Inventory dictionary data.
     '''
@@ -240,15 +239,15 @@ def load_Inventory():
         _ = get_inventory(check_load=False)
 
 
-def get_inventory(check_load=True):
+def get_inventory(check_load=True) -> dict:
     '''
     Function to get current inventory from the inventory.xlsx (excel) file.
 
-    Returns:
-        Dictionary of class for each sheet in the excel file.
+        Parameters:
+            check_load: DO NOT CHANGE, NEEDS FOR SET UP.
 
-    Parameters:
-        check_load: DO NOT CHANGE, NEEDS FOR SET UP.
+        Returns:
+            Dictionary of class for each sheet in the excel file.
     '''
     if check_load == False:  # only runs one for set up
         inventory = pd.read_excel(
@@ -260,16 +259,16 @@ def get_inventory(check_load=True):
     return Inventory
 
 
-def sort_order(order):
+def sort_order(order: pd.DataFrame) -> list:
     '''
     Function to sort an order (or any dataframe) into categories based on the item description.
     (i.e: Resistors, Capacitors, etc...)
 
-    Parameter
-        order - DataFrame: dataframe of items.
+        Parameter
+            order - DataFrame: dataframe of items.
 
-    Returns:
-        list of dataframe for each category.
+        Returns:
+            list of dataframe for each category.
     '''
 
     ics_conds = ['ics', 'ic']
@@ -330,18 +329,18 @@ def sort_order(order):
     return [pd.DataFrame(section) for section in sections]
 
 
-def get_ordersheet(filepath):
+def get_ordersheet(filepath: str) -> list:
     '''
     Function to read in an ordersheet using pandas.
 
     Drops columns: 'Index', 'Backorder', 'Extended Price' from the dataframes 
     and the subtotal line ONLY from the csv file.
 
-    Parameters:
-        filepath - str: filepath to the othersheet.
+        Parameters:
+            filepath - str: filepath to the othersheet.
 
-    Returns:
-        a list of dataframes for each category, (see sort_order()).
+        Returns:
+            a list of dataframes for each category, (see sort_order()).
     '''
     if os.path.isfile(filepath):
         filetype = filepath.split(".")[-1]
@@ -375,13 +374,12 @@ def get_ordersheet(filepath):
         return order
 
 
-def add_order_to_Inventory(order):
+def add_order_to_Inventory(order) -> None:
     '''
     Function to add a new order to the inventory
 
-    Parameter:
-        filename - str: filepath of order to add.
-          can also be a list of dataframes(see sort_order).
+        Parameter:
+            order: dict of categories or single dataframe.
     '''
 
     if type(order) == dict:
@@ -395,15 +393,15 @@ def add_order_to_Inventory(order):
                 Inventory[section].remove_duplicates()
 
 
-def get_subtotal(dictionary):
+def get_subtotal(dictionary: dict) -> float:
     '''
     Function to get the subtotal.
 
-    Parameter:
-        dictionary - dict: dictionary of category class.
+        Parameter:
+            dictionary - dict: dictionary of category class.
 
-    Returns:
-        float
+        Returns:
+            float
     '''
     subtotal = 0
     for section in dictionary.keys():
@@ -411,21 +409,25 @@ def get_subtotal(dictionary):
     return subtotal
 
 
-def drop_all_from_dict(dictionary):
+def drop_all_from_dict(dictionary: dict) -> None:
     '''
     Function to drop all items from each category in a dictionary
 
-    Parameter:
-        dictionary - dict: dictionary of category classes.
+        Parameter:
+            dictionary - dict: dictionary of category classes.
     '''
 
     for section in dictionary.keys():
         dictionary[section].drop_all_items()
 
 
-def get_item_category(item, dictionary):
+def get_item_category(item: pd.DataFrame, dictionary: dict) -> str:
     '''
     Function to get the item's category from a dictionary.
+
+        Parameters:
+            item: DataFrame of item.
+            dictionary: dictionary item is in.
     '''
     category = None
     for i, df in enumerate(sort_order(item)):
@@ -436,15 +438,15 @@ def get_item_category(item, dictionary):
     return category
 
 
-def update_item(self, item, dictionary, delete=False):
+def update_item(self, item: pd.DataFrame, dictionary: dict, delete=False) -> None:
     '''
     Function to update an item from a dictionary of Category classes. 
     Triggered when item is editted (see get_editted() in project_window.py).
 
-    Parameter:
-        item - DataFrame: dataframe of the item.
-        dictionary - dict: dictionary of Category classes.
-        delete - bool: drop item (default false).
+        Parameter:
+            item - DataFrame: dataframe of the item.
+            dictionary - dict: dictionary of Category classes.
+            delete - bool: drop item (default false).
     '''
 
     # getting item category
