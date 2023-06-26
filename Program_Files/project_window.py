@@ -876,7 +876,7 @@ class Project_Window(QMainWindow):
     def receive_add_item_manually(self, item: pd.DataFrame) -> None:
         '''
         Function to receive item from the other window.
-            Triggered when btn "Add External Item" clicked.
+            Triggered when btn "Add External Item" is clicked.
 
             Parameter:
                 item: item DataFrame.
