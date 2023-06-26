@@ -345,52 +345,56 @@ class MainWindow(QMainWindow):
                 event: QtGui.QCloseEvent.
         '''
 
-        # getting table geometry
-        pos = self.table.viewport().mapFromGlobal(event.globalPos())
-        row_index = self.table.rowAt(pos.y())
+        # only show contextMenu when inventory is opened.
+        conditions = ['Inventory']
+        if any(word.lower() in self.header.text().lower() for word in conditions):
 
-        # if right click on a row_index, row_index >= 0
-        if row_index >= 0:
+            # getting table geometry
+            pos = self.table.viewport().mapFromGlobal(event.globalPos())
+            row_index = self.table.rowAt(pos.y())
 
-            # Creating Menu
-            menu = QtWidgets.QMenu()
-            menu = QtWidgets.QMenu(self)
-            add_one_action = QtWidgets.QAction("Add One")
-            delete_action = QtWidgets.QAction("Remove One")
-            delete_item_action = QtWidgets.QAction("Delete")
+            # if right click on a row_index, row_index >= 0
+            if row_index >= 0:
 
-            # Attaching Functions to actions
-            # add_one_action.triggered.connect(
-            #     lambda: change_item_quantity(
-            #         self,
-            #         Items,
-            #         row_index,
-            #         remove_all=None
-            #     )
-            # )
-            # delete_action.triggered.connect(
-            #     lambda: change_item_quantity(
-            #         self,
-            #         Items,
-            #         row_index,
-            #         remove_all=False
-            #     )
-            # )
-            # delete_item_action.triggered.connect(
-            #     lambda: change_item_quantity(
-            #         self,
-            #         Items,
-            #         row_index,
-            #         remove_all=True
-            #     )
-            # )
+                # Creating Menu
+                menu = QtWidgets.QMenu()
+                menu = QtWidgets.QMenu(self)
+                add_one_action = QtWidgets.QAction("Add One")
+                delete_action = QtWidgets.QAction("Remove One")
+                delete_item_action = QtWidgets.QAction("Delete")
 
-            # Adding to actions to menu
-            menu.addAction(add_one_action)
-            menu.addAction(delete_action)
-            menu.addAction(delete_item_action)
+                # Attaching Functions to actions
+                # add_one_action.triggered.connect(
+                #     lambda: change_item_quantity(
+                #         self,
+                #         Items,
+                #         row_index,
+                #         remove_all=None
+                #     )
+                # )
+                # delete_action.triggered.connect(
+                #     lambda: change_item_quantity(
+                #         self,
+                #         Items,
+                #         row_index,
+                #         remove_all=False
+                #     )
+                # )
+                # delete_item_action.triggered.connect(
+                #     lambda: change_item_quantity(
+                #         self,
+                #         Items,
+                #         row_index,
+                #         remove_all=True
+                #     )
+                # )
 
-            menu.exec_(event.globalPos())  # showing menu
+                # Adding to actions to menu
+                menu.addAction(add_one_action)
+                menu.addAction(delete_action)
+                menu.addAction(delete_item_action)
+
+                menu.exec_(event.globalPos())  # showing menu
 
     def show_program_info(self) -> None:
         '''
@@ -505,18 +509,19 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
-    def load_Items(self, new_order: list) -> None:
+    def load_Items(self, order: list) -> None:
         '''
         Function to load items into the Item dictionary.
 
             Parameters:
-                new_order: list of items to load into the the dictionary
+                order: list of items to load into the the dictionary
         '''
         drop_all_from_dict(Items)
-        for order, section in zip(new_order, Items.keys()):
+        for items, section in zip(order, Items.keys()):
             if len(order) > 0:
-                Items[section].add_item(order)
-                Items[section].remove_duplicates()
+                if not items.empty:
+                    Items[section].add_item(items)
+                    Items[section].remove_duplicates()
 
     def open_inventory(self) -> None:
         '''
