@@ -281,6 +281,7 @@ def change_item_quantity(self, dictionary: dict, row_index: int, remove_all=None
             item['Quantity'] = item['Quantity'].astype(int) + 1
 
     # updating project dictionary
+    self.editted_saved = False
     update_item(self, item=item, dictionary=dictionary, delete=delete)
     if hasattr(self, 'subtotal'):
         update_subtotal(self, dictionary)
