@@ -26,6 +26,19 @@ from .data_handling import (
     update_item
 )
 
+from .gui_handling import (
+    show_btns,
+    hide_btns,
+    show_sorting_btns,
+    hide_sorting_btns,
+    open_website,
+    wrong_filetype_msg,
+    toggled_widgets,
+    refresh_opensheet,
+    fill_table,
+    update_subtotal
+)
+
 from .info_windows import How_To_Use_Project_Window
 from .add_item_window import Add_Item_Window
 
@@ -90,6 +103,7 @@ class Project_Window(QMainWindow):
         )
 
         # ToolBar
+        self.toolbar = self.findChild(QtWidgets.QToolBar, 'toolBar')
         self.actionExport_Project = self.findChild(
             QtWidgets.QAction, 'actionExport_Project'
         )
@@ -156,7 +170,9 @@ class Project_Window(QMainWindow):
         ''' Attaching Functions to gui Objects '''
 
         # Table
-        self.table.itemChanged.connect(self.update_subtotal)
+        self.table.itemChanged.connect(
+            lambda: update_subtotal(self, Project)
+        )
 
         # Menu Actions
         self.action_how_to_use.triggered.connect(self.show_how_to_use)
@@ -184,7 +200,7 @@ class Project_Window(QMainWindow):
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: self.refresh_opensheet()
+            lambda: refresh_opensheet(self, Project)
         )
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors')
@@ -198,6 +214,7 @@ class Project_Window(QMainWindow):
         self.btn_transistors.clicked.connect(
             lambda: self.show_sorted_section('Transistors')
         )
+
         self.btn_diodes.clicked.connect(
             lambda: self.show_sorted_section('Diodes'))
         self.btn_ics.clicked.connect(
@@ -270,7 +287,7 @@ class Project_Window(QMainWindow):
         Function to show a menu when right clicked on item in the table.
 
             Parameters:
-                event: QtGui.QCloseEvent.        
+                event: QtGui.QCloseEvent.
         '''
 
         # getting table geometry
@@ -562,14 +579,6 @@ class Project_Window(QMainWindow):
             header = 'There are no projects to open!'
             self.no_files_msg(title=title, header=header)
 
-    def refresh_opensheet(self) -> None:
-        '''
-        Function to refresh the last sheet that was opened.
-            used for when a user is looking a specific category.
-        '''
-        self.fill_table(Project)
-        self.sub_header.setText('')
-
     def load_Project(self, filename=None) -> None:
         '''
         Function to load the project into the Project dictionary of classes.
@@ -591,7 +600,7 @@ class Project_Window(QMainWindow):
                 if not section.empty:
                     Project[cat].add_item(section)
             self.project_loaded = True
-        self.fill_table(Project)
+        fill_table(self, Project)
 
     def add_to_project(self, items) -> None:
         '''
@@ -608,38 +617,6 @@ class Project_Window(QMainWindow):
                 Project[section].add_item(item)
                 Project[section].remove_duplicates()
                 self.editted_saved = False
-
-    def fill_table(self, dataframe) -> None:
-        '''
-        Function to fill in table.
-
-            Parameter:
-                dataframe - DataFrame: items to show.
-                  (can take a dict, pandas dataframe or list of dataframes)
-        '''
-        items = dataframe
-        if type(dataframe) == dict:
-            items = pd.concat([dataframe[cat].get_items()
-                               for cat in dataframe]).reset_index(drop=True)
-        elif type(dataframe) == list:
-            items = pd.concat(dataframe)
-
-        count = items.shape[0]
-        self.table.setRowCount(count)
-
-        for row in range(count):
-            self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
-                items['Part Number'][row]))
-            self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
-                items['Manufacturer Part Number'][row]))
-            self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-                items['Description'][row]))
-            self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-                items['Customer Reference'].fillna('')[row]))
-            self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
-                items['Unit Price'].astype(float).round(2).astype(str)[row]))
-            self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
-                items['Quantity'].astype(int).astype(str)[row]))
 
     def get_table_data(self) -> pd.DataFrame:
         '''
@@ -676,7 +653,7 @@ class Project_Window(QMainWindow):
             Parameter:
                 section: name of category to display.
         '''
-        self.fill_table(Project[section].get_items())
+        fill_table(self, Project[section].get_items())
         self.sub_header.setText(section)
 
     def save_project(self) -> None:
@@ -737,38 +714,7 @@ class Project_Window(QMainWindow):
         '''
         items = sort_order(items)
         self.add_to_project(items)
-        self.fill_table(Project)
-
-    def update_subtotal(self) -> None:
-        '''
-        Function to update the subtotal of the project.
-        '''
-        subtotal = get_subtotal(Project)
-        text = 'Subtotal: ${:.2f}'.format(subtotal)
-        self.subtotal.setText(text)
-
-    def toggled_btns(self, btns: list, disabled=True) -> None:
-        '''
-        Function to toggle disabling/enabling buttons when in edit mode.
-
-            Parameters:
-                disabled: whether to disable btns.
-                btns: list of buttons to toggle.
-        '''
-        if disabled:
-            for btn in btns:
-                btn.setEnabled(False)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(False)
-            # for action in self.toolbar.actions():
-            #     action.setEnabled(False)
-        else:
-            for btn in btns:
-                btn.setEnabled(True)
-            for btn in self.sorting_btns_frame.findChildren(QtWidgets.QPushButton):
-                btn.setEnabled(True)
-            # for action in self.toolbar.actions():
-                # action.setEnabled(True)
+        fill_table(self, Project)
 
     def edit_mode(self) -> None:
         '''
@@ -791,7 +737,7 @@ class Project_Window(QMainWindow):
             self.header.setStyleSheet('color: red;')
             self.table.setEditTriggers(QtWidgets.QTableWidget.DoubleClicked)
             self.table.itemChanged.connect(self.get_editted)
-            self.toggled_btns(disabled=True, btns=btns)
+            toggled_widgets(self, enable=False, widgets=btns)
         else:
             self.in_edit_mode = False
             self.btn_edit_mode.setText('Edit Mode')
@@ -801,8 +747,10 @@ class Project_Window(QMainWindow):
             self.header.setStyleSheet('color: black;')
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-            self.table.itemChanged.connect(self.update_subtotal)
-            self.toggled_btns(disabled=False, btns=btns)
+            self.table.itemChanged.connect(
+                update_subtotal(self, Project)
+            )
+            toggled_widgets(self, enable=True, widgets=btns)
 
     def get_editted(self, clicked_item: QtWidgets.QTableWidgetItem) -> None:
         '''
@@ -840,7 +788,7 @@ class Project_Window(QMainWindow):
                 _ = msg.exec_()
 
                 self.editted_saved = 'error'
-                self.toggled_btns(disabled=True, btns=btns)
+                toggled_widgets(self, enable=False, widgets=btns)
                 return
 
         # checking if user left empty description
@@ -859,16 +807,16 @@ class Project_Window(QMainWindow):
             _ = msg.exec_()
 
             self.editted_saved = 'error'
-            self.toggled_btns(disabled=True, btns=btns)
+            toggled_widgets(self, enable=False, widgets=btns)
             return
 
         # enabling button if they were disable from user error.
         if self.editted_saved == 'error':
-            self.toggled_btns(disabled=False, btns=btns)
+            toggled_widgets(self, enable=True, widgets=btns)
 
         # updating project
         update_item(self, item, Project)
-        self.update_subtotal()
+        update_subtotal(self, Project)
 
     def open_add_manually_window(self) -> None:
         '''
@@ -889,7 +837,7 @@ class Project_Window(QMainWindow):
         '''
         item = sort_order(item)  # sorting item.
         self.add_to_project(item)  # adding to project.
-        self.fill_table(Project)  # updating table.
+        fill_table(self, Project)  # updating table.
 
     def change_item_quantity(self, row_index: int, remove_all=None):
         '''
@@ -923,8 +871,8 @@ class Project_Window(QMainWindow):
 
         # updating project dictionary
         update_item(self, item=item, dictionary=Project, delete=delete)
-        self.update_subtotal()
-        self.fill_table(Project)
+        update_subtotal(self, Project)
+        fill_table(self, Project)
 
 
 if __name__ == "__main__":

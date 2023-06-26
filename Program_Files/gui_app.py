@@ -15,18 +15,31 @@ from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
-from .gui_handling import toggled_widgets
-from .data_handling import (Category,
-                            Inventory,
-                            labels,
-                            load_Inventory,
-                            get_ordersheet,
-                            add_order_to_Inventory,
-                            dict_to_dataframe,
-                            sort_order,
-                            get_inventory,
-                            drop_all_from_dict,
-                            update_item)
+from .gui_handling import (
+    show_btns,
+    hide_btns,
+    show_sorting_btns,
+    hide_sorting_btns,
+    open_website,
+    wrong_filetype_msg,
+    toggled_widgets,
+    refresh_opensheet,
+    fill_table
+)
+
+from .data_handling import (
+    Category,
+    Inventory,
+    labels,
+    load_Inventory,
+    get_ordersheet,
+    add_order_to_Inventory,
+    dict_to_dataframe,
+    sort_order,
+    get_inventory,
+    drop_all_from_dict,
+    update_item
+)
 
 
 # dictionary used a temporary holder for opening files.
@@ -177,13 +190,13 @@ class MainWindow(QMainWindow):
         self.action_open_program_info.triggered.connect(self.show_program_info)
         self.action_how_to_use.triggered.connect(self.show_how_to_use)
         self.action_open_Digikey.triggered.connect(
-            lambda: self.open_website('Digikey')
+            lambda: open_website(self, 'Digikey')
         )
         self.action_open_adafruit.triggered.connect(
-            lambda: self.open_website('Adafruit')
+            lambda: open_website(self, 'Adafruit')
         )
         self.action_open_BCrobotics.triggered.connect(
-            lambda: self.open_website('BC Robotics')
+            lambda: open_website(self, 'BC Robotics')
         )
 
         # toolbar
@@ -204,7 +217,7 @@ class MainWindow(QMainWindow):
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: self.refresh_opensheet()
+            lambda: refresh_opensheet(self, Items)
         )
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors')
@@ -263,14 +276,14 @@ class MainWindow(QMainWindow):
         )
 
         # Hidiing some buttons for initial start.
-        self.hide_btns([
+        hide_btns(self, [
             self.btn_save_list,
             self.btn_add_to_inventory,
             self.header_frame,
             self.btn_edit_mode,
             self.btn_add_item_manually,
         ])
-        self.hide_sorting_btns()
+        hide_sorting_btns(self)
 
         self.show()  # showing window
 
@@ -335,83 +348,6 @@ class MainWindow(QMainWindow):
         '''
         self.how_to_use_window.show()
 
-    def open_website(self, website: str) -> None:
-        '''
-        Function to open a website link on the user's default bowser.
-
-        Parameters:
-            website - str: website's name (used for conditions)
-        '''
-        match website.lower():
-            case 'digikey':
-                website = 'https://www.digikey.ca/'
-            case 'adafruit':
-                website = 'https://www.adafruit.com/'
-            case 'bc robotics':
-                website = 'https://bc-robotics.com/'
-
-        QDesktopServices.openUrl(QUrl(website))
-
-    def show_btns(self, buttons: list) -> None:
-        '''
-        Function to show buttons
-
-            Parameter:
-                buttons: list of buttons
-        '''
-        for btn in buttons:
-            btn.show()
-
-    def hide_btns(self, buttons: list) -> None:
-        '''
-        Function to hide buttons
-
-            Parameter:
-                buttons: list of buttons
-        '''
-        for btn in buttons:
-            btn.hide()
-
-    def hide_sorting_btns(self) -> None:
-        '''
-        Function to hide sorting buttons
-        '''
-        self.hide_btns([
-            self.btn_refresh_opensheet,
-            self.btn_resistors,
-            self.btn_capacitors,
-            self.btn_inductors,
-            self.btn_transistors,
-            self.btn_diodes,
-            self.btn_ics,
-            self.btn_leds,
-            self.btn_buttons,
-            self.btn_connectors,
-            self.btn_displays,
-            self.btn_modules,
-            self.btn_other
-        ])
-
-    def show_sorting_btns(self) -> None:
-        '''
-        Function to show sorting buttons
-        '''
-        self.show_btns([
-            self.btn_refresh_opensheet,
-            self.btn_resistors,
-            self.btn_capacitors,
-            self.btn_inductors,
-            self.btn_transistors,
-            self.btn_diodes,
-            self.btn_ics,
-            self.btn_leds,
-            self.btn_buttons,
-            self.btn_connectors,
-            self.btn_displays,
-            self.btn_modules,
-            self.btn_other
-        ])
-
     def no_files_msg(self, title='No Files', header="", text="") -> None:
         '''
         Function to display a pop up warning user there are no files to open
@@ -429,23 +365,6 @@ class MainWindow(QMainWindow):
 
         msg.setIcon(QtWidgets.QMessageBox.Warning)
         msg.setText(header)
-        msg.setInformativeText(text)
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        _ = msg.exec_()
-
-    def wrong_filetype_msg(self) -> None:
-        '''
-        Function to display pop up message about a wrongfile type
-        '''
-        msg = QtWidgets.QMessageBox()
-        msg.setWindowTitle('Wrong File Type')
-        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-        icon = self.style().standardIcon(pixmapi)
-        msg.setWindowIcon(icon)
-        msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-        msg.setText('Cannot user that file type!')
-        text = "You can only use 'CSV' (Comma-Seperated-Values) and 'XLSX' (Excel) files."
         msg.setInformativeText(text)
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
@@ -545,7 +464,7 @@ class MainWindow(QMainWindow):
         '''
         Function to open the inventory
         '''
-        self.hide_btns([self.btn_add_to_inventory, self.btn_save_list])
+        hide_btns(self, [self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
             if not self.editted_saved:
                 self.btn_save_list.clicked.connect(
@@ -555,16 +474,16 @@ class MainWindow(QMainWindow):
             self.is_sheet_open = "Saved_Lists/Inventory.xlsx"
             self.sub_header.setText('')
             self.header.setText('Looking at Inventory')
-            self.fill_table(Inventory)
-            self.show_sorting_btns()
-            self.show_btns(
-                [self.header_frame, self.btn_edit_mode, self.btn_add_item_manually])
+            fill_table(self, Inventory)
+            show_sorting_btns(self)
+            show_btns(self,
+                      [self.header_frame, self.btn_edit_mode, self.btn_add_item_manually])
         else:
             header = 'There is no inventory file.'
             text = 'Create an inventory by reading in some orders!'
             title = 'No Inventory'
             self.no_files_msg(title=title, header=header, text=text)
-            self.hide_sorting_btns()
+            hide_sorting_btns(self)
 
     def open_new_order(self) -> None:
         '''
@@ -605,16 +524,16 @@ class MainWindow(QMainWindow):
                 self.sub_header.setText('')
                 self.header_frame.show()
 
-                self.fill_table(Items)
-                self.hide_btns([
+                fill_table(self, Items)
+                hide_btns(self, [
                     self.btn_add_item_manually,
                     self.btn_edit_mode
                 ])
-                self.show_btns(
-                    [self.btn_add_to_inventory])
-                self.show_sorting_btns()
+                show_btns(self,
+                          [self.btn_add_to_inventory])
+                show_sorting_btns(self)
             else:
-                self.wrong_filetype_msg()
+                wrong_filetype_msg(self)
 
     def open_past_order(self) -> None:
         '''
@@ -638,10 +557,10 @@ class MainWindow(QMainWindow):
                 self.is_sheet_open = filename
                 past_order = get_ordersheet(filename)
                 self.load_Items(past_order)
-                self.fill_table(Items)
+                fill_table(self, Items)
 
-                self.show_sorting_btns()
-                self.hide_btns([
+                show_sorting_btns(self)
+                hide_btns(self, [
                     self.btn_add_item_manually,
                     self.btn_edit_mode,
                     self.btn_add_to_inventory,
@@ -649,7 +568,7 @@ class MainWindow(QMainWindow):
                 ])
 
             elif filetype not in ['csv', 'xlsx']:
-                self.wrong_filetype_msg()
+                wrong_filetype_msg(self)
             else:
                 pass
 
@@ -671,21 +590,10 @@ class MainWindow(QMainWindow):
                 section - str: name of category to display.
         '''
         if 'looking at inventory' in self.header.text().lower():
-            self.fill_table(Inventory[section].get_items())
+            fill_table(self, Inventory[section].get_items())
         else:
-            self.fill_table(Items[section].get_items())
+            fill_table(self, Items[section].get_items())
         self.sub_header.setText(section)
-
-    def refresh_opensheet(self) -> None:
-        '''
-        Function to refresh the last sheet that was opened.
-            used for when a user is looking a specific category.
-        '''
-        if 'looking at inventory' in self.header.text().lower():
-            self.open_inventory()
-        else:
-            self.fill_table(Items)
-        self.sub_header.setText('')
 
     def save_list(self, called_from: str) -> None:
         '''
@@ -798,36 +706,6 @@ class MainWindow(QMainWindow):
             case _:
                 self.editted_saved = False
 
-    def fill_table(self, dataframe) -> None:
-        '''
-        Function to fill in table.
-
-            Parameter:
-                dataframe: dict of category classes, single DataFrame or list of DataFrames of item.
-        '''
-        items = dataframe
-        if type(dataframe) == dict:
-            items = dict_to_dataframe(dataframe)
-        elif type(dataframe) == list:
-            items = pd.concat(dataframe)
-
-        count = items.shape[0]
-        self.table.setRowCount(count)
-
-        for row in range(count):
-            self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
-                items['Part Number'][row]))
-            self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
-                items['Manufacturer Part Number'][row]))
-            self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-                items['Description'].astype(str)[row]))
-            self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-                items['Customer Reference'].fillna('')[row]))
-            self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
-                items['Unit Price'].astype(float).round(2).astype(str)[row]))
-            self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
-                items['Quantity'].astype(int).astype(str)[row]))
-
     def get_table_data(self) -> pd.DataFrame:
         '''
         Function to get the displayed table data into a dataframe.
@@ -939,7 +817,7 @@ class MainWindow(QMainWindow):
                     user = user.exec_()
             else:
                 # pop to tell user they enter a wrong filetype.
-                self.wrong_filetype_msg()
+                wrong_filetype_msg(self)
 
         # User clicks "ok", but doesn't enter a project name.
         elif ok and not name:
@@ -1113,7 +991,7 @@ class MainWindow(QMainWindow):
 
         data = sort_order(data)
         add_order_to_Inventory(data)
-        self.fill_table(Inventory)
+        fill_table(self, Inventory)
         print(data)
 
         # self.editted_saved = False
