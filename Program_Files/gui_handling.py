@@ -282,7 +282,8 @@ def change_item_quantity(self, dictionary: dict, row_index: int, remove_all=None
 
     # updating project dictionary
     update_item(self, item=item, dictionary=dictionary, delete=delete)
-    update_subtotal(self, dictionary)
+    if hasattr(self, 'subtotal'):
+        update_subtotal(self, dictionary)
     fill_table(self, dictionary)
 
 
