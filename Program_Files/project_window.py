@@ -46,7 +46,11 @@ Project = {
 
 
 class Project_Window(QMainWindow):
-    def __init__(self, parent=None):
+    '''
+    Class to run the project window
+    '''
+
+    def __init__(self, parent=None) -> None:
         super(Project_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         self.move(1050, 50)
@@ -789,7 +793,6 @@ class Project_Window(QMainWindow):
 
         # buttons to toggle if user entries has an error.
         btns = [self.btn_save_project, self.btn_edit_mode]
-
 
         # checking if there is any letter in the editted price or quantity.
         if column_name in ['Unit Price', 'Quantity']:
