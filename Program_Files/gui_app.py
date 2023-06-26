@@ -46,7 +46,11 @@ Items = {
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    '''
+    Class to run the main window of the program.
+    '''
+
+    def __init__(self) -> None:
         super(MainWindow, self).__init__()
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
         self.move(50, 50)
@@ -199,7 +203,7 @@ class MainWindow(QMainWindow):
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: self.refresh_opensheet(self.is_sheet_open)
+            lambda: self.refresh_opensheet()
         )
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors')
@@ -269,9 +273,12 @@ class MainWindow(QMainWindow):
 
         self.show()  # showing window
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         '''
         Function to detect when user closes the window.
+
+            Parameters:
+                event: QtGui.QCloseEvent.
         '''
 
         if self.editted_saved:  # inventory has been saved
@@ -313,7 +320,7 @@ class MainWindow(QMainWindow):
                 case _:  # Cancel
                     event.ignore()
 
-    def show_program_info(self):
+    def show_program_info(self) -> None:
         '''
         Function to show user the program info.
 
@@ -321,13 +328,13 @@ class MainWindow(QMainWindow):
         '''
         self.window_program_info.show()
 
-    def show_how_to_use(self):
+    def show_how_to_use(self) -> None:
         '''
         Function to show the "how to use" window for the user.
         '''
         self.how_to_use_window.show()
 
-    def open_website(self, website=''):
+    def open_website(self, website: str) -> None:
         '''
         Function to open a website link on the user's default bowser.
 
@@ -344,21 +351,27 @@ class MainWindow(QMainWindow):
 
         QDesktopServices.openUrl(QUrl(website))
 
-    def show_btns(self, buttons):
+    def show_btns(self, buttons: list) -> None:
         '''
-        takes list of buttons to hide.
+        Function to show buttons
+
+            Parameter:
+                buttons: list of buttons
         '''
         for btn in buttons:
             btn.show()
 
-    def hide_btns(self, buttons):
+    def hide_btns(self, buttons: list) -> None:
         '''
-        takes list of buttons to show.
+        Function to hide buttons
+
+            Parameter:
+                buttons: list of buttons
         '''
         for btn in buttons:
             btn.hide()
 
-    def hide_sorting_btns(self):
+    def hide_sorting_btns(self) -> None:
         '''
         Function to hide sorting buttons
         '''
@@ -378,7 +391,7 @@ class MainWindow(QMainWindow):
             self.btn_other
         ])
 
-    def show_sorting_btns(self):
+    def show_sorting_btns(self) -> None:
         '''
         Function to show sorting buttons
         '''
@@ -398,11 +411,12 @@ class MainWindow(QMainWindow):
             self.btn_other
         ])
 
-    def no_files_msg(self, title='No Files', header="", text=""):
+    def no_files_msg(self, title='No Files', header="", text="") -> None:
         '''
         Function to display a pop up warning user there are no files to open
 
         Parameters:
+            title - str: pop up window title
             header - str: "header" text to pop up.
             text - str: informative text for pop up.
         '''
@@ -418,7 +432,10 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def wrong_filetype_msg(self):
+    def wrong_filetype_msg(self) -> None:
+        '''
+        Function to display pop up message about a wrongfile type
+        '''
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Wrong File Type')
         pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
@@ -432,26 +449,31 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def disable_feature_msg(self, header=None, text=None):
+    def disable_feature_msg(self, header='', text=None) -> None:
         '''
         Function to display a pop that a feature has been disable.
+
+        Parameter:
+            header: header text.
+            text: informatiive text.
         '''
 
         if not header:
             header = 'Feature is disabled.'
+        if text:
+            msg.setInformativeText(text)
 
         msg = QtWidgets.QMessageBox()
-        msg.setWindowTitle('Disable Feature')
+        msg.setWindowTitle('Disabled Feature')
         pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
         icon = self.style().standardIcon(pixmapi)
         msg.setWindowIcon(icon)
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setText(header)
-        msg.setInformativeText(text)
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def export_file(self, autoname=True):
+    def export_file(self, autoname=True) -> None:
         '''
         Function to export a file.
 
@@ -505,9 +527,12 @@ class MainWindow(QMainWindow):
             else:
                 pass
 
-    def load_Items(self, new_order):
+    def load_Items(self, new_order: list) -> None:
         '''
         Function to load items into the Item dictionary.
+
+            Parameters:
+                new_order: list of items to load into the the dictionary
         '''
         drop_all_from_dict(Items)
         for order, section in zip(new_order, Items.keys()):
@@ -515,7 +540,7 @@ class MainWindow(QMainWindow):
                 Items[section].add_item(order)
                 Items[section].remove_duplicates()
 
-    def open_inventory(self):
+    def open_inventory(self) -> None:
         '''
         Function to open the inventory
         '''
@@ -540,7 +565,7 @@ class MainWindow(QMainWindow):
             self.no_files_msg(title=title, header=header, text=text)
             self.hide_sorting_btns()
 
-    def open_new_order(self):
+    def open_new_order(self) -> None:
         '''
         Function to open a new order.
         '''
@@ -590,7 +615,7 @@ class MainWindow(QMainWindow):
             else:
                 self.wrong_filetype_msg()
 
-    def open_past_order(self):
+    def open_past_order(self) -> None:
         '''
         Function to open a past order
         '''
@@ -631,18 +656,18 @@ class MainWindow(QMainWindow):
             header = 'There are no past orders to open!'
             self.no_files_msg(title='No Past Orders', header=header)
 
-    def open_project_lists(self):
+    def open_project_lists(self) -> None:
         '''
         Function to open project lists.
         '''
         self.project_window.open_project()
 
-    def show_sorted_section(self, section):
+    def show_sorted_section(self, section: str) -> None:
         '''
         Function to show the sorted sections
 
-        Parameter:
-            section - str: name of category to display.
+            Parameter:
+                section - str: name of category to display.
         '''
         if 'looking at inventory' in self.header.text().lower():
             self.fill_table(Inventory[section].get_items())
@@ -650,27 +675,23 @@ class MainWindow(QMainWindow):
             self.fill_table(Items[section].get_items())
         self.sub_header.setText(section)
 
-    def refresh_opensheet(self, filename=None):
+    def refresh_opensheet(self) -> None:
         '''
         Function to refresh the last sheet that was opened.
             used for when a user is looking a specific category.
-
         '''
-
-        filename = self.is_sheet_open
         if 'looking at inventory' in self.header.text().lower():
             self.open_inventory()
         else:
             self.fill_table(Items)
         self.sub_header.setText('')
 
-    def save_list(self, called_from=None):
+    def save_list(self, called_from: str) -> None:
         '''
         Function to save a list.
 
         Parameters:
-            called_from = str: dummy to see where the function was called from,
-                                used for some of the following if statements.
+            called_from: where the function was called from
         '''
 
         if called_from.lower() == 'save_order':  # if new order is being saved.
@@ -700,7 +721,7 @@ class MainWindow(QMainWindow):
 
         self.btn_save_list.hide()
 
-    def add_to_inventory(self):
+    def add_to_inventory(self) -> None:
         '''
         Function to add an order to inventory.
             - Triggered by add_to_inventory button.
@@ -776,12 +797,12 @@ class MainWindow(QMainWindow):
             case _:
                 self.editted_saved = False
 
-    def fill_table(self, dataframe):
+    def fill_table(self, dataframe) -> None:
         '''
         Function to fill in table.
 
-        Parameter:
-            dataframe: can take a dict, pandas dataframe or list of dataframes.
+            Parameter:
+                dataframe: dict of category classes, single DataFrame or list of DataFrames of item.
         '''
         items = dataframe
         if type(dataframe) == dict:
@@ -806,11 +827,15 @@ class MainWindow(QMainWindow):
             self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
                 items['Quantity'].astype(int).astype(str)[row]))
 
-    def get_table_data(self):
+    def get_table_data(self) -> pd.DataFrame:
         '''
         Function to get the displayed table data into a dataframe.
 
-        Returns a pandas dataframe.
+            Parameters:
+                None
+
+            Returns:
+                DataFrame
         '''
         rows = self.table.rowCount()
         cols = self.table.columnCount()
@@ -831,13 +856,13 @@ class MainWindow(QMainWindow):
         else:
             print("NO ROWS IN TABLE")
 
-    def create_project(self):
+    def create_project(self) -> None:
         '''
         Function to create a new project using a second window.
 
-        Prompt user to enter a enter project name, then checks if it exists.
-        If the project name exists popup appears to tell the user, otherwise
-        it asks the user what filetype they want and creates the project file.
+            Prompts user to enter a project name, then checks if it exists.
+            If the project name exists popup appears to tell the user, otherwise
+            it asks the user what filetype they want and creates the project file.
         '''
         dialog = QtWidgets.QInputDialog(self)
         text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
@@ -941,9 +966,12 @@ class MainWindow(QMainWindow):
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
 
-    def get_clicked_row(self, index, labels):
+    def get_clicked_row(self, index: int) -> None:
         '''
-        Function to get the item row when user clicks a cell
+        Function to get the item from the table
+
+            Parameter:
+                index: index of item, starts at 0.
         '''
 
         if self.project_window.isVisible():
@@ -963,7 +991,7 @@ class MainWindow(QMainWindow):
             # passing item to project window.
             self.project_window.item_from_main_window(item)
 
-    def edit_mode(self):
+    def edit_mode(self) -> None:
         '''
         Function to update the Project inventory when the table is in edit mode.
         '''
@@ -993,9 +1021,13 @@ class MainWindow(QMainWindow):
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             toggled_widgets(self, widgets=btns, enable=True)
 
-    def get_editted(self, clicked_item):
+    def get_editted(self, clicked_item: QtWidgets.QTableWidgetItem) -> None:
         '''
         Function to get the item that has been editted.
+            Triggered by itemChanged in table.
+
+            Parameter:
+                clicked_item: QTableItem that was clicked.
         '''
 
         data = self.get_table_data()
@@ -1060,7 +1092,7 @@ class MainWindow(QMainWindow):
         # updating project
         update_item(self, item, Inventory)
 
-    def open_add_manually_window(self):
+    def open_add_manually_window(self) -> None:
         '''
         Function to show "add item manually" window.
         '''
@@ -1069,7 +1101,7 @@ class MainWindow(QMainWindow):
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
 
-    def receive_add_item_manually(self, data):
+    def receive_add_item_manually(self, data) -> None:
         '''
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
