@@ -348,10 +348,16 @@ class Project_Window(QMainWindow):
                     '/')[-1].split('.')
 
                 destination_folder = os.path.expanduser(
-                    "~" + os.sep + "Downloads\exported_electrontics_lists\Projects"
+                    "~" + os.sep + "Downloads\exported_electronics_lists"
                 )
-                # if the desitination folder doesn't exists, make it.
+                # if the destination folder doesn't exists, make it.
                 if not os.path.exists(destination_folder):
+                    os.mkdir(destination_folder)
+                    destination_folder += '/projects'
+                    os.mkdir(destination_folder)
+                # if the subfolder doesn't exsits, make it.
+                elif not os.path.exists(destination_folder + '/projects'):
+                    destination_folder += '/projects'
                     os.mkdir(destination_folder)
 
                 # while loop to check if file has already be exported,
