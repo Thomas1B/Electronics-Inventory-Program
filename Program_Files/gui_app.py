@@ -11,10 +11,11 @@ import sys
 import os
 import shutil
 
-from .info_windows import Program_Info_Window, How_To_Use_Program_Window, toggled_widgets
+from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 
+from .gui_handling import toggled_widgets
 from .data_handling import (Category,
                             Inventory,
                             labels,
