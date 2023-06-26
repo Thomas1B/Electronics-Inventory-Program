@@ -26,7 +26,8 @@ from .gui_handling import (
     refresh_opensheet,
     fill_table,
     get_table_data,
-    open_add_manually_window
+    open_add_manually_window,
+    get_editted_item
 )
 
 from .data_handling import (
@@ -882,77 +883,27 @@ class MainWindow(QMainWindow):
                 clicked_item: QTableItem that was clicked.
         '''
 
-        data = get_table_data(self)
-
-        column_name = data.keys()[clicked_item.column()]
-        row_index = clicked_item.row()
-        item = pd.DataFrame(data.iloc[row_index]).T
-
-        # buttons to toggle if user entries has an error.
-        btns = [self.btn_save_list, self.btn_edit_mode]
-
-        # checking if there is any letter in the editted price or quantity.
-        if column_name in ['Unit Price', 'Quantity']:
-            if any(char.isalpha() for char in clicked_item.text()):
-                msg = QtWidgets.QMessageBox()
-                msg.setWindowTitle('User Error')
-                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-                icon = self.style().standardIcon(pixmapi)
-                msg.setWindowIcon(icon)
-                msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-                msg.setText('You can only enter numbers!')
-                text = 'Fix before continuing.'
-                msg.setInformativeText(text)
-                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                _ = msg.exec_()
-
-                self.editted_saved = 'error'
-                toggled_widgets(self, widgets=btns, enable=False)
-                return
-
-        # checking if user left empty description
-        if item['Description'].iloc[0] == '':
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('User Error')
-            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-            icon = self.style().standardIcon(pixmapi)
-            msg.setWindowIcon(icon)
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-            msg.setText('You cannot have a blank item description!')
-            text = 'Fix before continuing.'
-            msg.setInformativeText(text)
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            _ = msg.exec_()
-
-            self.editted_saved = 'error'
-            self.toggled_btns(disabled=True, btns=btns)
+        item = get_editted_item(self, clicked_item)
+        if item.shape[0] < 1:
             return
+        else:
+            self.editted_saved = False
+            self.btn_save_list.clicked.connect(
+                lambda: self.save_list(called_from='editted')
+            )
+            self.btn_save_list.show()
+            # updating project
+            update_item(self, item, Inventory)
 
-        if self.editted_saved == 'error':
-            self.toggled_btns(disabled=False, btns=btns)
-            for action in self.toolbar.actions():
-                action.setEnabled(False)
-
-        self.editted_saved = False
-        self.btn_save_list.clicked.connect(
-            lambda: self.save_list(called_from='editted')
-        )
-        self.btn_save_list.show()
-
-        # updating project
-        update_item(self, item, Inventory)
-
-    def receive_add_item_manually(self, data) -> None:
+    def receive_add_item_manually(self, item) -> None:
         '''
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
         '''
 
-        data = sort_order(data)
-        add_order_to_Inventory(data)
-        fill_table(self, Inventory)
+        item = sort_order(item)  # sorting item.
+        self.add_to_project(item)  # adding to project.
+        fill_table(self, Inventory)  # updating table.
 
         self.editted_saved = False
         self.btn_save_list.setText('Save Inventory')

@@ -39,7 +39,8 @@ from .gui_handling import (
     update_subtotal,
     get_table_data,
     change_item_quantity,
-    open_add_manually_window
+    open_add_manually_window,
+    get_editted_item
 )
 
 from .info_windows import How_To_Use_Project_Window
@@ -118,7 +119,7 @@ class Project_Window(QMainWindow):
         )
 
         # Command Buttons
-        self.btn_save_project = self.findChild(
+        self.btn_save_list = self.findChild(
             QtWidgets.QPushButton, 'btn_save_project'
         )
         self.btn_edit_mode = self.findChild(
@@ -197,7 +198,7 @@ class Project_Window(QMainWindow):
         self.actionCreate_Project.triggered.connect(self.create_project)
 
         # Command Buttons
-        self.btn_save_project.clicked.connect(self.save_project)
+        self.btn_save_list.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item.clicked.connect(
             lambda: open_add_manually_window(self)
@@ -723,10 +724,11 @@ class Project_Window(QMainWindow):
             self.table.itemChanged.disconnect(self.get_editted)
             self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
             self.table.itemChanged.connect(
-                update_subtotal(self, Project)
+                lambda: update_subtotal(self, Project)
             )
             toggled_widgets(self, enable=True, widgets=btns)
 
+    # going to move this to gui_handling
     def get_editted(self, clicked_item: QtWidgets.QTableWidgetItem) -> None:
         '''
         Function to get the item that has been editted.
@@ -736,62 +738,15 @@ class Project_Window(QMainWindow):
             Parameter:
                 clicked_item: item that was clicked one
         '''
-        print(type(clicked_item))
-        data = get_table_data(self)
 
-        column_name = data.keys()[clicked_item.column()]
-        row_index = clicked_item.row()
-        item = pd.DataFrame(data.iloc[row_index]).T
-
-        # buttons to toggle if user entries has an error.
-        btns = [self.btn_save_project, self.btn_edit_mode]
-
-        # checking if there is any letter in the editted price or quantity.
-        if column_name in ['Unit Price', 'Quantity']:
-            if any(char.isalpha() for char in clicked_item.text()):
-                msg = QtWidgets.QMessageBox()
-                msg.setWindowTitle('User Error')
-                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-                icon = self.style().standardIcon(pixmapi)
-                msg.setWindowIcon(icon)
-                msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-                msg.setText('You can only enter numbers!')
-                text = 'Fix before continuing.'
-                msg.setInformativeText(text)
-                msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                _ = msg.exec_()
-
-                self.editted_saved = 'error'
-                toggled_widgets(self, enable=False, widgets=btns)
-                return
-
-        # checking if user left empty description
-        if item['Description'].iloc[0] == '':
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle('User Error')
-            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-            icon = self.style().standardIcon(pixmapi)
-            msg.setWindowIcon(icon)
-            msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-            msg.setText('You cannot have a blank item description!')
-            text = 'Fix before continuing.'
-            msg.setInformativeText(text)
-            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            _ = msg.exec_()
-
-            self.editted_saved = 'error'
-            toggled_widgets(self, enable=False, widgets=btns)
+        item = get_editted_item(self, clicked_item)
+        if item.shape[0] < 1:
             return
-
-        # enabling button if they were disable from user error.
-        if self.editted_saved == 'error':
-            toggled_widgets(self, enable=True, widgets=btns)
-
-        # updating project
-        update_item(self, item, Project)
-        update_subtotal(self, Project)
+        else:
+            # updating project
+            self.editted_saved = False
+            update_item(self, item, Project)
+            update_subtotal(self, Project)
 
     def item_from_main_window(self, item: pd.DataFrame) -> None:
         '''
@@ -808,7 +763,7 @@ class Project_Window(QMainWindow):
     def receive_add_item_manually(self, item) -> None:
         '''
         Function to read user's input when adding an item manually.
-            Triggered when btn "Add to inventory" clicked.
+            Triggered when btn "Add to ..." clicked.
         '''
 
         item = sort_order(item)  # sorting item.

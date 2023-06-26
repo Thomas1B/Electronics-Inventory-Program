@@ -25,7 +25,7 @@ class Category:
         # dataframe to store the data.
         self.items = pd.DataFrame()
         # type of component, i.e: Resistors, Capacitors, etc.
-        self.category = category.capitalize()
+        self.category = category
 
     def get_items(self) -> pd.DataFrame:
         '''
@@ -457,7 +457,7 @@ def update_item(self, item: pd.DataFrame, dictionary: dict, delete=False) -> Non
     for i in range(category_items.shape[0]):
         # checking if item's description matches any in each category.
         if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-            self.inventory_saved = False
+            self.editted_save = False
             if delete:
                 dictionary[category].get_items().drop(index=i, inplace=True)
             else:

@@ -181,7 +181,7 @@ def fill_table(self, dataframe) -> None:
         )
 
         self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-            items['Customer Reference'].fillna('')[row])
+            items['Customer Reference'].fillna('').astype(str)[row])
         )
 
         self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
@@ -292,3 +292,70 @@ def open_add_manually_window(self) -> None:
     # connecting window to function.
     self.add_item_window.data_sent.connect(self.receive_add_item_manually)
     self.add_item_window.show()
+
+
+def get_editted_item(self, clicked_item: QtWidgets.QTableWidgetItem) -> pd.DataFrame:
+    '''
+    Function to get the item that has been editted.
+        Triggered by itemChanged in table.
+
+        Parameter:
+            clicked_item: QTableItem that was clicked.
+
+        Returns:
+            DataFrame, (empty dataframe if there is a user error)
+    '''
+
+    data = get_table_data(self)
+
+    column_name = data.keys()[clicked_item.column()]
+    row_index = clicked_item.row()
+    item = pd.DataFrame(data.iloc[row_index]).T
+
+    # widgets to toggle if user entries has an error.
+    widgets = [self.btn_save_list, self.btn_edit_mode]
+
+    # checking if there is any letter in the editted price or quantity.
+    if column_name in ['Unit Price', 'Quantity']:
+        if any(char.isalpha() for char in clicked_item.text()):
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle('User Error')
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+            icon = self.style().standardIcon(pixmapi)
+            msg.setWindowIcon(icon)
+            msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+            msg.setText('You can only enter numbers!')
+            text = 'Fix before continuing.'
+            msg.setInformativeText(text)
+            msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            _ = msg.exec_()
+
+            self.editted_saved = 'error'
+            toggled_widgets(self, widgets=widgets, enable=False)
+            return pd.DataFrame()
+
+    # checking if user left empty description
+    elif item['Description'].iloc[0] == '':
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle('User Error')
+        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
+        icon = self.style().standardIcon(pixmapi)
+        msg.setWindowIcon(icon)
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+
+        msg.setText('You cannot have a blank item description!')
+        text = 'Fix before continuing.'
+        msg.setInformativeText(text)
+        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        _ = msg.exec_()
+
+        self.editted_saved = 'error'
+        toggled_widgets(self, enable=False, widgets=widgets)
+        return pd.DataFrame()
+
+    # enabling widgets if they were disabled from user error.
+    if self.editted_saved == 'error':
+        toggled_widgets(self, enable=True, widgets=widgets)
+
+    return item
