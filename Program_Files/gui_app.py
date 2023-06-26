@@ -46,22 +46,10 @@ from .data_handling import (
 )
 
 
-# dictionary used a temporary holder for opening files.
-Items = {
-    'Resistors': Category("Resistors"),
-    'Capacitors': Category("Capacitors"),
-    'Inductors': Category("Inductors"),
-    'Transistors': Category("Transistors"),
-    'Diodes': Category('Diodes'),
-    "ICs": Category('ICs'),
-    "Connectors": Category('Connectors'),
-    'Displays': Category('Displays'),
-    "Buttons": Category('Buttons'),
-    'LEDs': Category('LEDs'),
-    'Modules': Category('Modules'),
-    'Other': Category("Other"),
-}
-
+'''
+dictionary used a temporary holder for opening files.
+'''
+Items = {key: Category(key) for key in Inventory.keys()}
 
 class MainWindow(QMainWindow):
     '''
