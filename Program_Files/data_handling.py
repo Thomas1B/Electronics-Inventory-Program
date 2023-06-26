@@ -21,25 +21,25 @@ class Category:
         category: what type of category. Ex: Resistors, Capacitors...
     '''
 
-    def __init__(self, category):
+    def __init__(self, category: str) -> None:
         # dataframe to store the data.
         self.items = pd.DataFrame()
         # type of component, i.e: Resistors, Capacitors, etc.
         self.category = category.capitalize()
 
-    def get_items(self):
+    def get_items(self) -> pd.DataFrame:
         '''
-        Function to return Category's data
+        Function to return dataframe of Category's items.
         '''
         return self.items
 
-    def get_category(self):
+    def get_category(self) -> str:
         '''
-        Function to return Category's type
+        Function to return Category's type.
         '''
         return self.category
 
-    def add_item(self, items):
+    def add_item(self, items) -> None:
         '''
         Function to add items to category.
         'items' can be a dataframe, list of Series, or a single Serie of item(s).
@@ -69,7 +69,7 @@ class Category:
         self.get_items()['Unit Price'] = self.get_items()[
             'Unit Price'].astype(float)
 
-    def remove_duplicates(self, update_info=True):
+    def remove_duplicates(self, update_info=True) -> None:
         '''
         Function to remove duplicates (Part Number) and can update the quantities and unit prices of items.
 
@@ -94,7 +94,7 @@ class Category:
         self.get_items().reset_index(drop=True, inplace=True)
         self.get_items().drop(columns=['index'], inplace=True)
 
-    def save_toexcel(self, writer=None):
+    def save_toexcel(self, writer=None) -> None:
         '''
         Function to save the Category as a excel file, can be saved
         in a spreadsheet of multiple sheets.
@@ -115,7 +115,7 @@ class Category:
                     index=False
                 )
 
-    def save_tocsv(self, group=False):
+    def save_tocsv(self, group=False) -> None:
         '''
         Function to save dataframe as a '.csv' file
 
@@ -128,45 +128,48 @@ class Category:
             _ = self.get_items().to_csv(
                 f'Saved Filed/{self.get_category()}.csv')
 
-    def get_sorted_quantity(self, ascending=True):
+    def get_sorted_quantity(self, ascending=True) -> pd.DataFrame:
         '''
         Function to return the category sorted by quantity, by increasing or dreceasing quantities.
 
-        Parameters: acsending - bool (default True): True - increaing quantity, False decreasing quantity.
+            Parameters: 
+                acsending: True - increaing quantity, False decreasing quantity.
         '''
         return self.items.sort_values('Quantity', ascending=ascending).reset_index(drop=True)
 
-    def get_sorted_price(self, ascending=True):
+    def get_sorted_price(self, ascending=True) -> pd.DataFrame:
         '''
         Function to return the category sorted by unit price, by increasing or dreceasing unit prices.
 
-        Parameters: acsending - bool (default True): True - increasing price, False - decreasing price.
+            Parameters: 
+                acsending: True - increaing quantity, False decreasing quantity.
         '''
         return self.items.sort_values('Unit Price', ascending=ascending).reset_index(drop=True)
 
-    def get_sorted_part_num(self):
+    def get_sorted_part_num(self) -> pd.DataFrame:
         '''
-        Function to return a dataframe sorted by part number.
+        Function to return the category items sorted by part number.
         '''
         return self.items.sort_values('Part Number').reset_index(drop=True)
 
-    def get_sorted_man_num(self):
+    def get_sorted_man_num(self) -> pd.DataFrame:
         '''
-        Function to return a dataframe sorted by manufacturer part number.
+        Function to return the category items sorted by manufacturer part number.
         '''
         return self.items.sort_values('Manufacturer Part Number').reset_index(drop=True)
 
-    def drop_all_items(self):
+    def drop_all_items(self) -> None:
         '''
         Function to drop all items in the dataframe.
         '''
         self.items.drop(self.items.index, inplace=True)
 
-    def get_subtotal(self):
+    def get_subtotal(self) -> float:
         '''
         Function to get the subtotal of all the items in the category.
 
-        Returns float
+            Returns:
+                float
         '''
         subtotal = 0
         for i in range(self.items.shape[0]):
