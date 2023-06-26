@@ -406,8 +406,10 @@ def add_order_to_Inventory(order) -> None:
 
     if type(order) == dict:
         for section in Inventory.keys():
-            Inventory[section].add_item(order)
-            Inventory[section].remove_duplicates()
+            # checking if pass 'order' is empty
+            if not order[section].get_items().empty:
+                Inventory[section].add_item(order[section].get_items())
+                Inventory[section].remove_duplicates()
     else:
         for items, section in zip(order, Inventory.keys()):
             if len(order) > 0:
