@@ -184,7 +184,7 @@ class Project_Window(QMainWindow):
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: self.refresh_opensheet(self.is_sheet_open)
+            lambda: self.refresh_opensheet()
         )
         self.btn_resistors.clicked.connect(
             lambda: self.show_sorted_section('Resistors')
