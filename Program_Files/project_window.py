@@ -41,7 +41,8 @@ from .gui_handling import (
     get_table_data,
     change_item_quantity,
     open_add_manually_window,
-    get_editted_item
+    get_editted_item,
+    copySelectedCell
 )
 
 from .info_windows import How_To_Use_Project_Window
@@ -298,11 +299,18 @@ class Project_Window(QMainWindow):
             # Creating Menu
             menu = QtWidgets.QMenu()
             menu = QtWidgets.QMenu(self)
+            copy_selected_action = QtWidgets.QAction("Copy Selected")
             add_one_action = QtWidgets.QAction("Add One")
             delete_action = QtWidgets.QAction("Remove One")
             delete_item_action = QtWidgets.QAction("Delete")
 
             # Attaching Functions to actions
+            copy_selected_action.triggered.connect(
+                lambda: copySelectedCell(
+                    self,
+                    self.table.selectedItems()
+                )
+            )
             add_one_action.triggered.connect(
                 lambda: change_item_quantity(
                     self,
@@ -329,6 +337,7 @@ class Project_Window(QMainWindow):
             )
 
             # Adding to actions to menu
+            menu.addAction(copy_selected_action)
             menu.addAction(add_one_action)
             menu.addAction(delete_action)
             menu.addAction(delete_item_action)
