@@ -16,6 +16,7 @@ import shutil
 
 
 from .data_handling import (
+    dict_keys,
     labels,
     Category,
     sort_order,
@@ -23,7 +24,7 @@ from .data_handling import (
     dict_to_dataframe,
     sort_order,
     get_subtotal,
-    update_item
+    update_item,
 )
 
 from .gui_handling import (
@@ -46,20 +47,7 @@ from .gui_handling import (
 from .info_windows import How_To_Use_Project_Window
 from .add_item_window import Add_Item_Window
 
-Project = {
-    'Resistors': Category("Resistors"),
-    'Capacitors': Category("Capacitors"),
-    'Inductors': Category("Inductors"),
-    'Transistors': Category("Transistors"),
-    'Diodes': Category('Diodes'),
-    "ICs": Category('ICs'),
-    "Connectors": Category('Connectors'),
-    'Displays': Category('Displays'),
-    "Buttons": Category('Buttons'),
-    'LEDs': Category('LEDs'),
-    'Modules': Category('Modules'),
-    'Other': Category("Other"),
-}
+Project = {key: Category(key) for key in dict_keys}
 
 
 class Project_Window(QMainWindow):
