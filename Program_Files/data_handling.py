@@ -462,6 +462,7 @@ def update_item(self, item: pd.DataFrame, dictionary: dict, delete=False) -> Non
                 dictionary[category].get_items().drop(index=i, inplace=True)
             else:
                 dictionary[category].get_items().iloc[i] = item.iloc[0]
+            break
 
 
 if __name__ == "__main__":
