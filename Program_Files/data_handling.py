@@ -185,7 +185,7 @@ Rememeber when adding new categories to add the nessecary conditions
 in sort_order().
 
 '''
-keys = [
+dict_keys = [
     'Resistors',
     'Capacitors',
     'Inductors',
@@ -200,7 +200,7 @@ keys = [
     'Modules',
     'Other'
 ]
-Inventory = {key: Category(key) for key in keys}
+Inventory = {key: Category(key) for key in dict_keys}
 
 
 def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
