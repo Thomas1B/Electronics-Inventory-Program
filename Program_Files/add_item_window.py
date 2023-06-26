@@ -16,10 +16,15 @@ import pandas as pd
 
 
 class Add_Item_Window(QMainWindow):
+    '''
+    Class to show adding Item manually window.
+    '''
+
+
     # Signal for sending data (see function send_item_info).
     data_sent = pyqtSignal(pd.DataFrame)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super(Add_Item_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/adding_item_window.ui', self)
 
@@ -96,24 +101,30 @@ class Add_Item_Window(QMainWindow):
                 '''
             )
 
-    def how_to_use(self):
+    def how_to_use(self) -> None:
         '''
         Function to how to use window.
         '''
         self.how_to_use_window.show()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         '''
-        Function to handle closing event.
+        Function to detect when user closes the window.
+
+            Parameters:
+                event: QtGui.QCloseEvent.
         '''
         event.accept()
 
-    def check_user_entries(self):
+    def check_user_entries(self) -> list:
         '''
         Function to read in the user entries and check if they meant the requirments
 
-        Returns
-            list of item info
+            Parameters:
+                None
+
+            Returns
+                list of item info.
         '''
 
         # reading the plainTextEdits
@@ -168,11 +179,11 @@ class Add_Item_Window(QMainWindow):
 
         return item_info
 
-    def send_item_info(self):
+    def send_item_info(self) -> None:
         '''
         Function to send data to the main window.
 
-        Data must be emitted at a "DataFrame"
+        Data must be emitted as a "DataFrame"
         '''
         item_info = self.check_user_entries()
 
