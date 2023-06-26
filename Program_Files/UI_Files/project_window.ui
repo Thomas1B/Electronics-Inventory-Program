@@ -331,7 +331,7 @@ background-color: rgb(255, 255, 255);</string>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_3">
+      <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QPushButton" name="btn_refresh_opensheet">
          <property name="font">
@@ -357,8 +357,8 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="btn_capacitors">
+       <item row="0" column="3">
+        <widget class="QPushButton" name="btn_other">
          <property name="font">
           <font>
            <family>Terminal</family>
@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Capacitors</string>
+          <string>Other</string>
          </property>
         </widget>
        </item>
@@ -393,8 +393,8 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="btn_ics">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_capacitors">
          <property name="font">
           <font>
            <family>Terminal</family>
@@ -407,7 +407,43 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>ICs</string>
+          <string>Capacitors</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="btn_inductors">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Inductors</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QPushButton" name="btn_transistors">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Transistors</string>
          </property>
         </widget>
        </item>
@@ -465,8 +501,8 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QPushButton" name="btn_inductors">
+       <item row="2" column="3">
+        <widget class="QPushButton" name="btn_ics">
          <property name="font">
           <font>
            <family>Terminal</family>
@@ -479,25 +515,7 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Inductors</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QPushButton" name="btn_transistors">
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Transistors</string>
+          <string>ICs</string>
          </property>
         </widget>
        </item>
@@ -556,7 +574,7 @@ background-color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item row="3" column="3">
-        <widget class="QPushButton" name="btn_other">
+        <widget class="QPushButton" name="btn_audio">
          <property name="font">
           <font>
            <family>Terminal</family>
@@ -569,7 +587,7 @@ background-color: rgb(255, 255, 255);</string>
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Other</string>
+          <string>Audio</string>
          </property>
         </widget>
        </item>
