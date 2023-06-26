@@ -425,23 +425,6 @@ class Project_Window(QMainWindow):
             else:
                 pass
 
-    def wrong_filetype_msg(self) -> None:
-        '''
-        Function to display a pop telling user they selected a wrong filetype.
-        '''
-        msg = QtWidgets.QMessageBox()
-        msg.setWindowTitle('Wrong File Type')
-        pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-        icon = self.style().standardIcon(pixmapi)
-        msg.setWindowIcon(icon)
-        msg.setIcon(QtWidgets.QMessageBox.Critical)
-
-        msg.setText('Cannot user that file type!')
-        text = "You can only use 'CSV' (Comma-Seperated-Values) and 'XLSX' (Excel) files."
-        msg.setInformativeText(text)
-        msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
-        _ = msg.exec_()
-
     def no_files_msg(self, title='No Files', header="", text=""):
         '''
         Function to display a pop up warning user there are no files to open
@@ -543,7 +526,7 @@ class Project_Window(QMainWindow):
                     user = user.exec_()
             else:
                 # pop to tell user they enter a wrong filetype.
-                self.wrong_filetype_msg()
+                wrong_filetype_msg(self)
 
         # User clicks "ok", but doesn't enter a project name.
         elif ok and not name:
@@ -592,7 +575,7 @@ class Project_Window(QMainWindow):
                     self.load_Project(filename)
                     self.show()
                 else:
-                    self.wrong_filetype_msg()
+                    wrong_filetype_msg(self)
             else:
                 pass
         else:
