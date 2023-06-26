@@ -957,8 +957,8 @@ class MainWindow(QMainWindow):
             Triggered when btn "Add to inventory" clicked.
         '''
 
-        item = sort_order(item)  # sorting item.
-        self.add_to_project(item)  # adding to project.
+        items = sort_order(item)  # sorting item.
+        add_order_to_Inventory(items)  # adding to inventory.
         fill_table(self, Inventory)  # updating table.
 
         self.editted_saved = False
