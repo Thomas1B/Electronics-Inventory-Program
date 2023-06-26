@@ -744,26 +744,31 @@ class MainWindow(QMainWindow):
         user = user.exec_()
 
         # checking user's response
+        # text file to store files that have been added.
+        added_orders = 'Saved_lists/Orders_added_to_inventory.txt'
+        line_count = 0  # count used to increment added orders.
         match user:
             case QtWidgets.QMessageBox.Yes:
                 # saving to inventory
-                self.save_list(called_from='add_to_inventory')
-                # text file to store files that have been added.
-                added_orders = 'Saved_lists/Orders_added_to_inventory.txt'
-                line_count = 0  # count used to increment added orders.
 
-                # this file exists, count the number of line
-                if os.path.exists(added_orders):
-                    with open(added_orders, 'r') as file:
-                        # Read the lines and count them
-                        line_count = sum(1 for line in file)
-                with open(added_orders, 'a') as file:
-                    # adding order name to text of previous added orders.
-                    filename = self.is_sheet_open.split('/')[-1]
-                    text = '{:>3}: {:s}\n'.format(line_count+1, filename)
-                    file.write(text)
+                self.save_list(called_from='add_to_inventory')
             case _:
                 self.editted_saved = False
+                self.btn_save_list.clicked.connect(
+                    lambda: self.save_list(called_from='editted')
+                )
+                self.btn_save_list.show()
+
+        # this file exists, count the number of line
+        if os.path.exists(added_orders):
+            with open(added_orders, 'r') as file:
+                # Read the lines and count them
+                line_count = sum(1 for line in file)
+        with open(added_orders, 'a') as file:
+            # adding order name to text of previous added orders.
+            filename = self.is_sheet_open.split('/')[-1]
+            text = '{:>3}: {:s}\n'.format(line_count+1, filename)
+            file.write(text)
 
     def create_project(self) -> None:
         '''
