@@ -354,13 +354,13 @@ class MainWindow(QMainWindow):
                 # Creating Menu
                 menu = QtWidgets.QMenu()
                 menu = QtWidgets.QMenu(self)
-                copy_selected_cells = QtWidgets.QAction("Copy Selected")
+                copy_selected_action = QtWidgets.QAction("Copy Selected")
                 add_one_action = QtWidgets.QAction("Add One")
                 delete_action = QtWidgets.QAction("Remove One")
                 delete_item_action = QtWidgets.QAction("Delete")
 
                 # Attaching Functions to actions
-                copy_selected_cells.triggered.connect(
+                copy_selected_action.triggered.connect(
                     lambda: copySelectedCell(
                         self,
                         self.table.selectedItems()
@@ -392,7 +392,7 @@ class MainWindow(QMainWindow):
                 )
 
                 # Adding to actions to menu
-                menu.addAction(copy_selected_cells)
+                menu.addAction(copy_selected_action)
                 menu.addAction(add_one_action)
                 menu.addAction(delete_action)
                 menu.addAction(delete_item_action)
