@@ -27,7 +27,8 @@ from .gui_handling import (
     fill_table,
     get_table_data,
     open_add_manually_window,
-    get_editted_item
+    get_editted_item,
+    change_item_quantity
 )
 
 from .data_handling import (
@@ -364,30 +365,30 @@ class MainWindow(QMainWindow):
                 delete_item_action = QtWidgets.QAction("Delete")
 
                 # Attaching Functions to actions
-                # add_one_action.triggered.connect(
-                #     lambda: change_item_quantity(
-                #         self,
-                #         Items,
-                #         row_index,
-                #         remove_all=None
-                #     )
-                # )
-                # delete_action.triggered.connect(
-                #     lambda: change_item_quantity(
-                #         self,
-                #         Items,
-                #         row_index,
-                #         remove_all=False
-                #     )
-                # )
-                # delete_item_action.triggered.connect(
-                #     lambda: change_item_quantity(
-                #         self,
-                #         Items,
-                #         row_index,
-                #         remove_all=True
-                #     )
-                # )
+                add_one_action.triggered.connect(
+                    lambda: change_item_quantity(
+                        self,
+                        Inventory,
+                        row_index,
+                        remove_all=None
+                    )
+                )
+                delete_action.triggered.connect(
+                    lambda: change_item_quantity(
+                        self,
+                        Inventory,
+                        row_index,
+                        remove_all=False
+                    )
+                )
+                delete_item_action.triggered.connect(
+                    lambda: change_item_quantity(
+                        self,
+                        Inventory,
+                        row_index,
+                        remove_all=True
+                    )
+                )
 
                 # Adding to actions to menu
                 menu.addAction(add_one_action)
