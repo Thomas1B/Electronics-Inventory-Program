@@ -121,9 +121,6 @@ class MainWindow(QMainWindow):
         self.btn_add_item_manually = self.findChild(
             QtWidgets.QPushButton, 'btn_add_item_manually'
         )
-        self.btn_remove_item = self.findChild(
-            QtWidgets.QPushButton, 'btn_remove_item'
-        )
 
         # Sorting Buttons
         self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
@@ -199,7 +196,6 @@ class MainWindow(QMainWindow):
         self.btn_add_item_manually.clicked.connect(
             self.open_add_manually_window
         )
-        # self.btn_remove_item.clicked(lambda: self.remove_item)
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
@@ -268,7 +264,6 @@ class MainWindow(QMainWindow):
             self.header_frame,
             self.btn_edit_mode,
             self.btn_add_item_manually,
-            self.btn_remove_item
         ])
         self.hide_sorting_btns()
 
@@ -1029,7 +1024,7 @@ class MainWindow(QMainWindow):
                 _ = msg.exec_()
 
                 self.editted_saved = 'error'
-                self.toggled_btns(disabled=True, btns=btns)
+                toggled_widgets(self, widgets=btns, enable=False)
                 return
 
         # checking if user left empty description

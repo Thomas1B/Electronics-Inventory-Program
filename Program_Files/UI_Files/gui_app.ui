@@ -73,8 +73,8 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="3">
-        <widget class="QPushButton" name="btn_remove_item">
+       <item row="0" column="2">
+        <widget class="QPushButton" name="btn_add_to_inventory">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -83,33 +83,29 @@
 background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Remove Item</string>
+          <string>Add to Inventory</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../Icons/minus.png</normaloff>../Icons/minus.png</iconset>
+           <normaloff>../Icons/book--plus.png</normaloff>../Icons/book--plus.png</iconset>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="btn_edit_mode">
-         <property name="font">
-          <font>
-           <family>Terminal</family>
-          </font>
-         </property>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="btn_add_item_manually">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Edit Mode</string>
+          <string>Add Item</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../Icons/edit-writing-mode.png</normaloff>../Icons/edit-writing-mode.png</iconset>
+           <normaloff>../Icons/plus.png</normaloff>../Icons/plus.png</iconset>
          </property>
         </widget>
        </item>
@@ -135,39 +131,25 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="btn_add_item_manually">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="btn_edit_mode">
+         <property name="font">
+          <font>
+           <family>Terminal</family>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Add Item</string>
+          <string>Edit Mode</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../Icons/plus.png</normaloff>../Icons/plus.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="btn_add_to_inventory">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Add to Inventory</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../Icons/book--plus.png</normaloff>../Icons/book--plus.png</iconset>
+           <normaloff>../Icons/edit-writing-mode.png</normaloff>../Icons/edit-writing-mode.png</iconset>
          </property>
         </widget>
        </item>
