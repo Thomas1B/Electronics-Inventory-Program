@@ -267,7 +267,6 @@ def change_item_quantity(self, dictionary: dict, row_index: int, remove_all=None
     # conditions for updating item quantity
     delete = False
     match remove_all:
-
         case True:
             # deleting item
             delete = True
