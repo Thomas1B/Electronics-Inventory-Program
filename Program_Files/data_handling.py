@@ -179,27 +179,28 @@ class Category:
 
 
 '''
-Dictionary of categories for the inventory.
+creating dictionary of Category classes for the inventory.
 
 Rememeber when adding new categories to add the nessecary conditions
 in sort_order().
 
 '''
-Inventory = {
-    'Resistors': Category("Resistors"),
-    'Capacitors': Category("Capacitors"),
-    'Inductors': Category("Inductors"),
-    'Transistors': Category("Transistors"),
-    'Diodes': Category('Diodes'),
-    "ICs": Category('ICs'),
-    "Connectors": Category('Connectors'),
-    'Displays': Category('Displays'),
-    "Buttons": Category('Buttons'),
-    'LEDs': Category('LEDs'),
-    'Audio': Category('Audio'),
-    'Modules': Category('Modules'),
-    'Other': Category("Other"),
-}
+keys = [
+    'Resistors',
+    'Capacitors',
+    'Inductors',
+    'Transistors',
+    'Diodes',
+    'ICs',
+    'Connectors',
+    'Displays',
+    'Buttons',
+    'LEDs',
+    'Audio',
+    'Modules',
+    'Other'
+]
+Inventory = {key: Category(key) for key in keys}
 
 
 def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
