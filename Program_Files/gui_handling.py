@@ -363,3 +363,11 @@ def get_editted_item(self, clicked_item: QtWidgets.QTableWidgetItem) -> pd.DataF
         toggled_widgets(self, enable=True, widgets=widgets)
 
     return item
+
+def copySelectedCell(self, item):
+    # selected_items = self.selectedItems()
+    if item:
+        text = ', '.join(info.text() for info in item)
+        print(text)
+        QApplication.clipboard().setText(text)
+

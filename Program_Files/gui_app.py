@@ -28,7 +28,8 @@ from .gui_handling import (
     get_table_data,
     open_add_manually_window,
     get_editted_item,
-    change_item_quantity
+    change_item_quantity,
+    copySelectedCell
 )
 
 from .data_handling import (
@@ -353,11 +354,18 @@ class MainWindow(QMainWindow):
                 # Creating Menu
                 menu = QtWidgets.QMenu()
                 menu = QtWidgets.QMenu(self)
+                copy_selected_cells = QtWidgets.QAction("Copy Selected")
                 add_one_action = QtWidgets.QAction("Add One")
                 delete_action = QtWidgets.QAction("Remove One")
                 delete_item_action = QtWidgets.QAction("Delete")
 
                 # Attaching Functions to actions
+                copy_selected_cells.triggered.connect(
+                    lambda: copySelectedCell(
+                        self,
+                        self.table.selectedItems()
+                    )
+                )
                 add_one_action.triggered.connect(
                     lambda: change_item_quantity(
                         self,
@@ -384,6 +392,7 @@ class MainWindow(QMainWindow):
                 )
 
                 # Adding to actions to menu
+                menu.addAction(copy_selected_cells)
                 menu.addAction(add_one_action)
                 menu.addAction(delete_action)
                 menu.addAction(delete_item_action)
