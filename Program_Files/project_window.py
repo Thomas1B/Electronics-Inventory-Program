@@ -222,10 +222,14 @@ class Project_Window(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         '''
         Function to detect when user closes the window.
+
+            Parameters:
+                event: QtGui.QCloseEvent.
         '''
+
         if self.editted_saved:  # if editted project has been saved already.
             event.accept()  # let the window close.
         else:  # popup to warning user editted project has not been saved.
@@ -261,9 +265,12 @@ class Project_Window(QMainWindow):
                     # user cancels selection.
                     event.ignore()
 
-    def contextMenuEvent(self, event):
+    def contextMenuEvent(self, event) -> None:
         '''
         Function to show a menu when right clicked on item in the table.
+
+            Parameters:
+                event: QtGui.QCloseEvent.        
         '''
 
         # getting table geometry
@@ -296,20 +303,20 @@ class Project_Window(QMainWindow):
             menu.addAction(delete_action)
             menu.addAction(delete_item_action)
 
-            menu.exec_(event.globalPos())  # showing menuF
+            menu.exec_(event.globalPos())  # showing menu
 
-    def show_how_to_use(self):
+    def show_how_to_use(self) -> None:
         '''
         Function to show the "how to use" window.
         '''
         self.how_to_use_window.show()
 
-    def open_website(self, website=''):
+    def open_website(self, website: str) -> None:
         '''
         Function to open a website link on the user's default bowser.
 
-        Parameters:
-            website - str: website's name (used for conditions)
+            Parameters:
+                website - str: website's name (used for conditions).
         '''
         match website.lower():
             case 'digikey':
@@ -321,13 +328,12 @@ class Project_Window(QMainWindow):
 
         QDesktopServices.openUrl(QUrl(website))
 
-    def export_project(self, autoname=True):
+    def export_project(self, autoname=True) -> None:
         '''
         Function to export a Project.
 
-        Parameters:
-            autoname - bool: true - automatically named the final.
-                if true, exports to 'Downloads\exported_electrontics_lists\Projects'
+            Parameters:
+                autoname - bool: true - automatically named the final.
         '''
         if autoname:
             file_toexport, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -338,13 +344,13 @@ class Project_Window(QMainWindow):
             )
 
             if file_toexport:
-
                 export_filename, export_filetype = file_toexport.split(
                     '/')[-1].split('.')
 
                 destination_folder = os.path.expanduser(
                     "~" + os.sep + "Downloads\exported_electrontics_lists\Projects"
                 )
+                # if the desitination folder doesn't exists, make it.
                 if not os.path.exists(destination_folder):
                     os.mkdir(destination_folder)
 
@@ -375,7 +381,7 @@ class Project_Window(QMainWindow):
             else:
                 pass
 
-    def wrong_filetype_msg(self):
+    def wrong_filetype_msg(self) -> None:
         '''
         Function to display a pop telling user they selected a wrong filetype.
         '''
@@ -396,9 +402,10 @@ class Project_Window(QMainWindow):
         '''
         Function to display a pop up warning user there are no files to open
 
-        Parameters:
-            header - str: "header" text to pop up.
-            text - str: informative text for pop up.
+            Parameters:
+                title - str: Window title.
+                header - str: "header" text to pop up.
+                text - str: informative text for pop up.
         '''
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle(title)
@@ -412,13 +419,13 @@ class Project_Window(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def create_project(self):
+    def create_project(self) -> None:
         '''
         Function to create a new project using a second window.
 
-        Prompt user to enter a enter project name, then checks if it exists.
-        If the project name exists popup appears to tell the user, otherwise
-        it asks the user what filetype they want and creates the project file.
+            Prompt user to enter a enter project name, then checks if it exists.
+            If the project name exists popup appears to tell the user, otherwise
+            it asks the user what filetype they want and creates the project file.
         '''
         dialog = QtWidgets.QInputDialog(self)
         text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
@@ -520,7 +527,7 @@ class Project_Window(QMainWindow):
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
 
-    def open_project(self):
+    def open_project(self) -> None:
         '''
         Function to open a project
         '''
@@ -549,16 +556,15 @@ class Project_Window(QMainWindow):
             header = 'There are no projects to open!'
             self.no_files_msg(title=title, header=header)
 
-    def refresh_opensheet(self, filename=None):
+    def refresh_opensheet(self) -> None:
         '''
         Function to refresh the last sheet that was opened.
             used for when a user is looking a specific category.
-
         '''
         self.fill_table(Project)
         self.sub_header.setText('')
 
-    def load_Project(self, filename=None):
+    def load_Project(self, filename=None) -> None:
         '''
         Function to load the project into the Project dictionary of classes.
 
@@ -581,7 +587,7 @@ class Project_Window(QMainWindow):
             self.project_loaded = True
         self.fill_table(Project)
 
-    def add_to_project(self, items):
+    def add_to_project(self, items) -> None:
         '''
         Function to add items to the project dictionary
 
@@ -597,12 +603,13 @@ class Project_Window(QMainWindow):
                 Project[section].remove_duplicates()
                 self.editted_saved = False
 
-    def fill_table(self, dataframe):
+    def fill_table(self, dataframe) -> None:
         '''
         Function to fill in table.
 
-        Parameter:
-            dataframe: can take a dict, pandas dataframe or list of dataframes.
+            Parameter:
+                dataframe - DataFrame: items to show.
+                  (can take a dict, pandas dataframe or list of dataframes)
         '''
         items = dataframe
         if type(dataframe) == dict:
@@ -628,11 +635,15 @@ class Project_Window(QMainWindow):
             self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
                 items['Quantity'].astype(int).astype(str)[row]))
 
-    def get_table_data(self):
+    def get_table_data(self) -> pd.DataFrame:
         '''
-        Function to get the displayed table data into a dataframe.
+        Function to get the displayed table data and put it into a dataframe.
 
-        Returns a pandas dataframe.
+            Parameters: 
+                None
+
+            Returns:
+                DataFrame
         '''
         rows = self.table.rowCount()
         cols = self.table.columnCount()
@@ -652,17 +663,17 @@ class Project_Window(QMainWindow):
         else:
             print("NO ROWS IN TABLE")
 
-    def show_sorted_section(self, section):
+    def show_sorted_section(self, section: str) -> None:
         '''
         Function to show the sorted sections
 
-        Parameter:
-            section - str: name of category to display.
+            Parameter:
+                section: name of category to display.
         '''
         self.fill_table(Project[section].get_items())
         self.sub_header.setText(section)
 
-    def save_project(self):
+    def save_project(self) -> None:
         '''
         Function to save the project.
         '''
@@ -705,18 +716,24 @@ class Project_Window(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def item_from_main_window(self, items):
+    def item_from_main_window(self, items: pd.DataFrame) -> None:
         '''
         Function to get items from the Main UI Window.
 
-        Parameter:
-            items - DataFrame of items
+            Used for adding items to the project dictionary.
+
+            Parameters:
+                items: dataframe of items to add.
+
+
+            Parameter:
+                items - DataFrame of items
         '''
         items = sort_order(items)
         self.add_to_project(items)
         self.fill_table(Project)
 
-    def update_subtotal(self, item):
+    def update_subtotal(self) -> None:
         '''
         Function to update the subtotal of the project.
         '''
@@ -724,9 +741,13 @@ class Project_Window(QMainWindow):
         text = 'Subtotal: ${:.2f}'.format(subtotal)
         self.subtotal.setText(text)
 
-    def toggled_btns(self, disabled=True, btns=None):
+    def toggled_btns(self, btns: list, disabled=True) -> None:
         '''
         Function to toggle disabling/enabling buttons when in edit mode.
+
+            Parameters:
+                disabled: whether to disable btns.
+                btns: list of buttons to toggle.
         '''
         if disabled:
             for btn in btns:
@@ -743,7 +764,7 @@ class Project_Window(QMainWindow):
             # for action in self.toolbar.actions():
                 # action.setEnabled(True)
 
-    def edit_mode(self):
+    def edit_mode(self) -> None:
         '''
         Function to update the Project inventory when the table is in edit mode.
         '''
@@ -777,14 +798,16 @@ class Project_Window(QMainWindow):
             self.table.itemChanged.connect(self.update_subtotal)
             self.toggled_btns(disabled=False, btns=btns)
 
-    def get_editted(self, clicked_item):
+    def get_editted(self, clicked_item: QtWidgets.QTableWidgetItem) -> None:
         '''
         Function to get the item that has been editted.
 
-        Parameter:
-            item 0 
-        '''
+        Triggered by itemChanged in table.
 
+            Parameter:
+                clicked_item: item that was clicked one
+        '''
+        print(type(clicked_item))
         data = self.get_table_data()
 
         column_name = data.keys()[clicked_item.column()]
@@ -839,9 +862,9 @@ class Project_Window(QMainWindow):
 
         # updating project
         update_item(self, item, Project)
-        self.update_subtotal(item)
+        self.update_subtotal()
 
-    def open_add_manually_window(self):
+    def open_add_manually_window(self) -> None:
         '''
         Function to show "add item manually" window.
         '''
@@ -850,26 +873,25 @@ class Project_Window(QMainWindow):
         self.add_item_window.data_sent.connect(self.receive_add_item_manually)
         self.add_item_window.show()
 
-    def receive_add_item_manually(self, data):
+    def receive_add_item_manually(self, item: pd.DataFrame) -> None:
         '''
         Function to receive item from the other window.
             Triggered when btn "Add External Item" clicked.
 
-        Parameter:
-            data - DataFrame of item.
-
+            Parameter:
+                item: item DataFrame.
         '''
-        item = sort_order(data)  # sorting item.
+        item = sort_order(item)  # sorting item.
         self.add_to_project(item)  # adding to project.
         self.fill_table(Project)  # updating table.
 
-    def change_item_quantity(self, row_index, remove_all=None):
+    def change_item_quantity(self, row_index: int, remove_all=None):
         '''
         Function to change an item's quantity. Triggered by contextMenuEvent actions.
 
-        Parameter:
-            row_index - int: index to row that was clicked.
-            remove_all - bool: False removes one, true deletes item, None for increasing by one.
+            Parameter:
+                row_index - int: index to row that was clicked.
+                remove_all - bool: False removes one, true deletes item, None for increasing by one.
 
         '''
 
@@ -894,8 +916,8 @@ class Project_Window(QMainWindow):
                 item['Quantity'] = item['Quantity'].astype(int) + 1
 
         # updating project dictionary
-        self.update_item(item, delete=delete)
-        self.update_subtotal(Project)
+        update_item(self, item=item, dictionary=Project, delete=delete)
+        self.update_subtotal()
         self.fill_table(Project)
 
 
