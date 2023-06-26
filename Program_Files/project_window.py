@@ -36,7 +36,10 @@ from .gui_handling import (
     toggled_widgets,
     refresh_opensheet,
     fill_table,
-    update_subtotal
+    update_subtotal,
+    get_table_data,
+    change_item_quantity,
+    open_add_manually_window
 )
 
 from .info_windows import How_To_Use_Project_Window
@@ -196,7 +199,9 @@ class Project_Window(QMainWindow):
         # Command Buttons
         self.btn_save_project.clicked.connect(self.save_project)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
-        self.btn_add_item.clicked.connect(self.open_add_manually_window)
+        self.btn_add_item.clicked.connect(
+            lambda: open_add_manually_window(self)
+        )
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
@@ -306,13 +311,28 @@ class Project_Window(QMainWindow):
 
             # Attaching Functions to actions
             add_one_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, remove_all=None)
+                lambda: change_item_quantity(
+                    self,
+                    Project,
+                    row_index,
+                    remove_all=None
+                )
             )
             delete_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, remove_all=False)
+                lambda: change_item_quantity(
+                    self,
+                    Project,
+                    row_index,
+                    remove_all=False
+                )
             )
             delete_item_action.triggered.connect(
-                lambda: self.change_item_quantity(row_index, remove_all=True)
+                lambda: change_item_quantity(
+                    self,
+                    Project,
+                    row_index,
+                    remove_all=True
+                )
             )
 
             # Adding to actions to menu
@@ -618,34 +638,6 @@ class Project_Window(QMainWindow):
                 Project[section].remove_duplicates()
                 self.editted_saved = False
 
-    def get_table_data(self) -> pd.DataFrame:
-        '''
-        Function to get the displayed table data and put it into a dataframe.
-
-            Parameters: 
-                None
-
-            Returns:
-                DataFrame
-        '''
-        rows = self.table.rowCount()
-        cols = self.table.columnCount()
-        data = []
-
-        if rows:
-            for r in range(rows):
-                row_data = []
-                for c in range(cols):
-                    item = self.table.item(r, c)
-                    if item:
-                        row_data.append(item.text())
-                data.append(row_data)
-            data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
-                                'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
-            return data
-        else:
-            print("NO ROWS IN TABLE")
-
     def show_sorted_section(self, section: str) -> None:
         '''
         Function to show the sorted sections
@@ -699,23 +691,6 @@ class Project_Window(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-    def item_from_main_window(self, items: pd.DataFrame) -> None:
-        '''
-        Function to get items from the Main UI Window.
-
-            Used for adding items to the project dictionary.
-
-            Parameters:
-                items: dataframe of items to add.
-
-
-            Parameter:
-                items - DataFrame of items
-        '''
-        items = sort_order(items)
-        self.add_to_project(items)
-        fill_table(self, Project)
-
     def edit_mode(self) -> None:
         '''
         Function to update the Project inventory when the table is in edit mode.
@@ -762,7 +737,7 @@ class Project_Window(QMainWindow):
                 clicked_item: item that was clicked one
         '''
         print(type(clicked_item))
-        data = self.get_table_data()
+        data = get_table_data(self)
 
         column_name = data.keys()[clicked_item.column()]
         row_index = clicked_item.row()
@@ -818,16 +793,7 @@ class Project_Window(QMainWindow):
         update_item(self, item, Project)
         update_subtotal(self, Project)
 
-    def open_add_manually_window(self) -> None:
-        '''
-        Function to show "add item manually" window.
-        '''
-
-        # connecting function to 2nd window
-        self.add_item_window.data_sent.connect(self.receive_add_item_manually)
-        self.add_item_window.show()
-
-    def receive_add_item_manually(self, item: pd.DataFrame) -> None:
+    def item_from_main_window(self, item: pd.DataFrame) -> None:
         '''
         Function to receive item from the other window.
             Triggered when btn "Add External Item" is clicked.
@@ -839,40 +805,17 @@ class Project_Window(QMainWindow):
         self.add_to_project(item)  # adding to project.
         fill_table(self, Project)  # updating table.
 
-    def change_item_quantity(self, row_index: int, remove_all=None):
+    def receive_add_item_manually(self, item) -> None:
         '''
-        Function to change an item's quantity. Triggered by contextMenuEvent actions.
-
-            Parameter:
-                row_index - int: index to row that was clicked.
-                remove_all - bool: False removes one, true deletes item, None for increasing by one.
-
+        Function to read user's input when adding an item manually.
+            Triggered when btn "Add to inventory" clicked.
         '''
 
-        # getting item that was clicked on
-        item = self.get_table_data().iloc[row_index]
-        item = pd.DataFrame(item).T
+        item = sort_order(item)  # sorting item.
+        self.add_to_project(item)  # adding to project.
+        fill_table(self, Project)  # updating table.
 
-        # conditions for updating item quantity
-        delete = False
-        match remove_all:
-            case False:
-                # minus 1 from quantity, if quantity > 1 otherwise delete
-                if int(item['Quantity'].iloc[0]) > 1:
-                    item['Quantity'] = item['Quantity'].astype(int) - 1
-                else:
-                    delete = True
-            case True:
-                # deleting item
-                delete = True
-            case None:
-                # add 1 to quantity
-                item['Quantity'] = item['Quantity'].astype(int) + 1
-
-        # updating project dictionary
-        update_item(self, item=item, dictionary=Project, delete=delete)
-        update_subtotal(self, Project)
-        fill_table(self, Project)
+        self.editted_saved = False
 
 
 if __name__ == "__main__":

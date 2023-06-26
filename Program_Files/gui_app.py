@@ -24,7 +24,9 @@ from .gui_handling import (
     wrong_filetype_msg,
     toggled_widgets,
     refresh_opensheet,
-    fill_table
+    fill_table,
+    get_table_data,
+    open_add_manually_window
 )
 
 from .data_handling import (
@@ -212,7 +214,7 @@ class MainWindow(QMainWindow):
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item_manually.clicked.connect(
-            self.open_add_manually_window
+            lambda: open_add_manually_window(self)
         )
 
         # Sorting Buttons
@@ -706,35 +708,6 @@ class MainWindow(QMainWindow):
             case _:
                 self.editted_saved = False
 
-    def get_table_data(self) -> pd.DataFrame:
-        '''
-        Function to get the displayed table data into a dataframe.
-
-            Parameters:
-                None
-
-            Returns:
-                DataFrame
-        '''
-        rows = self.table.rowCount()
-        cols = self.table.columnCount()
-        data = []
-
-        if rows:
-            for r in range(rows):
-                row_data = []
-                for c in range(cols):
-                    item = self.table.item(r, c)
-                    if item:
-                        row_data.append(item.text())
-                data.append(row_data)
-
-            data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
-                                'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
-            return data
-        else:
-            print("NO ROWS IN TABLE")
-
     def create_project(self) -> None:
         '''
         Function to create a new project using a second window.
@@ -859,7 +832,7 @@ class MainWindow(QMainWindow):
             the project window.
             '''
 
-            data = self.get_table_data()
+            data = get_table_data(self)
 
             # getting the individual item and putting into a dataframe.
             item = pd.Series([cell for cell in data.iloc[index]])
@@ -909,7 +882,7 @@ class MainWindow(QMainWindow):
                 clicked_item: QTableItem that was clicked.
         '''
 
-        data = self.get_table_data()
+        data = get_table_data(self)
 
         column_name = data.keys()[clicked_item.column()]
         row_index = clicked_item.row()
@@ -971,30 +944,17 @@ class MainWindow(QMainWindow):
         # updating project
         update_item(self, item, Inventory)
 
-    def open_add_manually_window(self) -> None:
-        '''
-        Function to show "add item manually" window.
-        '''
-
-        # connecting function to 2nd window
-        self.add_item_window.data_sent.connect(self.receive_add_item_manually)
-        self.add_item_window.show()
-
     def receive_add_item_manually(self, data) -> None:
         '''
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to inventory" clicked.
         '''
 
-        data = pd.DataFrame(pd.Series(data)).T
-        data.columns = labels
-
         data = sort_order(data)
         add_order_to_Inventory(data)
         fill_table(self, Inventory)
-        print(data)
 
-        # self.editted_saved = False
+        self.editted_saved = False
         self.btn_save_list.setText('Save Inventory')
         self.btn_save_list.clicked.connect(
             lambda: self.save_list('edited')

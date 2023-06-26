@@ -15,7 +15,8 @@ import shutil
 
 from .data_handling import (
     dict_to_dataframe,
-    get_subtotal
+    get_subtotal,
+    update_item
 )
 
 
@@ -168,17 +169,28 @@ def fill_table(self, dataframe) -> None:
 
     for row in range(count):
         self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
-            items['Part Number'][row]))
+            items['Part Number'][row])
+        )
+
         self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
-            items['Manufacturer Part Number'][row]))
+            items['Manufacturer Part Number'].fillna('').astype(str)[row])
+        )
+
         self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-            items['Description'].astype(str)[row]))
+            items['Description'].fillna('').astype(str)[row])
+        )
+
         self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-            items['Customer Reference'].fillna('')[row]))
+            items['Customer Reference'].fillna('')[row])
+        )
+
         self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
-            items['Unit Price'].astype(float).round(2).astype(str)[row]))
+            items['Unit Price'].astype(float).round(2).astype(str)[row])
+        )
+
         self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
-            items['Quantity'].astype(int).astype(str)[row]))
+            items['Quantity'].astype(int).astype(str)[row])
+        )
 
 
 def refresh_opensheet(self, items: dict) -> None:
@@ -204,3 +216,79 @@ def update_subtotal(self, dictionary) -> None:
     subtotal = get_subtotal(dictionary)
     text = 'Subtotal: ${:.2f}'.format(subtotal)
     self.subtotal.setText(text)
+
+
+def get_table_data(self) -> pd.DataFrame:
+    '''
+    Function to get the displayed table data into a dataframe.
+
+        Parameters:
+            self: QWindow Class instance
+
+        Returns:
+            DataFrame
+    '''
+    rows = self.table.rowCount()
+    cols = self.table.columnCount()
+    data = []
+
+    if rows:
+        for r in range(rows):
+            row_data = []
+            for c in range(cols):
+                item = self.table.item(r, c)
+                if item:
+                    row_data.append(item.text())
+            data.append(row_data)
+
+        data = pd.DataFrame(data, columns=['Part Number', 'Manufacturer Part Number',
+                            'Description', 'Customer Reference', 'Unit Price', 'Quantity'])
+        return data
+    else:
+        print("NO ROWS IN TABLE")
+
+
+def change_item_quantity(self, dictionary: dict, row_index: int, remove_all=None):
+    '''
+    Function to change an item's quantity. Triggered by contextMenuEvent actions.
+
+        Parameter:
+            row_index - int: index to row that was clicked.
+            remove_all - bool: False removes one, true deletes item, None for increasing by one.
+
+    '''
+
+    # getting item that was clicked on
+    item = get_table_data(self).iloc[row_index]
+    item = pd.DataFrame(item).T
+
+    # conditions for updating item quantity
+    delete = False
+    match remove_all:
+        case False:
+            # minus 1 from quantity, if quantity > 1 otherwise delete
+            if int(item['Quantity'].iloc[0]) > 1:
+                item['Quantity'] = item['Quantity'].astype(int) - 1
+            else:
+                delete = True
+        case True:
+            # deleting item
+            delete = True
+        case None:
+            # add 1 to quantity
+            item['Quantity'] = item['Quantity'].astype(int) + 1
+
+    # updating project dictionary
+    update_item(self, item=item, dictionary=dictionary, delete=delete)
+    update_subtotal(self, dictionary)
+    fill_table(self, dictionary)
+
+
+def open_add_manually_window(self) -> None:
+    '''
+    Function to show "add item manually" window.
+    '''
+
+    # connecting window to function.
+    self.add_item_window.data_sent.connect(self.receive_add_item_manually)
+    self.add_item_window.show()
