@@ -570,10 +570,12 @@ class MainWindow(QMainWindow):
                     self.btn_save_list
                 ])
 
-            elif filetype not in ['csv', 'xlsx']:
-                wrong_filetype_msg(self)
-            else:
+            elif len(filetype) == 0:
+                # no file selected
                 pass
+
+            else:
+                wrong_filetype_msg(self)
 
         else:
             header = 'There are no past orders to open!'
