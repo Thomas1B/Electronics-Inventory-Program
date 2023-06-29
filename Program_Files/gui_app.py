@@ -667,8 +667,11 @@ class MainWindow(QMainWindow):
         if 'looking at inventory' in self.header.text().lower():
             fill_table(self, Inventory[section].get_items())
         else:
-            fill_table(self, Items[section].get_items())
-        self.sub_header.setText(section)
+            items = Items[section].get_items()
+            if items.empty:
+                self.table.setRowCount(0)
+            self.sub_header.setText(section)
+            fill_table(self, items)
 
     def save_list(self, called_from: str) -> None:
         '''
