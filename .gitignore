@@ -7,3 +7,4 @@ Program_Files/__pycache__/info_windows.cpython-311.pyc
 Program_Files/__pycache__/project_window.cpython-311.pyc
 Program_Files/__pycache__/__init__.cpython-311.pyc
 .gitignore
+Program_Files/__pycache__/search_window.cpython-311.pyc
