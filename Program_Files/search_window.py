@@ -227,19 +227,13 @@ class SearchWindow(QMainWindow):
         section, category, user_text = search_info
         user_text = user_text.lower().split(' ')
 
-        # words = ['resistors', 'resistor', 'capacitor',
-        #          'capacitors', 'inductor', 'inductors']
-        # for word in words:
-        #     if word in user_text:
-        #         user_text[user_text.index(word)] = word[:3].upper()
-
         # checking the dataframe's 'Description' for each word in the string
         results = [category_items[category_items['Description'].str.contains(
             text, case=False)] for text in user_text]
-        found_items = pd.concat(results).reset_index(drop=True)
+        results = pd.concat(results).drop_duplicates()
 
         # checking if the search result is empty
-        if found_items.empty:
+        if results.empty:
             user = QtWidgets.QMessageBox()
             user.setWindowIcon(
                 QIcon('Program_Files/Icons/magnifier.png'))
@@ -254,7 +248,7 @@ class SearchWindow(QMainWindow):
             _ = user.exec_()
             return pd.DataFrame()
 
-        return pd.concat(results).reset_index(drop=True)
+        return results.reset_index(drop=True)
 
     def search_for(self, search_info: tuple):
         '''
