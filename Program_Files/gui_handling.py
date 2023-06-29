@@ -60,6 +60,7 @@ def show_sorting_btns(self) -> None:
         self.btn_buttons,
         self.btn_connectors,
         self.btn_displays,
+        self.btn_audio,
         self.btn_modules,
         self.btn_other
     ])
@@ -81,6 +82,7 @@ def hide_sorting_btns(self) -> None:
         self.btn_buttons,
         self.btn_connectors,
         self.btn_displays,
+        self.btn_audio,
         self.btn_modules,
         self.btn_other
     ])
@@ -102,6 +104,28 @@ def open_website(self, website: str) -> None:
             website = 'https://bc-robotics.com/'
 
     QDesktopServices.openUrl(QUrl(website))
+
+
+def no_files_msg(self, title='No Files', header="", text="") -> None:
+    '''
+    Function to display a pop up warning user there are no files to open
+
+    Parameters:
+        title - str: pop up window title
+        header - str: "header" text to pop up.
+        text - str: informative text for pop up.
+    '''
+    msg = QtWidgets.QMessageBox()
+    msg.setWindowTitle(title)
+    pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+    icon = self.style().standardIcon(pixmapi)
+    msg.setWindowIcon(icon)
+
+    msg.setIcon(QtWidgets.QMessageBox.Warning)
+    msg.setText(header)
+    msg.setInformativeText(text)
+    msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+    _ = msg.exec_()
 
 
 def wrong_filetype_msg(self) -> None:
@@ -153,7 +177,7 @@ def toggled_widgets(self,
             action.setEnabled(enable)
 
 
-def fill_table(self, dataframe) -> None:
+def fill_table(self, dataframe: dict | pd.DataFrame | list) -> None:
     '''
     Function to fill in table.
 
@@ -364,10 +388,10 @@ def get_editted_item(self, clicked_item: QtWidgets.QTableWidgetItem) -> pd.DataF
 
     return item
 
+
 def copySelectedCell(self, item):
     # selected_items = self.selectedItems()
     if item:
         text = ', '.join(info.text() for info in item)
         print(text)
         QApplication.clipboard().setText(text)
-

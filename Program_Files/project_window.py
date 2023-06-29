@@ -25,6 +25,9 @@ from .data_handling import (
     sort_order,
     get_subtotal,
     update_item,
+    Inventory,
+    Project,
+    Items
 )
 
 from .gui_handling import (
@@ -34,6 +37,7 @@ from .gui_handling import (
     hide_sorting_btns,
     open_website,
     wrong_filetype_msg,
+
     toggled_widgets,
     refresh_opensheet,
     fill_table,
@@ -47,8 +51,6 @@ from .gui_handling import (
 
 from .info_windows import How_To_Use_Project_Window
 from .add_item_window import Add_Item_Window
-
-Project = {key: Category(key) for key in dict_keys}
 
 
 class Project_Window(QMainWindow):
@@ -732,7 +734,7 @@ class Project_Window(QMainWindow):
             update_item(self, item, Project)
             update_subtotal(self, Project)
 
-    def item_from_main_window(self, item: pd.DataFrame) -> None:
+    def add_to_project(self, item: pd.DataFrame) -> None:
         '''
         Function to receive item from the other window.
             Triggered when btn "Add External Item" is clicked.

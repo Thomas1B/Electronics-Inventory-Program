@@ -14,6 +14,7 @@ import shutil
 from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
+from .search_window import SearchWindow
 
 from .gui_handling import (
     show_btns,
@@ -35,6 +36,8 @@ from .gui_handling import (
 from .data_handling import (
     Category,
     Inventory,
+    Project,
+    Items,
     labels,
     load_Inventory,
     get_ordersheet,
@@ -47,12 +50,6 @@ from .data_handling import (
 )
 
 
-'''
-dictionary used a temporary holder for opening files.
-'''
-Items = {key: Category(key) for key in Inventory.keys()}
-
-
 class MainWindow(QMainWindow):
     '''
     Class to run the main window of the program.
@@ -61,6 +58,9 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super(MainWindow, self).__init__()
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
+
+        # if self.size().width() < 800:
+        #     self.resize(800, 800)
         self.move(50, 50)
 
         # Other Windows used in the program.
@@ -68,6 +68,7 @@ class MainWindow(QMainWindow):
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
+        self.search_window = SearchWindow(self)
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
@@ -95,6 +96,9 @@ class MainWindow(QMainWindow):
 
         # Toolbar
         self.toolbar = self.findChild(QtWidgets.QToolBar, 'toolBar')
+        self.action_search = self.findChild(
+            QtWidgets.QAction, 'actionSearch'
+        )
         self.action_open_new_order = self.findChild(
             QtWidgets.QAction, 'actionOpen_New_Order'
         )
@@ -135,7 +139,8 @@ class MainWindow(QMainWindow):
         )
 
         # Sorting Buttons
-        self.sorting_btns_frame = self.findChild(QtWidgets.QFrame, 'frame')
+        self.sorting_btns_frame = self.findChild(
+            QtWidgets.QFrame, 'sorting_frame')
         self.btn_refresh_opensheet = self.findChild(
             QtWidgets.QPushButton, 'btn_refresh_opensheet'
         )
@@ -195,6 +200,7 @@ class MainWindow(QMainWindow):
         )
 
         # toolbar
+        self.action_search.triggered.connect(self.open_search_window)
         self.action_open_inventory.triggered.connect(self.open_inventory)
         self.action_open_new_order.triggered.connect(self.open_new_order)
         self.action_open_projects.triggered.connect(self.open_project_lists)
@@ -254,7 +260,7 @@ class MainWindow(QMainWindow):
             lambda: self.show_sorted_section('Other')
         )
 
-        # Styles
+        ''' CSS Styling '''
         self.table.setColumnWidth(0, 175)  # Default columns widths
         self.table.setColumnWidth(1, 175)
         self.table.setColumnWidth(2, 175)
@@ -262,6 +268,7 @@ class MainWindow(QMainWindow):
         self.table.setColumnWidth(4, 75)
         self.table.setColumnWidth(5, 75)
 
+        # toolbar
         self.toolbar.setStyleSheet(  # Toolbar styles
             '''
             QToolButton {
@@ -912,7 +919,7 @@ class MainWindow(QMainWindow):
             item['Quantity'] = 1  # need this for incrementing quantities.
 
             # passing item to project window.
-            self.project_window.item_from_main_window(item)
+            self.project_window.add_to_project(item)
 
     def edit_mode(self) -> None:
         '''
@@ -968,7 +975,7 @@ class MainWindow(QMainWindow):
     def receive_add_item_manually(self, item) -> None:
         '''
         Function to read user's input when adding an item manually.
-            Triggered when btn "Add to inventory" clicked.
+            Triggered when btn "Add to ..." clicked.
         '''
 
         items = sort_order(item)  # sorting item.
@@ -981,6 +988,12 @@ class MainWindow(QMainWindow):
             lambda: self.save_list('edited')
         )
         self.btn_save_list.show()
+
+    def open_search_window(self) -> None:
+        '''
+        Function to open the search window.
+        '''
+        self.search_window.show()
 
 
 if __name__ == "__main__":

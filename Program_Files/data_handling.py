@@ -200,7 +200,14 @@ dict_keys = [
     'Modules',
     'Other'
 ]
+
+
+'''
+dictionary used a temporary holder for opening files.
+'''
 Inventory = {key: Category(key) for key in dict_keys}
+Items = {key: Category(key) for key in Inventory.keys()}
+Project = {key: Category(key) for key in dict_keys}
 
 
 def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
