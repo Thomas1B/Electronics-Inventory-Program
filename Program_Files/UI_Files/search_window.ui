@@ -296,7 +296,7 @@
              <string/>
             </property>
             <property name="placeholderText">
-             <string>resistor 10K</string>
+             <string>Ex. resistor 10k</string>
             </property>
             <property name="clearButtonEnabled">
              <bool>true</bool>
