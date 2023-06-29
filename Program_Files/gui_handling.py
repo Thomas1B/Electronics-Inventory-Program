@@ -184,11 +184,14 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list) -> None:
         Parameter:
             dataframe: dict of category classes, single DataFrame or list of DataFrames of item.
     '''
+
     items = dataframe
     if type(dataframe) == dict:
         items = dict_to_dataframe(dataframe)
     elif type(dataframe) == list:
         items = pd.concat(dataframe)
+    if items.empty:
+        return
 
     count = items.shape[0]
     self.table.setRowCount(count)

@@ -100,7 +100,7 @@ class Category:
         in a spreadsheet of multiple sheets.
 
         Parameters:
-            writer - pd.ExcelWriter default none: 
+            writer - pd.ExcelWriter default none:
                      only pass 'writer' when saving in a group of other sheets.
         '''
         if writer:
@@ -132,7 +132,7 @@ class Category:
         '''
         Function to return the category sorted by quantity, by increasing or dreceasing quantities.
 
-            Parameters: 
+            Parameters:
                 acsending: True - increaing quantity, False decreasing quantity.
         '''
         return self.items.sort_values('Quantity', ascending=ascending).reset_index(drop=True)
@@ -141,7 +141,7 @@ class Category:
         '''
         Function to return the category sorted by unit price, by increasing or dreceasing unit prices.
 
-            Parameters: 
+            Parameters:
                 acsending: True - increaing quantity, False decreasing quantity.
         '''
         return self.items.sort_values('Unit Price', ascending=ascending).reset_index(drop=True)
@@ -290,8 +290,8 @@ def sort_order(order: pd.DataFrame) -> list:
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
     connectors_conds = ['conn', 'term']
-    capacitors_conds = ['cap']
-    resistors_conds = ['res']
+    capacitors_conds = ['cap', 'capacitor', 'capacitors']
+    resistors_conds = ['res', 'resistor', 'resistors']
     leds_conds = ['leds', 'led', 'light']
     transistors_conds = ['transistors', 'transistor', 'NPN', "PNP"]
     inductors_conds = ['inductors', 'inductor', 'ind']
@@ -362,7 +362,7 @@ def get_ordersheet(filepath: str) -> list:
     '''
     Function to read in an ordersheet using pandas.
 
-    Drops columns: 'Index', 'Backorder', 'Extended Price' from the dataframes 
+    Drops columns: 'Index', 'Backorder', 'Extended Price' from the dataframes
     and the subtotal line ONLY from the csv file.
 
         Parameters:
@@ -374,7 +374,7 @@ def get_ordersheet(filepath: str) -> list:
     if os.path.isfile(filepath):
         filetype = filepath.split(".")[-1]
 
-        order = ''
+        order = None
         if filetype == 'csv':
             order = pd.read_csv(filepath)
             if str(order.iloc[-1]["Unit Price"]).lower() == 'subtotal':
@@ -399,6 +399,16 @@ def get_ordersheet(filepath: str) -> list:
         ]
         order.drop(columns=unnamed_cols, inplace=True)
         order[labels].reset_index(drop=True, inplace=True)  # reindexing
+
+        # retyping some item descriptions, i.e RES -> Resistor
+        update_dict = {
+            'RES': 'Resistor',
+            'CAP': 'Capacitor',
+            'IND': 'Inductor'
+        }
+        for key, value in update_dict.items():
+            order['Description'] = order['Description'].str.replace(key, value)
+
         order = sort_order(order)  # sorting the order
         return order
 
@@ -471,7 +481,7 @@ def get_item_category(item: pd.DataFrame, dictionary: dict) -> str:
 
 def update_item(self, item: pd.DataFrame, dictionary: dict, delete=False) -> None:
     '''
-    Function to update an item from a dictionary of Category classes. 
+    Function to update an item from a dictionary of Category classes.
     Triggered when item is editted (see get_editted() in project_window.py).
 
         Parameter:

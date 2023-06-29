@@ -128,7 +128,7 @@ class SearchWindow(QMainWindow):
         '''
         Function to get all items from the inventory.
 
-            Parameter: 
+            Parameter:
                 None
 
             Returns:
@@ -143,11 +143,11 @@ class SearchWindow(QMainWindow):
         '''
         Function to get all the items from all project files.
 
-            Parameter: 
-                project_name (optional): specific project name to get items from, default all projects.  
+            Parameter:
+                project_name (optional): specific project name to get items from, default all projects.
 
             Returns:
-                DataFrame of items        
+                DataFrame of items
         '''
 
         folder = 'Saved_Lists/Projects'  # project folder
@@ -175,11 +175,11 @@ class SearchWindow(QMainWindow):
         '''
         Function to get all the items from all project files.
 
-            Parameter: 
-                order_name (optional): specific project name to get items from, default all projects.  
+            Parameter:
+                order_name (optional): specific project name to get items from, default all projects.
 
             Returns:
-                DataFrame of items        
+                DataFrame of items
         '''
         folder = 'Saved_Lists/Past Orders'  # past orders folder
 
@@ -206,16 +206,55 @@ class SearchWindow(QMainWindow):
         '''
         Function to get items from a given DataFrame of items using the category type.
 
-            Parameter: 
+            Parameter:
                 items: DataFrame of items to look at.
                 category: what category to look at.
 
             Returns:
-                DataFrame of items        
+                DataFrame of items
         '''
         sorted_items = sort_order(items)
         category_items = dataframe_to_dict(sorted_items)[category]
         return category_items
+
+    def get_items_using_text(self, category_items: pd.DataFrame, search_info: tuple) -> pd.DataFrame:
+        '''
+        Function to get items using the text the user typed in
+
+            Parameters:
+
+        '''
+        section, category, user_text = search_info
+        user_text = user_text.lower().split(' ')
+
+        # words = ['resistors', 'resistor', 'capacitor',
+        #          'capacitors', 'inductor', 'inductors']
+        # for word in words:
+        #     if word in user_text:
+        #         user_text[user_text.index(word)] = word[:3].upper()
+
+        # checking the dataframe's 'Description' for each word in the string
+        results = [category_items[category_items['Description'].str.contains(
+            text, case=False)] for text in user_text]
+        found_items = pd.concat(results).reset_index(drop=True)
+
+        # checking if the search result is empty
+        if found_items.empty:
+            user = QtWidgets.QMessageBox()
+            user.setWindowIcon(
+                QIcon('Program_Files/Icons/magnifier.png'))
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            user.setStandardButtons(
+                QtWidgets.QMessageBox.Ok
+            )
+            user.setWindowTitle("No Search Results")
+            text = " ".join(user_text)
+            header = f'There are no search results for:\n{section}, {category}, {text}.'
+            user.setText(header)
+            _ = user.exec_()
+            return pd.DataFrame()
+
+        return pd.concat(results).reset_index(drop=True)
 
     def search_for(self, search_info: tuple):
         '''
@@ -225,7 +264,6 @@ class SearchWindow(QMainWindow):
                 search_info: tuple of strings for criteria (section, category, text)
         '''
         section, category, user_text = search_info
-        print(f'\n Searching for {section}, {category}, {user_text}:\n')
 
         # DataFrames to pass
         section_items = None
@@ -290,28 +328,10 @@ class SearchWindow(QMainWindow):
             case 'all':
                 found_items = category_items.reset_index(drop=True)
             case _:
-                user_text = user_text.split(' ')
-                found_items = []
-                for text in user_text:
-                    found_items.append(category_items[
-                        category_items['Description'].str.contains(
-                            text, case=False)
-                    ])
-                found_items = pd.concat(found_items)
-                if found_items.empty:
-                    user = QtWidgets.QMessageBox()
-                    user.setWindowIcon(
-                        QIcon('Program_Files/Icons/magnifier.png'))
-                    user.setIcon(QtWidgets.QMessageBox.Warning)
-                    user.setStandardButtons(
-                        QtWidgets.QMessageBox.Ok
-                    )
-                    user.setWindowTitle("No Search Results")
-                    text = " ".join(user_text)
-                    header = f'There are no search results for:\n{section}, {category}, {text}.'
-                    user.setText(header)
-                    _ = user.exec_()
-                    return
+                found_items = self.get_items_using_text(
+                    category_items=category_items,
+                    search_info=(section, category, user_text)
+                )
 
         self.show_found_items(found_items)
 
