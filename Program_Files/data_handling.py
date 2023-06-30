@@ -62,6 +62,21 @@ class Category:
                 items
             ]).reset_index(drop=True)
 
+        # updating item some descriptions
+        update_dict = {
+            'RES': 'Resistors',
+            'CAP': 'Capacitor',
+            'IND': 'Inductor'
+        }
+        # words = self.items['Description'].split(' ')
+        # for i, word in enumerate(self.items['Description']):
+        #     if word in update_dict:
+        #         words[i] = update_dict[word]
+        # self.items['Description'] = ' '.join(words)
+
+        for key, value in update_dict.items():
+            self.items['Description'] = self.items['Description'].str.lower().replace(key.capitalize(), value)
+
         # Changing the datatype of 'Quantity' and 'Unit Price'.
         # (Fixes bugs in later code)
         self.items['Quantity'] = self.get_items()[
@@ -401,13 +416,13 @@ def get_ordersheet(filepath: str) -> list:
         order[labels].reset_index(drop=True, inplace=True)  # reindexing
 
         # retyping some item descriptions, i.e RES -> Resistor
-        update_dict = {
-            'RES': 'Resistor',
-            'CAP': 'Capacitor',
-            'IND': 'Inductor'
-        }
-        for key, value in update_dict.items():
-            order['Description'] = order['Description'].str.replace(key, value)
+        # update_dict = {
+        #     'RES': 'Resistor',
+        #     'CAP': 'Capacitor',
+        #     'IND': 'Inductor'
+        # }
+        # for key, value in update_dict.items():
+        #     order['Description'] = order['Description'].str.replace(key, value)
 
         order = sort_order(order)  # sorting the order
         return order
