@@ -48,44 +48,14 @@ def show_sorting_btns(self) -> None:
     '''
     Function to show sorting buttons
     '''
-    show_btns(self, [
-        self.btn_refresh_opensheet,
-        self.btn_resistors,
-        self.btn_capacitors,
-        self.btn_inductors,
-        self.btn_transistors,
-        self.btn_diodes,
-        self.btn_ics,
-        self.btn_leds,
-        self.btn_buttons,
-        self.btn_connectors,
-        self.btn_displays,
-        self.btn_audio,
-        self.btn_modules,
-        self.btn_other
-    ])
+    self.sorting_btns_frame.show()
 
 
 def hide_sorting_btns(self) -> None:
     '''
     Function to hide sorting buttons
     '''
-    hide_btns(self, [
-        self.btn_refresh_opensheet,
-        self.btn_resistors,
-        self.btn_capacitors,
-        self.btn_inductors,
-        self.btn_transistors,
-        self.btn_diodes,
-        self.btn_ics,
-        self.btn_leds,
-        self.btn_buttons,
-        self.btn_connectors,
-        self.btn_displays,
-        self.btn_audio,
-        self.btn_modules,
-        self.btn_other
-    ])
+    self.sorting_btns_frame.hide()
 
 
 def open_website(self, website: str) -> None:
