@@ -66,16 +66,13 @@ class Category:
         update_dict = {
             'RES': 'Resistors',
             'CAP': 'Capacitor',
-            'IND': 'Inductor'
+            'IND': 'Inductor',
+            'TRANS NPN': "TRANSISTOR NPN",
+            'TRANS PNP': "TRANSISTOR PNP"
         }
-        # words = self.items['Description'].split(' ')
-        # for i, word in enumerate(self.items['Description']):
-        #     if word in update_dict:
-        #         words[i] = update_dict[word]
-        # self.items['Description'] = ' '.join(words)
-
         for key, value in update_dict.items():
-            self.items['Description'] = self.items['Description'].str.lower().replace(key.capitalize(), value)
+            self.items['Description'] = self.items['Description'].str.replace(
+                key, value.upper(), case=False)
 
         # Changing the datatype of 'Quantity' and 'Unit Price'.
         # (Fixes bugs in later code)
@@ -225,70 +222,6 @@ Items = {key: Category(key) for key in Inventory.keys()}
 Project = {key: Category(key) for key in dict_keys}
 
 
-def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
-    '''
-    Function to convert a category dictionary into a dataframe.
-
-        Parameters:
-            dictionary: dict of Category classes.
-
-        Returns:
-            single dataframe of entire dictionary.
-    '''
-    items = pd.concat([dictionary[cat].get_items()
-                      for cat in dictionary]).reset_index(drop=True)
-    return items
-
-
-def dataframe_to_dict(dataframes=[]) -> dict:
-    '''
-    Function to convert a list of dataframes into a category dictionary.
-
-            Parameter:
-                dataframes: list of dataframes
-
-            Returns:
-                dictionary of categories.
-    '''
-
-    new_dict = {}
-    keys = list(Inventory.keys())
-    for dataframe, key in zip(dataframes, keys):
-        new_dict[key] = dataframe
-    return new_dict
-
-
-def load_Inventory() -> None:
-    '''
-    Function to check if inventory exists, if it does then load the Inventory dictionary data.
-    '''
-    if not os.path.exists("Saved_Lists/Inventory.xlsx"):
-        return 'Inventory missing...'
-    else:
-        # loading the Inventory dictionary data
-        _ = get_inventory(check_load=False)
-
-
-def get_inventory(check_load=True) -> dict:
-    '''
-    Function to get current inventory from the inventory.xlsx (excel) file.
-
-        Parameters:
-            check_load: DO NOT CHANGE, NEEDS FOR SET UP.
-
-        Returns:
-            Dictionary of class for each sheet in the excel file.
-    '''
-    if check_load == False:  # only runs one for set up
-        inventory = pd.read_excel(
-            'Saved_Lists/Inventory.xlsx', sheet_name=None)
-        for section in inventory.keys():
-            Inventory[section].add_item(inventory[section])
-        check_load = True
-
-    return Inventory
-
-
 def sort_order(order: pd.DataFrame) -> list:
     '''
     Function to sort an order (or any dataframe) into categories based on the item description.
@@ -300,7 +233,7 @@ def sort_order(order: pd.DataFrame) -> list:
         Returns:
             list of dataframe for each category.
     '''
-    audio_conds = ['speaker', 'audio']
+    audio_conds = ['speaker', 'audio', 'mp3']
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
@@ -371,6 +304,70 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # returning list of dataframe for each category.
     return [pd.DataFrame(section) for section in sections]
+
+
+def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
+    '''
+    Function to convert a category dictionary into a dataframe.
+
+        Parameters:
+            dictionary: dict of Category classes.
+
+        Returns:
+            single dataframe of entire dictionary.
+    '''
+    items = pd.concat([dictionary[cat].get_items()
+                      for cat in dictionary]).reset_index(drop=True)
+    return items
+
+
+def dataframe_to_dict(dataframes=[]) -> dict:
+    '''
+    Function to convert a list of dataframes into a category dictionary.
+
+            Parameter:
+                dataframes: list of dataframes
+
+            Returns:
+                dictionary of categories.
+    '''
+
+    new_dict = {}
+    keys = list(Inventory.keys())
+    for dataframe, key in zip(dataframes, keys):
+        new_dict[key] = dataframe
+    return new_dict
+
+
+def load_Inventory() -> None:
+    '''
+    Function to check if inventory exists, if it does then load the Inventory dictionary data.
+    '''
+    if not os.path.exists("Saved_Lists/Inventory.xlsx"):
+        return 'Inventory missing...'
+    else:
+        # loading the Inventory dictionary data
+        _ = get_inventory(check_load=False)
+
+
+def get_inventory(check_load=True) -> dict:
+    '''
+    Function to get current inventory from the inventory.xlsx (excel) file.
+
+        Parameters:
+            check_load: DO NOT CHANGE, NEEDS FOR SET UP.
+
+        Returns:
+            Dictionary of class for each sheet in the excel file.
+    '''
+    if check_load == False:  # only runs one for set up
+        inventory = pd.read_excel(
+            'Saved_Lists/Inventory.xlsx', sheet_name=None)
+        for section in inventory.keys():
+            Inventory[section].add_item(inventory[section])
+        check_load = True
+
+    return Inventory
 
 
 def get_ordersheet(filepath: str) -> list:
