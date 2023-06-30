@@ -212,7 +212,7 @@ dict_keys = [
     'Potentiometer',
     'Modules',
     'Fans',
-    'AC/DC Converters',
+    'ACDC Converters',
     'AC Transformer',
     'Other'
 ]
