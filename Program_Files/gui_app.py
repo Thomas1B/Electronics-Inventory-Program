@@ -563,8 +563,10 @@ class MainWindow(QMainWindow):
         '''
         Function to open the inventory
         '''
-        hide_btns(self, [self.btn_add_to_inventory, self.btn_save_list])
         if os.path.exists("Saved_Lists/Inventory.xlsx"):
+            hide_btns(
+                self, [self.btn_add_to_inventory, self.btn_save_list]
+            )
             if not self.editted_saved:
                 self.btn_save_list.clicked.connect(
                     lambda: self.save_list('add_to_inventory')
@@ -582,7 +584,7 @@ class MainWindow(QMainWindow):
             text = 'Create an inventory by reading in some orders!'
             title = 'No Inventory'
             self.no_files_msg(title=title, header=header, text=text)
-            hide_sorting_btns(self)
+            # hide_sorting_btns(self)
 
     def open_new_order(self) -> None:
         '''
