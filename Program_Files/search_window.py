@@ -230,7 +230,7 @@ class SearchWindow(QMainWindow):
         # checking the dataframe's 'Description' for each word in the string
         results = [category_items[category_items['Description'].str.contains(
             text, case=False)] for text in user_text]
-        results = pd.concat(results).drop_duplicates()
+        results = pd.concat(results)
 
         # checking if the search result is empty
         if results.empty:
@@ -248,7 +248,7 @@ class SearchWindow(QMainWindow):
             _ = user.exec_()
             return pd.DataFrame()
 
-        return results.reset_index(drop=True)
+        return results.reset_index(drop=True).drop_duplicates()
 
     def search_for(self, search_info: tuple):
         '''
