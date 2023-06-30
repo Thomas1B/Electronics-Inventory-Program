@@ -64,7 +64,7 @@ class Category:
 
         # updating item some descriptions
         update_dict = {
-            'RES': 'Resistors',
+            'RES': 'Resistor',
             'CAP': 'Capacitor',
             'IND': 'Inductor',
             'TRANS NPN': "TRANSISTOR NPN",
@@ -209,7 +209,11 @@ dict_keys = [
     'Buttons',
     'LEDs',
     'Audio',
+    'Potentiometer',
     'Modules',
+    'Fans',
+    'AC/DC Converters',
+    'AC Transformer',
     'Other'
 ]
 
@@ -233,6 +237,12 @@ def sort_order(order: pd.DataFrame) -> list:
         Returns:
             list of dataframe for each category.
     '''
+
+    # list of key description words to sorting items
+    ac_transformer_conds = ['AC/AC', 'AC Transformer', 'AC Trans']
+    pot_conds = ['potentiometer', 'pot']
+    acdc_conds = ['AC/DC', 'AC/DC Converter', 'ACDC']
+    fan_conds = ['fan', 'fans']
     audio_conds = ['speaker', 'audio', 'mp3']
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
@@ -248,7 +258,8 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # empty lists for parts to be added.
     # if adding new sections, dont forget to add
-    audio = []
+    ac_transformer, potentiometer = [], []
+    acdc, audio, fans = [], [], []
     resistors, capacitors, inductors = [], [], []
     transistors, diodes, ics = [], [], []
     leds, connectors, buttons = [], [], []
@@ -256,26 +267,30 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # THIS NEEDS TO BE IN THE SAME ORDER AS THE INVENTORY DICTIONARY!
     # Otherwise when showing a category it will display an unintended one.
-    sections = [resistors,
-                capacitors,
-                inductors,
-                transistors,
-                diodes,
-                ics,
-                connectors,
-                displays,
-                buttons,
-                leds,
-                audio,
-                modules,
-                other]
+    sections = [
+        resistors, capacitors, inductors, transistors,
+        diodes, ics, connectors, displays, buttons, leds,
+        audio, potentiometer, modules, fans, acdc, ac_transformer,
+        other
+    ]
 
     # sorting the order into categories by checking if any words from
     # the conditions are in the item description.
-    for i, line in enumerate(order['Description']):
-        line = line.lower().split()
+    for i, descrip in enumerate(order['Description']):
+        line = descrip.lower().split()
 
-        if any(word.lower() in line for word in audio_conds):
+        if any(word.lower() in line for word in ac_transformer_conds):
+            ac_transformer.append(order.iloc[i])
+        elif any(word.lower() in line for word in pot_conds):
+            potentiometer.append(order.iloc[i])
+        elif any(word.lower() in line for word in acdc_conds):
+            acdc.append(order.iloc[i])
+        elif any(word.lower() in line for word in fan_conds):
+            fans.append(order.iloc[i])
+        elif (
+            any(word.lower() in line for word in audio_conds) or
+            all(word.lower() in line for word in ['board', 'max9744'])
+        ):
             audio.append(order.iloc[i])
         elif any(word.lower() in line for word in ics_conds):
             ics.append(order.iloc[i])

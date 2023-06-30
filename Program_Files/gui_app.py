@@ -173,12 +173,26 @@ class MainWindow(QMainWindow):
         self.btn_displays = self.findChild(
             QtWidgets.QPushButton, 'btn_displays'
         )
-        self.btn_audio = self.findChild(QtWidgets.QPushButton, 'btn_audio')
+        self.btn_audio = self.findChild(
+            QtWidgets.QPushButton, 'btn_audio'
+        )
         self.btn_modules = self.findChild(
             QtWidgets.QPushButton, 'btn_modules'
         )
         self.btn_other = self.findChild(
             QtWidgets.QPushButton, 'btn_other'
+        )
+        self.btn_fans = self.findChild(
+            QtWidgets.QPushButton, 'btn_fans'
+        )
+        self.btn_acdc_converter = self.findChild(
+            QtWidgets.QPushButton, 'btn_acdc_converter'
+        )
+        self.btn_potentiometer = self.findChild(
+            QtWidgets.QPushButton, 'btn_potentiometer'
+        )
+        self.btn_ac_transformer = self.findChild(
+            QtWidgets.QPushButton, 'btn_ac_transformer'
         )
 
         ''' Attaching Functions to Widgets '''
@@ -258,6 +272,18 @@ class MainWindow(QMainWindow):
         )
         self.btn_other.clicked.connect(
             lambda: self.show_sorted_section('Other')
+        )
+        self.btn_fans.clicked.connect(
+            lambda: self.show_sorted_section('Fans')
+        )
+        self.btn_acdc_converter.clicked.connect(
+            lambda: self.show_sorted_section('AC/DC Converters')
+        )
+        self.btn_potentiometer.clicked.connect(
+            lambda: self.show_sorted_section('Potentiometer')
+        )
+        self.btn_ac_transformer.clicked.connect(
+            lambda: self.show_sorted_section('AC Transformer')
         )
 
         ''' CSS Styling '''
