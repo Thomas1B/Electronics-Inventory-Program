@@ -97,9 +97,9 @@ class Category:
             'TRANS NPN': "TRANSISTOR NPN",
             'TRANS PNP': "TRANSISTOR PNP"
         }
-        for key, value in update_dict.items():
-            self.items['Description'] = self.items['Description'].str.replace(
-                key, value.upper(), case=False, n=1)
+        # for key, value in update_dict.items():
+        #     self.items['Description'] = self.items['Description'].str.replace(
+        #         key, value.upper(), case=False, n=1)
 
         # Changing the datatype of 'Quantity' and 'Unit Price'.
         # (Fixes bugs in later code)
@@ -448,13 +448,16 @@ def get_ordersheet(filepath: str) -> list:
         order['Unit Price'] = order['Unit Price'].str.strip(to_strip='$')
 
         # retyping some item descriptions, i.e RES -> Resistor
-        # update_dict = {
-        #     'RES': 'Resistor',
-        #     'CAP': 'Capacitor',
-        #     'IND': 'Inductor'
-        # }
-        # for key, value in update_dict.items():
-        #     order['Description'] = order['Description'].str.replace(key, value)
+        update_dict = {
+            'RES': 'Resistor',
+            'CAP': 'Capacitor',
+            'IND': 'Inductor',
+            'TRANS NPN': "TRANSISTOR NPN",
+            'TRANS PNP': "TRANSISTOR PNP"
+        }
+        for key, value in update_dict.items():
+            order['Description'] = order['Description'].str.replace(
+                key, value.upper(), case=False, n=1)
 
         order = sort_order(order)  # sorting the order
         return order
