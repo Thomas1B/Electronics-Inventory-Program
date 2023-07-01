@@ -232,7 +232,7 @@ def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
         Parameters:
             index: index of column.
     '''
-    header = labels[index] # column header text
+    header = labels[index]  # column header text
 
     if header.lower() == 'quantity' or 'unit price':
         # changing datatype to fix sorting issue with strings.
