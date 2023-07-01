@@ -70,12 +70,13 @@ class MainWindow(QMainWindow):
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
         self.search_window = SearchWindow(self)
-        self.sort_by = {key: True for key in labels}
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
         self.editted_saved = True  # if inventory has been saveed.
         self.in_edit_mode = False  # if in edit mode.
+        self.new_orders_count = 0 # count how many orders have been added
+        self.sort_by = {key: True for key in labels}
 
         ''' Defining Widgets'''
 
@@ -363,6 +364,13 @@ class MainWindow(QMainWindow):
                     event.accept()
                 case QtWidgets.QMessageBox.No:
                     # user declines to save.
+                    with open('Saved_Lists/Orders_added_to_inventory.txt', 'r+') as file:
+                        lines = file.readlines()
+                        file.seek(0)
+                        num_total_lines = len(lines)
+                        num_lines_to_delete = min(self.new_orders_count, num_total_lines)
+                        file.writelines(lines[:num_total_lines - num_lines_to_delete])
+                        file.truncate()
                     event.accept()
                 case _:  # Cancel
                     event.ignore()
@@ -756,16 +764,10 @@ class MainWindow(QMainWindow):
         # checking if order has been added already.
         read_orders_list = 'Saved_Lists/Orders_added_to_inventory.txt'
         if os.path.exists(read_orders_list):
-            read_orders = pd.read_csv(read_orders_list, delimiter='\s+')
 
-            files = []
             with open(read_orders_list, 'r') as file:
-                lines = file.readlines()
-                for line in lines:
-                    line = line.rstrip()
-                    line = line.split(": ")[-1]
-                    line = line.split('.')[0]
-                    files.append(line)
+                files = [line.rstrip().split(": ")[-1].split('.')[0]
+                         for line in file.readlines()]
 
             name = self.is_sheet_open.split("/")[-1].split('.')[0]
 
@@ -803,12 +805,9 @@ class MainWindow(QMainWindow):
 
         # checking user's response
         # text file to store files that have been added.
-        added_orders = 'Saved_lists/Orders_added_to_inventory.txt'
-        line_count = 0  # count used to increment added orders.
         match user:
             case QtWidgets.QMessageBox.Yes:
                 # saving to inventory
-
                 self.save_list(called_from='add_to_inventory')
             case _:
                 self.editted_saved = False
@@ -818,15 +817,19 @@ class MainWindow(QMainWindow):
                 self.btn_save_list.show()
 
         # this file exists, count the number of line
+        added_orders = 'Saved_lists/Orders_added_to_inventory.txt'
+        line_count = 0  # count used to increment added orders.
         if os.path.exists(added_orders):
             with open(added_orders, 'r') as file:
                 # Read the lines and count them
                 line_count = sum(1 for line in file)
+
         with open(added_orders, 'a') as file:
             # adding order name to text of previous added orders.
             filename = self.is_sheet_open.split('/')[-1]
             text = '{:>3}: {:s}\n'.format(line_count+1, filename)
             file.write(text)
+            self.new_orders_count = self.new_orders_count + 1
 
     def create_project(self) -> None:
         '''
