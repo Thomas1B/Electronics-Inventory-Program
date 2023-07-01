@@ -440,14 +440,14 @@ class MainWindow(QMainWindow):
                 )
 
                 # Adding to actions to menu
+                if self.project_window.isVisible():
+                    menu.addAction(add_to_project_action)
+                    menu.addSeparator()
                 menu.addAction(copy_selected_action)
                 menu.addAction(add_one_action)
                 menu.addAction(delete_action)
                 menu.addAction(delete_item_action)
 
-                if self.project_window.isVisible():
-                    menu.addSeparator()
-                    menu.addAction(add_to_project_action)
 
                 menu.exec_(event.globalPos())  # showing menu
 

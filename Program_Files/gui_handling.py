@@ -18,7 +18,8 @@ from .data_handling import (
     get_subtotal,
     update_item,
     sort_order,
-    Inventory
+    Inventory,
+    labels
 )
 
 
@@ -168,7 +169,7 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list) -> None:
 
     for row in range(count):
         self.table.setItem(row, 0, QtWidgets.QTableWidgetItem(
-            items['Part Number'][row])
+            items[labels[0]][row])
         )
 
         self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(

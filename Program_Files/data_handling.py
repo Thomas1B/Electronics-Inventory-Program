@@ -9,7 +9,7 @@ import numpy as np
 import os
 
 labels_drop = ['Index', 'Backorder', 'Extended Price']
-labels = ['Part Number', 'Manufacturer Part Number',
+labels = ['Digi-Key Part #', 'Manufacturer Part Number',
           'Description', 'Customer Reference', 'Unit Price', 'Quantity']
 
 '''
@@ -99,7 +99,7 @@ class Category:
         }
         for key, value in update_dict.items():
             self.items['Description'] = self.items['Description'].str.replace(
-                key, value.upper(), case=False)
+                key, value.upper(), case=False, n=1)
 
         # Changing the datatype of 'Quantity' and 'Unit Price'.
         # (Fixes bugs in later code)
@@ -118,16 +118,17 @@ class Category:
         Made using ChatGPT.
         '''
         self.get_items().sort_values(
-            ['Part Number', 'Unit Price'], ascending=[True, False], inplace=True)
+            [labels[0], 'Unit Price'], ascending=[True, False], inplace=True)
 
         # whether to update the quantity and unit price, default - True.
         if update_info:
             self.get_items()['Quantity'] = self.get_items().groupby(
-                'Part Number')['Quantity'].transform('sum')
+                labels[0])['Quantity'].transform('sum')
             self.get_items()['Unit Price'] = self.get_items().groupby(
-                'Part Number')['Unit Price'].transform('max')
+                labels[0])['Unit Price'].transform('max')
 
-        self.get_items().drop_duplicates(subset='Part Number', keep='first', inplace=True)
+        self.get_items().drop_duplicates(
+            subset=labels[0], keep='first', inplace=True)
         self.get_items().reset_index(inplace=True)
         self.get_items().sort_values('index', inplace=True)
         self.get_items().reset_index(drop=True, inplace=True)
@@ -443,12 +444,8 @@ def get_ordersheet(filepath: str) -> list:
         #     # dropping unwanted labels
         #     order.drop(labels_drop, axis=1, inplace=True)
         order = order[labels]
-        # dropping unnamed columns
-        unnamed_cols = [
-            col for col in order.columns if 'unnamed' in col.lower()
-        ]
-        order.drop(columns=unnamed_cols, inplace=True)
         order[labels].reset_index(drop=True, inplace=True)  # reindexing
+        order['Unit Price'] = order['Unit Price'].str.strip(to_strip='$')
 
         # retyping some item descriptions, i.e RES -> Resistor
         # update_dict = {
