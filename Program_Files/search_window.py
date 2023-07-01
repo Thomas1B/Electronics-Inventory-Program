@@ -23,7 +23,8 @@ from .data_handling import (
 
 from .gui_handling import (
     no_files_msg,
-    fill_table
+    fill_table,
+    copySelectedCell
 )
 
 
@@ -55,6 +56,9 @@ class SearchWindow(QMainWindow):
         self.btn_search = self.findChild(
             QtWidgets.QPushButton, 'btn_search'
         )
+
+        # table
+        # self.table = QtWidgets.QTableWidget()
 
         ''' Attaching Functions to widgets '''
 
@@ -99,6 +103,30 @@ class SearchWindow(QMainWindow):
         self.comboBox_category.setCurrentIndex(0)
         self.search_lineEdit.clear()
         event.accept()
+
+    def contextMenuEvent(self, event) -> None:
+        '''
+        Function to handle right click on table
+        '''
+
+        # only allow contextMenuEvent if there items in the table
+        pos = self.table.viewport().mapFromGlobal(event.globalPos())
+        row_index = self.table.rowAt(pos.y())
+        if row_index >= 0:
+
+            menu = QtWidgets.QMenu()
+            menu = QtWidgets.QMenu(self)
+            copy_selected_action = QtWidgets.QAction("Copy Selected")
+
+            copy_selected_action.triggered.connect(
+                lambda: copySelectedCell(
+                    self,
+                    self.table.selectedItems()
+                )
+            )
+
+            menu.addAction(copy_selected_action)
+            menu.exec_(event.globalPos())  # showing menu
 
     def clear_search_entires(self) -> None:
         '''
