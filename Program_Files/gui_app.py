@@ -200,7 +200,6 @@ class MainWindow(QMainWindow):
         ''' Attaching Functions to Widgets '''
 
         # Table
-        self.table.cellClicked.connect(self.get_clicked_row)
         self.table.horizontalHeader().sectionClicked.connect(self.get_clicked_header)
 
         # Menu
