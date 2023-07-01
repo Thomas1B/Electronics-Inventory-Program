@@ -366,5 +366,4 @@ def copySelectedCell(self, item):
     # selected_items = self.selectedItems()
     if item:
         text = ', '.join(info.text() for info in item)
-        print(text)
         QApplication.clipboard().setText(text)
