@@ -12,6 +12,33 @@ labels_drop = ['Index', 'Backorder', 'Extended Price']
 labels = ['Part Number', 'Manufacturer Part Number',
           'Description', 'Customer Reference', 'Unit Price', 'Quantity']
 
+'''
+creating dictionary of Category classes for the inventory.
+
+Rememeber when adding new categories to add the nessecary conditions
+in sort_order().
+
+'''
+dict_keys = [
+    'Resistors',
+    'Capacitors',
+    'Inductors',
+    'Transistors',
+    'Diodes',
+    'ICs',
+    'Connectors',
+    'Displays',
+    'Buttons',
+    'LEDs',
+    'Audio',
+    'Potentiometer',
+    'Modules',
+    'Fans',
+    'ACDC Converters',
+    'AC Transformer',
+    'Other'
+]
+
 
 class Category:
     '''
@@ -188,34 +215,6 @@ class Category:
             subtotal += float(self.items.iloc[i]['Quantity']) * \
                 float(self.items.iloc[i]['Unit Price'])
         return subtotal
-
-
-'''
-creating dictionary of Category classes for the inventory.
-
-Rememeber when adding new categories to add the nessecary conditions
-in sort_order().
-
-'''
-dict_keys = [
-    'Resistors',
-    'Capacitors',
-    'Inductors',
-    'Transistors',
-    'Diodes',
-    'ICs',
-    'Connectors',
-    'Displays',
-    'Buttons',
-    'LEDs',
-    'Audio',
-    'Potentiometer',
-    'Modules',
-    'Fans',
-    'ACDC Converters',
-    'AC Transformer',
-    'Other'
-]
 
 
 '''
