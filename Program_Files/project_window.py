@@ -609,7 +609,7 @@ class Project_Window(QMainWindow):
             self.project_loaded = True
         fill_table(self, Project)
 
-    def add_to_project(self, items) -> None:
+    def add_to_project_dict(self, items) -> None:
         '''
         Function to add items to the project dictionary
 
@@ -743,7 +743,7 @@ class Project_Window(QMainWindow):
                 item: item DataFrame.
         '''
         item = sort_order(item)  # sorting item.
-        self.add_to_project(item)  # adding to project.
+        self.add_to_project_dict(item)  # adding to project.
         fill_table(self, Project)  # updating table.
 
     def receive_add_item_manually(self, item) -> None:
