@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
-    <height>580</height>
+    <width>501</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -65,8 +65,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>460</width>
-         <height>527</height>
+         <width>459</width>
+         <height>526</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -135,7 +135,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>502</width>
+     <width>501</width>
      <height>21</height>
     </rect>
    </property>
