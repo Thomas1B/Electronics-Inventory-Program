@@ -27,7 +27,8 @@ from .data_handling import (
     update_item,
     Inventory,
     Project,
-    Items
+    Items,
+    sort_by
 )
 
 from .gui_handling import (
@@ -37,7 +38,6 @@ from .gui_handling import (
     hide_sorting_btns,
     open_website,
     wrong_filetype_msg,
-
     toggled_widgets,
     refresh_opensheet,
     fill_table,
@@ -46,7 +46,7 @@ from .gui_handling import (
     change_item_quantity,
     open_add_manually_window,
     get_editted_item,
-    copySelectedCell
+    copySelectedCell,
 )
 
 from .info_windows import How_To_Use_Project_Window
@@ -74,6 +74,7 @@ class Project_Window(QMainWindow):
         self.is_sheet_open = False  # what sheet is opened.
         self.editted_saved = True  # if project has been saved
         self.in_edit_mode = False  # if in edit mode.
+        self.sort_by = {key: True for key in labels}
 
         # display labels
         self.header = self.findChild(QtWidgets.QLabel, 'header')
@@ -169,6 +170,7 @@ class Project_Window(QMainWindow):
         self.table.itemChanged.connect(
             lambda: update_subtotal(self, Project)
         )
+        self.table.horizontalHeader().sectionClicked.connect(self.get_clicked_header)
 
         # Menu Actions
         self.action_how_to_use.triggered.connect(self.show_how_to_use)
@@ -757,6 +759,15 @@ class Project_Window(QMainWindow):
         fill_table(self, Project)  # updating table.
 
         self.editted_saved = False
+
+    def get_clicked_header(self, index):
+        '''
+        Function to get the header that was clicked on, then sort the table respectivitely.
+        '''
+
+        data = get_table_data(self)
+        data = sort_by(self, index, data)
+        fill_table(self, data)
 
 
 if __name__ == "__main__":

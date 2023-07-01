@@ -225,6 +225,30 @@ Items = {key: Category(key) for key in Inventory.keys()}
 Project = {key: Category(key) for key in dict_keys}
 
 
+def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
+    '''
+    Function to sort a frame by a column header.
+
+        Parameters:
+            index: index of column.
+    '''
+    header = labels[index] # column header text
+
+    if header.lower() == 'quantity' or 'unit price':
+        # changing datatype to fix sorting issue with strings.
+        data['Quantity'] = data['Quantity'].astype(int)
+
+    if self.sort_by[header]:
+        self.sort_by[header] = False
+        data = data.sort_values(by=header).reset_index(drop=True)
+    else:
+        self.sort_by[header] = True
+        data = data.sort_values(
+            by=header, ascending=False).reset_index(drop=True)
+
+    return data
+
+
 def sort_order(order: pd.DataFrame) -> list:
     '''
     Function to sort an order (or any dataframe) into categories based on the item description.

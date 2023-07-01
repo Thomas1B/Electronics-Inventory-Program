@@ -46,7 +46,8 @@ from .data_handling import (
     sort_order,
     get_inventory,
     drop_all_from_dict,
-    update_item
+    update_item,
+    sort_by
 )
 
 
@@ -69,6 +70,7 @@ class MainWindow(QMainWindow):
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
         self.search_window = SearchWindow(self)
+        self.sort_by = {key: True for key in labels}
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
@@ -199,6 +201,7 @@ class MainWindow(QMainWindow):
 
         # Table
         self.table.cellClicked.connect(self.get_clicked_row)
+        self.table.horizontalHeader().sectionClicked.connect(self.get_clicked_header)
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
@@ -935,6 +938,14 @@ class MainWindow(QMainWindow):
             user.setText(text)
             user.setStandardButtons(QtWidgets.QMessageBox.Ok)
             user = user.exec_()
+
+    def get_clicked_header(self, index):
+        '''
+        Function to get the header that was clicked on, then sort the table respectivitely.
+        '''
+        data = get_table_data(self)
+        data = sort_by(self, index, data)
+        fill_table(self, data)
 
     def get_clicked_row(self, index: int) -> None:
         '''
