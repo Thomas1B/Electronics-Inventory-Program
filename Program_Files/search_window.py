@@ -18,13 +18,14 @@ from .data_handling import (
     dict_to_dataframe,
     dataframe_to_dict,
     get_ordersheet,
-    sort_order
+    sort_order,
 )
 
 from .gui_handling import (
     no_files_msg,
     fill_table,
-    copySelectedCell
+    copySelectedCell,
+    get_table_data
 )
 
 
@@ -61,6 +62,10 @@ class SearchWindow(QMainWindow):
         self.table = self.findChild(
             QtWidgets.QTableWidget, 'table'
         )
+        self.table.cellClicked.connect(self.get_clicked_row)
+        
+        # project window from the parent window (from gui_app.py)
+        self.project_window = parent.project_window
 
         ''' Attaching Functions to widgets '''
 
@@ -130,6 +135,31 @@ class SearchWindow(QMainWindow):
 
             menu.addAction(copy_selected_action)
             menu.exec_(event.globalPos())  # showing menu
+
+    def get_clicked_row(self, index: int) -> None:
+        '''
+        Function to get the item from the table
+
+            Parameter:
+                index: index of item, starts at 0.
+        '''
+
+        if self.project_window.isVisible():
+            '''
+            if project window is open, then send the clicked row to
+            the project window.
+            '''
+
+            data = get_table_data(self)
+
+            # getting the individual item and putting into a dataframe.
+            item = pd.Series([cell for cell in data.iloc[index]])
+            item = pd.DataFrame(item).T
+            item.columns = data.keys()
+            item['Quantity'] = 1  # need this for incrementing quantities.
+
+            # passing item to project window.
+            self.project_window.add_to_project(item)
 
     def clear_search_entires(self) -> None:
         '''
