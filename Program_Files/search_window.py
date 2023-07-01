@@ -58,7 +58,9 @@ class SearchWindow(QMainWindow):
         )
 
         # table
-        # self.table = QtWidgets.QTableWidget()
+        self.table = self.findChild(
+            QtWidgets.QTableWidget, 'table'
+        )
 
         ''' Attaching Functions to widgets '''
 
@@ -102,6 +104,7 @@ class SearchWindow(QMainWindow):
         self.comboBox_section.setCurrentIndex(0)
         self.comboBox_category.setCurrentIndex(0)
         self.search_lineEdit.clear()
+        self.table.setRowCount(0)
         event.accept()
 
     def contextMenuEvent(self, event) -> None:
