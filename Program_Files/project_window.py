@@ -634,8 +634,11 @@ class Project_Window(QMainWindow):
             Parameter:
                 section: name of category to display.
         '''
-        fill_table(self, Project[section].get_items())
+        items = Project[section].get_items()
+        if items.empty:
+            self.table.setRowCount(0)
         self.sub_header.setText(section)
+        fill_table(self, items)
 
     def save_project(self) -> None:
         '''
