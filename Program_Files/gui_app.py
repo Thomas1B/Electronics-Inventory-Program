@@ -391,6 +391,8 @@ class MainWindow(QMainWindow):
                 add_one_action = QtWidgets.QAction("Add One")
                 delete_action = QtWidgets.QAction("Remove One")
                 delete_item_action = QtWidgets.QAction("Delete")
+                add_to_project_action = QtWidgets.QAction(
+                    "Add Item to Project")
 
                 # Attaching Functions to actions
                 copy_selected_action.triggered.connect(
@@ -423,12 +425,19 @@ class MainWindow(QMainWindow):
                         remove_all=True
                     )
                 )
+                add_to_project_action.triggered.connect(
+                    lambda: self.get_clicked_row(row_index)
+                )
 
                 # Adding to actions to menu
                 menu.addAction(copy_selected_action)
                 menu.addAction(add_one_action)
                 menu.addAction(delete_action)
                 menu.addAction(delete_item_action)
+
+                if self.project_window.isVisible():
+                    menu.addSeparator()
+                    menu.addAction(add_to_project_action)
 
                 menu.exec_(event.globalPos())  # showing menu
 

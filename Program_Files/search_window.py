@@ -62,8 +62,7 @@ class SearchWindow(QMainWindow):
         self.table = self.findChild(
             QtWidgets.QTableWidget, 'table'
         )
-        self.table.cellClicked.connect(self.get_clicked_row)
-        
+        # self.table.cellClicked.connect(self.get_clicked_row)
         # project window from the parent window (from gui_app.py)
         self.project_window = parent.project_window
 
@@ -125,6 +124,7 @@ class SearchWindow(QMainWindow):
             menu = QtWidgets.QMenu()
             menu = QtWidgets.QMenu(self)
             copy_selected_action = QtWidgets.QAction("Copy Selected")
+            add_to_project_action = QtWidgets.QAction("Add Item to Project")
 
             copy_selected_action.triggered.connect(
                 lambda: copySelectedCell(
@@ -132,8 +132,15 @@ class SearchWindow(QMainWindow):
                     self.table.selectedItems()
                 )
             )
+            add_to_project_action.triggered.connect(
+                lambda: self.get_clicked_row(row_index)
+            )
 
             menu.addAction(copy_selected_action)
+            if self.project_window.isVisible():
+                menu.addSeparator()
+                menu.addAction(add_to_project_action)
+
             menu.exec_(event.globalPos())  # showing menu
 
     def get_clicked_row(self, index: int) -> None:
