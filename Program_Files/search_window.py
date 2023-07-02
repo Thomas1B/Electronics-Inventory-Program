@@ -373,6 +373,12 @@ class SearchWindow(QMainWindow):
                 all_items = [inventory_items, project_items, past_order_items]
                 all_items = [items for items in all_items if not items.empty]
 
+                if not all_items:
+                    title = 'No Files'
+                    header = 'There are no files to search.'
+                    no_files_msg(self, title=title, header=header)
+                    return
+
                 section_items = pd.concat(all_items)
                 section_items.drop_duplicates(
                     inplace=True, subset=['Description'])
