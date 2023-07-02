@@ -47,7 +47,8 @@ from .data_handling import (
     get_inventory,
     drop_all_from_dict,
     update_item,
-    sort_by
+    sort_by,
+    check_if_dict_empty
 )
 
 
@@ -75,7 +76,7 @@ class MainWindow(QMainWindow):
         self.is_sheet_open = False  # what sheet is opened.
         self.editted_saved = True  # if inventory has been saveed.
         self.in_edit_mode = False  # if in edit mode.
-        self.new_orders_count = 0 # count how many orders have been added
+        self.new_orders_count = 0  # count how many orders have been added
         self.sort_by = {key: True for key in labels}
 
         ''' Defining Widgets'''
@@ -368,8 +369,10 @@ class MainWindow(QMainWindow):
                         lines = file.readlines()
                         file.seek(0)
                         num_total_lines = len(lines)
-                        num_lines_to_delete = min(self.new_orders_count, num_total_lines)
-                        file.writelines(lines[:num_total_lines - num_lines_to_delete])
+                        num_lines_to_delete = min(
+                            self.new_orders_count, num_total_lines)
+                        file.writelines(
+                            lines[:num_total_lines - num_lines_to_delete])
                         file.truncate()
                     event.accept()
                 case _:  # Cancel
@@ -447,7 +450,6 @@ class MainWindow(QMainWindow):
                 menu.addAction(add_one_action)
                 menu.addAction(delete_action)
                 menu.addAction(delete_item_action)
-
 
                 menu.exec_(event.globalPos())  # showing menu
 
@@ -582,7 +584,7 @@ class MainWindow(QMainWindow):
         '''
         Function to open the inventory
         '''
-        if os.path.exists("Saved_Lists/Inventory.xlsx"):
+        if os.path.exists("Saved_Lists/Inventory.xlsx") or check_if_dict_empty(Inventory):
             hide_btns(
                 self, [self.btn_add_to_inventory, self.btn_save_list]
             )
@@ -711,14 +713,15 @@ class MainWindow(QMainWindow):
             Parameter:
                 section - str: name of category to display.
         '''
+        items = Items[section].get_items()
+
         if 'looking at inventory' in self.header.text().lower():
-            fill_table(self, Inventory[section].get_items())
-        else:
-            items = Items[section].get_items()
-            if items.empty:
-                self.table.setRowCount(0)
-            self.sub_header.setText(section)
-            fill_table(self, items)
+            items = Inventory[section].get_items()
+
+        if items.empty:
+            self.table.setRowCount(0)
+        fill_table(self, items)
+        self.sub_header.setText(section)
 
     def save_list(self, called_from: str) -> None:
         '''

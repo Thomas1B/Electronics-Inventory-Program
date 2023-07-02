@@ -226,6 +226,26 @@ Items = {key: Category(key) for key in Inventory.keys()}
 Project = {key: Category(key) for key in dict_keys}
 
 
+def check_if_dict_empty(dictionary: dict) -> bool:
+    '''
+    Function to check if an dictionary has any items.
+
+        Parameters:
+            dictionary: dictionary of Category classes.
+
+        Returns:
+            True if dictionary has any items.
+    '''
+
+    has_items = []
+    for key in dictionary.keys():
+        if dictionary[key].get_items().empty:
+            has_items.append(False)
+        else:
+            has_items.append(True)
+    return any(has_items)
+
+
 def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
     '''
     Function to sort a frame by a column header.
@@ -371,7 +391,7 @@ def dataframe_to_dict(dataframes=[]) -> dict:
             Returns:
                 dictionary of categories.
     '''
-    
+
     new_dict = {}
     keys = list(Inventory.keys())
     for dataframe, key in zip(dataframes, keys):
