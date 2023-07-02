@@ -582,3 +582,5 @@ if __name__ == "__main__":
     result = load_Inventory()
     if not result:
         print("Inventory file exists.")
+    else:
+        print("Inventory file does not exists.")
