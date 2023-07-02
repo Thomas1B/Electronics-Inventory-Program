@@ -25,7 +25,9 @@ from .gui_handling import (
     no_files_msg,
     fill_table,
     copySelectedCell,
-    get_table_data
+    get_table_data,
+    get_device_window_size,
+    get_window_size,
 )
 
 
@@ -37,8 +39,9 @@ class SearchWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super(SearchWindow, self).__init__(parent=parent)
         uic.loadUi('Program_Files/UI_Files/search_window.ui', self)
-        # if self.size().width() < 1000:
-        #     self.resize(1015, 1000)
+        device_window_width, device_window_height = get_device_window_size()
+        if self.size().width() < 800:
+            self.resize(800, 800)
         self.move(1000, 50)
 
         ''' Finding Widgets '''

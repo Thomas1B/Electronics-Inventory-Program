@@ -4,7 +4,7 @@ Script to run shared functions in PyQt Windows.
 All of the functions require a self parameter.
 '''
 
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDesktopWidget
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QDesktopServices, QIcon
@@ -12,6 +12,7 @@ import pandas as pd
 import sys
 import os
 import shutil
+from tkinter import Tk
 
 from .data_handling import (
     dict_to_dataframe,
@@ -21,6 +22,37 @@ from .data_handling import (
     Inventory,
     labels
 )
+
+
+def get_device_window_size() -> tuple:
+    '''
+    Function to get the device window size in pixels.
+
+        Parameters:
+            None
+
+        Returns:
+            tuple: width, height in pixels.
+    '''
+    root = Tk()
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    return width, height
+
+
+def get_window_size(self) -> tuple:
+    '''
+    Function to get a PyQt Window size in pixels.
+
+        Parameters:
+            self: Window instance.
+
+        Returns:
+            tuple: width, height in pixels.
+    '''
+    width = self.size().width()  # Retrieve the window width
+    height = self.size().height()  # Retrieve the window height
+    return width, height
 
 
 def show_btns(self, buttons: list) -> None:

@@ -30,7 +30,9 @@ from .gui_handling import (
     open_add_manually_window,
     get_editted_item,
     change_item_quantity,
-    copySelectedCell
+    copySelectedCell,
+    get_device_window_size,
+    get_window_size
 )
 
 from .data_handling import (
@@ -61,8 +63,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
 
-        # if self.size().width() < 800:
-        #     self.resize(800, 800)
+        device_window_width, device_window_height = get_device_window_size()
+        if self.size().width() < 800:
+            self.resize(1000, 800)
         self.move(50, 50)
 
         # Other Windows used in the program.
