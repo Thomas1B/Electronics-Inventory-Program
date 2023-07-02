@@ -355,6 +355,7 @@ def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
         Returns:
             single dataframe of entire dictionary.
     '''
+
     items = pd.concat([dictionary[cat].get_items()
                       for cat in dictionary]).reset_index(drop=True)
     return items
@@ -370,7 +371,7 @@ def dataframe_to_dict(dataframes=[]) -> dict:
             Returns:
                 dictionary of categories.
     '''
-
+    
     new_dict = {}
     keys = list(Inventory.keys())
     for dataframe, key in zip(dataframes, keys):
