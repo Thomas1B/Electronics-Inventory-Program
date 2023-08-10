@@ -318,6 +318,12 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
             items[labels[5]].astype(int).astype(str)[row])
         )
 
+    # Modifying styling for table and headers.
+    header = self.table.horizontalHeader()
+    header.setSectionResizeMode(QtWidgets.QHeaderView.Interactive)
+    header.resizeSections(QtWidgets.QHeaderView.Stretch)
+    header.setSectionsClickable(True)
+
 
 def refresh_opensheet(self, items: dict | Data) -> None:
     '''
