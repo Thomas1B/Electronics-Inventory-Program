@@ -59,7 +59,6 @@ class Project_Window(QMainWindow):
         super(Project_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         style_central_widget(self)
-        style_table(self)
         self.move(1050, 50)
 
         # Items dictonary of categories
@@ -182,6 +181,8 @@ class Project_Window(QMainWindow):
 
         style_refresh_btn(self)  # styling refresh btn.
         style_sorting_comboBox(self)  # styling sorting comboBox
+        style_table(self)
+
 
     def closeEvent(self, event) -> None:
         '''
@@ -482,6 +483,7 @@ class Project_Window(QMainWindow):
                         f'Project: {order_name}'
                     )
                     self.load_Project(filename)
+                    style_table(self)
                     self.show()
                 else:
                     wrong_filetype_msg(self)
