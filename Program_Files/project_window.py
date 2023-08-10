@@ -630,7 +630,6 @@ class Project_Window(QMainWindow):
             )
             toggled_widgets(self, enable=True, widgets=btns)
 
-    # going to move this to gui_handling
     def get_editted(self, clicked_item: QtWidgets.QTableWidgetItem) -> None:
         '''
         Function to get the item that has been editted.
