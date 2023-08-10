@@ -24,6 +24,11 @@ from .gui_handling import (
     get_table_data,
 )
 
+from .styles import (
+    style_central_widget,
+    style_table
+)
+
 
 class SearchWindow(QMainWindow):
     '''
@@ -33,13 +38,9 @@ class SearchWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super(SearchWindow, self).__init__(parent=parent)
         uic.loadUi('Program_Files/UI_Files/search_window.ui', self)
-        self.findChild(QtWidgets.QWidget, 'centralwidget').setStyleSheet(
-            '''
-            QWidget {
-                background-color: rgb(204, 204, 204);
-            }
-            '''
-        )
+        style_central_widget(self)
+        style_table(self)
+
         if self.size().width() < 800:
             self.resize(800, 800)
         self.move(1000, 50)
