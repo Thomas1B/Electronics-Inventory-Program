@@ -4,6 +4,7 @@ Script to run shared functions in PyQt Windows.
 All of the functions require a self parameter.
 '''
 
+
 from PyQt5.QtWidgets import QApplication, QDesktopWidget
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QUrl
@@ -521,23 +522,3 @@ def copySelectedCell(self, item):
     if item:
         text = ', '.join(info.text() for info in item)
         QApplication.clipboard().setText(text)
-
-
-# style for refresh button
-refresh_btn_styles = '''
-            QPushButton {
-                background-color: white;
-                padding: 10px;
-                border: 1.5px grey;
-                border-radius: 5px;
-                border-style: outset;
-            }
-
-            QPushButton:hover, QPushButton:focus {
-                border: 2px solid blue;
-            }
-
-            QPushButton:pressed {
-                border-style: inset;
-            }
-            '''

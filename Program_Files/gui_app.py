@@ -31,7 +31,6 @@ from .gui_handling import (
     get_editted_item,
     change_item_qty,
     copySelectedCell,
-    refresh_btn_styles,
     web_search_item
 )
 
@@ -49,6 +48,14 @@ from .data_handling import (
 )
 
 
+from .styles import (
+    toolbar_styles,
+    refresh_btn_styles,
+    style_central_widget,
+    style_table
+)
+
+
 class MainWindow(QMainWindow):
     '''
     Class to run the main window of the program.
@@ -58,13 +65,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
         self.setWindowIcon(QIcon('Program_files/Icons/circuit.png'))
-        self.findChild(QtWidgets.QWidget, 'centralwidget').setStyleSheet(
-            '''
-            QWidget {
-                background-color: rgb(204, 204, 204);
-            }
-            '''
-        )
+        # self.findChild(QtWidgets.QWidget, 'centralwidget').setStyleSheet(
+        # central_widget_style)
+        style_central_widget(self)
         self.showMaximized()
 
         # Other Windows used in the program.
@@ -219,28 +222,13 @@ class MainWindow(QMainWindow):
                 self.comboBox_section.currentText())
         )
 
-        ''' CSS Styling '''
-        self.table.setColumnWidth(0, 175)  # Default columns widths
-        self.table.setColumnWidth(1, 175)
-        self.table.setColumnWidth(2, 175)
-        self.table.setColumnWidth(3, 175)
-        self.table.setColumnWidth(4, 75)
-        self.table.setColumnWidth(5, 75)
-
         # styling refresh button
         self.btn_refresh_opensheet.setStyleSheet(refresh_btn_styles)
 
+        style_table(self)
+
         # toolbar
-        self.toolbar.setStyleSheet(  # Toolbar styles
-            '''
-            QToolButton {
-                padding: 5px;
-            }
-             QToolButton:hover {
-                background-color: rgb(200, 200, 200);
-            }
-            '''
-        )
+        self.toolbar.setStyleSheet(toolbar_styles)
 
         # adding category to sorting comboBox
         for key in sorted(dict_keys):

@@ -35,9 +35,15 @@ from .gui_handling import (
     open_add_manually_window,
     get_editted_item,
     copySelectedCell,
-    refresh_btn_styles,
     web_search_item
 )
+
+from .styles import (
+    refresh_btn_styles,
+    style_central_widget,
+    style_table
+)
+
 
 from .info_windows import How_To_Use_Project_Window
 from .add_item_window import Add_Item_Window
@@ -51,6 +57,8 @@ class Project_Window(QMainWindow):
     def __init__(self, parent=None) -> None:
         super(Project_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
+        style_central_widget(self)
+        style_table(self)
         self.move(1050, 50)
 
         # Items dictonary of categories
