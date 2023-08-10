@@ -299,23 +299,23 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
         )
 
         self.table.setItem(row, 1, QtWidgets.QTableWidgetItem(
-            items['Manufacturer Part Number'].fillna('').astype(str)[row])
+            items[labels[1]].fillna('').astype(str)[row])
         )
 
         self.table.setItem(row, 2, QtWidgets.QTableWidgetItem(
-            items['Description'].fillna('').astype(str)[row])
+            items[labels[2]].fillna('').astype(str)[row])
         )
 
         self.table.setItem(row, 3, QtWidgets.QTableWidgetItem(
-            items['Customer Reference'].fillna('').astype(str)[row])
+            items[labels[3]].fillna('').astype(str)[row])
         )
 
         self.table.setItem(row, 4, QtWidgets.QTableWidgetItem(
-            items['Unit Price'].astype(float).round(2).astype(str)[row])
+            items[labels[4]].astype(float).round(2).astype(str)[row])
         )
 
         self.table.setItem(row, 5, QtWidgets.QTableWidgetItem(
-            items['Quantity'].astype(int).astype(str)[row])
+            items[labels[5]].astype(int).astype(str)[row])
         )
 
 
