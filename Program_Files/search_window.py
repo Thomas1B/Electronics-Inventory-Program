@@ -207,7 +207,7 @@ class SearchWindow(QMainWindow):
                 DataFrame of items
         '''
         if os.path.exists('Saved_Lists/Inventory.xlsx'):
-            return Inventory.dict_to_dataframe()
+            return Inventory.to_dataframe()
         else:
             return pd.DataFrame()
 
@@ -380,7 +380,7 @@ class SearchWindow(QMainWindow):
                     return
 
             case _:  # default searches all
-                inventory_items = Inventory.dict_to_dataframe()
+                inventory_items = Inventory.to_dataframe()
                 project_items = self.get_project_items()
                 past_order_items = self.get_past_order_items()
 
