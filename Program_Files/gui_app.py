@@ -65,10 +65,7 @@ class MainWindow(QMainWindow):
             }
             '''
         )
-
-        if self.size().width() < 800:
-            self.resize(1000, 800)
-        self.move(50, 50)
+        self.showMaximized()
 
         # Other Windows used in the program.
         self.project_window = Project_Window(self)
