@@ -2,9 +2,11 @@
 File to store shared CSS styling throughout the program.
 '''
 from PyQt5 import QtWidgets
+from .data_handling import labels
 
-# style for central widget
-
+# names for headers
+headers = labels
+# headers = [1, 2, 3, 4, 5, 6]
 
 # style for toolbar
 toolbar_styles = '''
@@ -18,23 +20,6 @@ QToolButton:hover {
 '''
 
 # style for refresh button
-refresh_btn_styles = '''
-QPushButton {
-    background-color: white;
-    padding: 10px;
-    border: 1.5px grey;
-    border-radius: 5px;
-    border-style: outset;
-}
-
-QPushButton:hover, QPushButton:focus {
-    border: 2px solid blue;
-}
-
-QPushButton:pressed {
-    border-style: inset;
-}
-'''
 
 
 def style_central_widget(self) -> None:
@@ -51,18 +36,70 @@ def style_central_widget(self) -> None:
     )
 
 
+def style_refresh_btn(self) -> None:
+    '''
+    Function to style the refresh button.
+    '''
+    self.btn_refresh_opensheet.setStyleSheet(
+        '''
+        QPushButton {
+            background-color: white;
+            padding: 10px;
+            border: 1.5px grey;
+            border-radius: 5px;
+            border-style: outset;
+        }
+
+        QPushButton:hover, QPushButton:focus {
+            border: 2px solid blue;
+        }
+
+        QPushButton:pressed {
+            border-style: inset;
+        }
+        '''
+    )
+
+
 def style_table(self) -> None:
     '''
-    Functiont to style the table
+    Function to style the table and set header names.
     '''
-    # styling table
+
+    # making sure all the entries are strings.
+    for i, header in enumerate(headers):
+        if type(header) != str:
+            headers[i] = str(header)
+    self.table.setHorizontalHeaderLabels(headers)
+
     header = self.table.horizontalHeader()
     header.setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+    header.setSectionsClickable(False)
+
     header.setStyleSheet(
         '''
         QHeaderView {
             font-size: 14px;
             font-weight: bold;
+        }
+        '''
+    )
+
+
+def style_sorting_comboBox(self):
+    '''
+    Function to style the sorting combobox
+    '''
+
+    self.comboBox_section.setStyleSheet(
+        '''
+        QComboBox {
+            background-color: white;
+            padding: 5px;
+        }
+
+        QAbstractItemView {
+            background-color: white;
         }
         '''
     )

@@ -50,9 +50,10 @@ from .data_handling import (
 
 from .styles import (
     toolbar_styles,
-    refresh_btn_styles,
     style_central_widget,
-    style_table
+    style_table,
+    style_sorting_comboBox,
+    style_refresh_btn
 )
 
 
@@ -223,14 +224,15 @@ class MainWindow(QMainWindow):
         )
 
         # styling refresh button
-        self.btn_refresh_opensheet.setStyleSheet(refresh_btn_styles)
+        style_refresh_btn(self)
 
-        style_table(self)
+        style_table(self)  # styling table
 
         # toolbar
         self.toolbar.setStyleSheet(toolbar_styles)
 
-        # adding category to sorting comboBox
+        # adding category to sorting comboBox and styling
+        style_sorting_comboBox(self)
         for key in sorted(dict_keys):
             self.comboBox_section.addItem(key)
 

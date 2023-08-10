@@ -39,9 +39,10 @@ from .gui_handling import (
 )
 
 from .styles import (
-    refresh_btn_styles,
     style_central_widget,
-    style_table
+    style_table,
+    style_sorting_comboBox,
+    style_refresh_btn
 )
 
 
@@ -179,7 +180,8 @@ class Project_Window(QMainWindow):
                 self.comboBox_section.currentText())
         )
 
-        self.btn_refresh_opensheet.setStyleSheet(refresh_btn_styles)
+        style_refresh_btn(self)  # styling refresh btn.
+        style_sorting_comboBox(self) # styling sorting comboBox
 
     def closeEvent(self, event) -> None:
         '''
