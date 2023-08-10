@@ -106,7 +106,7 @@ class SearchWindow(QMainWindow):
         )
 
         ''' adding Initial values to some widgets '''
-        self.comboBox_category.addItems(Inventory.keys)
+        self.comboBox_category.addItems(Inventory.sections)
 
     def closeEvent(self, event) -> None:
         self.comboBox_section.setCurrentIndex(0)

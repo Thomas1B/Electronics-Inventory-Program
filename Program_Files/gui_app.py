@@ -648,7 +648,7 @@ class MainWindow(QMainWindow):
             Parameters:
                 order: list of items to load into the the dictionary
         '''
-        Items.drop_all_from_dict()
+        Items.drop_all_items()
         for items, section in zip(order, Items.keys):
             if len(order) > 0:
                 if not items.empty:
@@ -659,7 +659,7 @@ class MainWindow(QMainWindow):
         '''
         Function to open the inventory
         '''
-        if os.path.exists("Saved_Lists/Inventory.xlsx") or Inventory.check_if_dict_empty():
+        if os.path.exists("Saved_Lists/Inventory.xlsx") or Inventory.check_if_empty():
             hide_btns(
                 self, [self.btn_add_to_inventory, self.btn_save_list]
             )

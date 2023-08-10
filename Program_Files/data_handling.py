@@ -228,15 +228,15 @@ dictionary used a temporary holder for opening files.
 
 
 class Data:
-    def __init__(self, category_keys: list):
+    def __init__(self, sections: list):
         '''
             Parameters:
-                category_keys: list of category names.
+                sections: list of category names.
         '''
-        self.keys = category_keys
-        self.data = {key: Category(key) for key in category_keys}
+        self.sections = sections
+        self.data = {section: Category(section) for section in sections}
 
-    def add_item_to_dict(self, key: str, items: pd.DataFrame | list | pd.Series) -> None:
+    def add_item(self, items: pd.DataFrame | list | pd.Series, section: str) -> None:
         '''
         Function to add items to the data dictionary.
 
@@ -244,29 +244,44 @@ class Data:
                 key: what category to add items to.
                 items: Dataframe, list of Series, or single Serie of items.
         '''
-        self.data[key].add_item(items)
+        self.data[section].add_item(items)
 
-    def drop_all_from_dict(self) -> None:
+    def remove_duplicates(self, section='all', update_info=True) -> None:
+        '''
+        Function to remove duplicates (Part Number) and can update the quantities and unit prices of items.
+
+        Parameters:
+            section: what section to remove duplicates from, (default all).
+            update_info - bool, default True: if "False" doesn't update quantities and unit prices.
+        '''
+
+        if section == 'all':
+            for section in self.sections:
+                self.data[section].remove_duplicates(update_info)
+        else:
+            self.data[section].remove_duplicates(update_info)
+
+    def drop_all_items(self) -> None:
         '''
         Function to drop all items from each category in the data dictionary.
         '''
 
-        for section in self.keys():
+        for section in self.sections():
             self.data[section].drop_all_items()
 
-    def check_if_dict_empty(self) -> bool:
+    def check_if_empty(self) -> bool:
         '''
         Function to check if a dictionary has any items.
 
             Returns:
                 True if dictionary has any items.
         '''
-        for key in self.keys:
+        for key in self.sections:
             if self.data[key].get_items().empty:
                 return True
         return False
 
-    def dict_to_dataframe(self) -> pd.DataFrame:
+    def to_dataframe(self) -> pd.DataFrame:
         '''
         Function to convert the data dictionary into a single dataframe.
 
@@ -275,7 +290,7 @@ class Data:
         '''
 
         items = pd.concat([self.data[cat].get_items()
-                           for cat in self.keys]).reset_index(drop=True)
+                           for cat in self.sections]).reset_index(drop=True)
         return items
 
     def get_subtotal(self) -> float:
@@ -286,7 +301,7 @@ class Data:
                 float
         '''
         subtotal = 0
-        for section in self.keys:
+        for section in self.sections:
             subtotal += self.data[section].get_subtotal()
         return subtotal
 
@@ -300,7 +315,7 @@ class Data:
         category = None
         for i, df in enumerate(sort_order(item)):
             if not df.empty:
-                category = list(self.keys)[i]
+                category = list(self.sections)[i]
                 break
 
         return category

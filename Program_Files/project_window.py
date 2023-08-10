@@ -496,9 +496,9 @@ class Project_Window(QMainWindow):
 
         Skips empty classes.
         '''
-        
+
         # deleting items from the Project dictionary so items don't append.
-        for section in self.Project.keys:
+        for section in self.Project.sections:
             self.Project.data[section].drop_all_items()
 
         if not os.path.exists(filename):
@@ -507,7 +507,7 @@ class Project_Window(QMainWindow):
         project = get_ordersheet(filename)
         self.is_sheet_open = filename
         if project:
-            for section, cat in zip(project, self.Project.keys):
+            for section, cat in zip(project, self.Project.sections):
                 if not section.empty:
                     self.Project.data[cat].add_item(section)
             self.project_loaded = True
@@ -523,11 +523,11 @@ class Project_Window(QMainWindow):
         if type(items) == pd.DataFrame:
             items = sort_order(items)
 
-        for item, section in zip(items, self.Project.keys):
-            if len(item) > 0:  # if the list
-                self.Project.data[section].add_item(item)
-                self.Project.data[section].remove_duplicates()
-                self.editted_saved = False
+        for item, section in zip(items, self.Project.sections):
+            if len(item) > 0:
+                self.Project.add_item(item, section)
+                self.Project.remove_duplicates(section)
+        self.editted_saved = False
 
     def show_sorted_section(self, section: str) -> None:
         '''
@@ -569,12 +569,12 @@ class Project_Window(QMainWindow):
 
             filetype = self.is_sheet_open.split('.')[-1]
             if filetype == 'csv':
-                data = self.Project.dict_to_dataframe()
+                data = self.Project.to_dataframe()
                 data.to_csv(self.is_sheet_open, index=False)
             elif filetype == 'xlsx':
                 with pd.ExcelWriter(self.is_sheet_open) as writer:
                     # Saves the new inventory as a spreadsheet, with each sheetname as the category name.
-                    for cat in self.Project.keys:
+                    for cat in self.Project.sections:
                         self.Project.data[cat].save_toexcel(
                             writer=writer, index=True)
             self.editted_saved = True

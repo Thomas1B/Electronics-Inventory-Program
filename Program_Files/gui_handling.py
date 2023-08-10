@@ -290,7 +290,7 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
     elif type(dataframe) == list:
         items = pd.concat(dataframe)
     elif type(dataframe) == Data:
-        items = dataframe.dict_to_dataframe()
+        items = dataframe.to_dataframe()
     if items.empty:
         return
 
