@@ -93,6 +93,12 @@ background-color: rgb(255, 255, 255);</string>
        </item>
        <item row="0" column="3">
         <widget class="QPushButton" name="btn_add_item_manually">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
@@ -436,15 +442,7 @@ background-color: rgb(255, 255, 255);</string>
              <bool>false</bool>
             </property>
             <property name="styleSheet">
-             <string notr="true">QComboBox {
-	background-color: white;
-	padding: 5px;
-}
-
-QAbstractItemView {
-	background-color: white;
-}
-</string>
+             <string notr="true"/>
             </property>
             <property name="maxVisibleItems">
              <number>20</number>

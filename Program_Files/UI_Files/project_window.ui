@@ -383,15 +383,7 @@ background-color: rgb(255, 255, 255);</string>
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="styleSheet">
-                <string notr="true">QComboBox {
-	background-color: white;
-	padding: 5px;
-}
-
-QAbstractItemView {
-	background-color: white;
-}
-</string>
+                <string notr="true"/>
                </property>
                <item>
                 <property name="text">
