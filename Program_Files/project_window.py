@@ -181,7 +181,7 @@ class Project_Window(QMainWindow):
         )
 
         style_refresh_btn(self)  # styling refresh btn.
-        style_sorting_comboBox(self) # styling sorting comboBox
+        style_sorting_comboBox(self)  # styling sorting comboBox
 
     def closeEvent(self, event) -> None:
         '''
@@ -496,7 +496,7 @@ class Project_Window(QMainWindow):
 
         Skips empty classes.
         '''
-
+        
         # deleting items from the Project dictionary so items don't append.
         for section in self.Project.keys:
             self.Project.data[section].drop_all_items()
