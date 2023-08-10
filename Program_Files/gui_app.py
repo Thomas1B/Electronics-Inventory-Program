@@ -258,8 +258,9 @@ class MainWindow(QMainWindow):
 
         if self.editted_saved:  # inventory has been saved
             # closing other windows.
-            for window in [self.project_window, self.add_item_window]:
-                window.close()
+            for child in self.children():
+                if isinstance(child, (Project_Window, SearchWindow, Add_Item_Window, How_To_Use_Program_Window, Program_Info_Window)):
+                    child.close()
             event.accept()  # close this window.
 
         else:  # inventory has NOT been saved
@@ -818,8 +819,7 @@ class MainWindow(QMainWindow):
                 new_inventory[cat].save_toexcel(writer=writer)
 
         if self.new_orders_list:
-            for file in self.new_orders_list:
-                self.new_orders_list.clear()
+            self.new_orders_list.clear()
 
         # displays successfully save popup
         msg = QtWidgets.QMessageBox()
