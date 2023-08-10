@@ -14,7 +14,8 @@ import pandas as pd
 from .data_handling import (
     Inventory,
     labels,
-    Data
+    Data,
+    dict_to_dataframe
 )
 
 
@@ -281,8 +282,7 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
     items = dataframe
     if type(dataframe) == dict:
         print("\nOLD CODE in fill_table() in gui_handling.py")
-        # items = dict_to_dataframe(dataframe)
-        return
+        items = dict_to_dataframe(dataframe)
     elif type(dataframe) == list:
         items = pd.concat(dataframe)
     elif type(dataframe) == Data:

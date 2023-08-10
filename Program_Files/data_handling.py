@@ -475,20 +475,20 @@ def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-# def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
-#     '''
-#     Function to convert a category dictionary into a dataframe.
+def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
+    '''
+    Function to convert a category dictionary into a dataframe.
 
-#         Parameters:
-#             dictionary: dict of Category classes.
+        Parameters:
+            dictionary: dict of Category classes.
 
-#         Returns:
-#             single dataframe of entire dictionary.
-#     '''
+        Returns:
+            single dataframe of entire dictionary.
+    '''
 
-#     items = pd.concat([dictionary[cat].get_items()
-#                       for cat in dictionary]).reset_index(drop=True)
-#     return items
+    items = pd.concat([dictionary[cat].get_items()
+                      for cat in dictionary]).reset_index(drop=True)
+    return items
 
 
 def dataframe_to_dict(dataframes=[]) -> dict:
