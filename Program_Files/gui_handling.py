@@ -5,6 +5,7 @@ All of the functions require a self parameter.
 '''
 
 
+import inspect
 from PyQt5.QtWidgets import QApplication, QDesktopWidget
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QUrl
@@ -281,7 +282,10 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
 
     items = dataframe
     if type(dataframe) == dict:
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
         print("\nOLD CODE in fill_table() in gui_handling.py")
+        print('Caller name: {}\n'.format(calframe[1][3]))
         items = dict_to_dataframe(dataframe)
     elif type(dataframe) == list:
         items = pd.concat(dataframe)
