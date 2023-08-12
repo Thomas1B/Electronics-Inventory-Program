@@ -14,7 +14,7 @@ import shutil
 from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
-from .search_window import SearchWindow
+from .search_window import SearchWindow, open_search_window
 
 from .gui_handling import (
     show_btns,
@@ -72,11 +72,10 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
         # Other Windows used in the program.
-        self.project_window = Project_Window(self)
+        # self.project_window = Project_Window(self)
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
-        self.search_window = SearchWindow(self)
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
@@ -85,6 +84,7 @@ class MainWindow(QMainWindow):
         self.new_orders_list = []
         self.new_orders_count = 0  # count how many orders have been added
         self.sort_by = {key: True for key in labels}
+        self.project_windows = []
 
         ''' Defining Widgets'''
 
@@ -187,7 +187,7 @@ class MainWindow(QMainWindow):
         )
 
         # toolbar
-        self.action_search.triggered.connect(self.open_search_window)
+        self.action_search.triggered.connect(lambda: open_search_window(self))
         self.action_open_inventory.triggered.connect(self.open_inventory)
         self.action_open_new_order.triggered.connect(self.open_new_order)
         self.action_open_projects.triggered.connect(self.open_project_lists)
@@ -257,10 +257,10 @@ class MainWindow(QMainWindow):
         '''
 
         if self.editted_saved:  # inventory has been saved
-            # closing other windows.
-            for child in self.children():
-                if isinstance(child, (Project_Window, SearchWindow, Add_Item_Window, How_To_Use_Program_Window, Program_Info_Window)):
-                    child.close()
+            # closing children windows.
+            children = self.get_children_windows()
+            for child in children:
+                child.close()
             event.accept()  # close this window.
 
         else:  # inventory has NOT been saved
@@ -341,10 +341,17 @@ class MainWindow(QMainWindow):
                     QIcon("Program_Files/Icons/minus-circle-frame.png"),
                     'Delete Item'
                 )
-                add_to_project_action = QtWidgets.QAction(
-                    QIcon("Program_Files/Icons/document--arrow.png"),
-                    "Add Item to Project"
-                )
+
+                # creating QActions for adding items to projects
+                add_to_project_actions = []
+                for widget in self.get_children_windows(instances=(Project_Window)):
+                    filename = widget.header.text().split(':')[-1]
+                    filename = filename.split('.')[0]
+                    action = QtWidgets.QAction(
+                        QIcon("Program_Files/Icons/document--arrow.png"),
+                        f"Add Item to Project: {filename}"
+                    )
+                    add_to_project_actions.append(action)
 
                 # Attaching Functions to actions
                 copy_selected_action.triggered.connect(
@@ -380,20 +387,23 @@ class MainWindow(QMainWindow):
                         remove_all=True
                     )
                 )
-                add_to_project_action.triggered.connect(
-                    lambda: self.get_clicked_row(row_index)
-                )
+                for action_index, action in enumerate(add_to_project_actions):
+                    action.triggered.connect(
+                        # dummy is need since signal sends the current variable
+                        lambda dummy, action_index=action_index: self.add_to_project(
+                            row_index, action_index)
+                    )
 
                 # Adding to actions to menu
-                if self.project_window.isVisible():
-                    menu.addAction(add_to_project_action)
-                    menu.addSeparator()
                 menu.addAction(web_search_action)
                 menu.addSeparator()
                 menu.addAction(copy_selected_action)
                 menu.addAction(add_one_action)
                 menu.addAction(remove_one_action)
                 menu.addAction(delete_item_action)
+                menu.addSeparator()
+                for action in add_to_project_actions:
+                    menu.addAction(action)
 
                 menu.exec_(event.globalPos())  # showing menu
 
@@ -780,7 +790,9 @@ class MainWindow(QMainWindow):
         '''
         Function to open project lists.
         '''
-        self.project_window.open_project()
+        project_window = Project_Window(self)
+        project_window.open_project()
+        self.project_windows.append(project_window)
 
     def show_sorted_section(self, section: str) -> None:
         '''
@@ -908,7 +920,7 @@ class MainWindow(QMainWindow):
             base_path, filepath = os.path.split(save_filename)
             filename, ext = os.path.splitext(filepath)
 
-            self.project_window.setWindowTitle(f"EIP = Project {filename}")
+            self.project_window.setWindowTitle(f"EIP - Project {filename}")
             text = f'New Project: {filename}{ext}'
             self.project_window.header.setText(text)
             self.project_window.load_Project(save_filename)
@@ -922,15 +934,17 @@ class MainWindow(QMainWindow):
         data = sort_by(self, index, data)
         fill_table(self, data)
 
-    def get_clicked_row(self, index: int) -> None:
+    def add_to_project(self, row_index: int, action_index: int) -> None:
         '''
         Function to get the item from the table
 
             Parameter:
                 index: index of item, starts at 0.
         '''
+        project_windows = self.get_children_windows(
+            instances=(Project_Window))[action_index]
 
-        if self.project_window.isVisible():
+        if project_windows:
             '''
             if project window is open, then send the clicked row to
             the project window.
@@ -939,13 +953,13 @@ class MainWindow(QMainWindow):
             data = get_table_data(self)
 
             # getting the individual item and putting into a dataframe.
-            item = pd.Series([cell for cell in data.iloc[index]])
+            item = pd.Series([cell for cell in data.iloc[row_index]])
             item = pd.DataFrame(item).T
             item.columns = data.keys()
             item['Quantity'] = 1  # need this for incrementing quantities.
 
             # passing item to project window.
-            self.project_window.add_to_project(item)
+            project_windows.add_to_project(item)
 
     def edit_mode(self) -> None:
         '''
@@ -1009,11 +1023,26 @@ class MainWindow(QMainWindow):
         self.btn_save_list.setText('Save Inventory')
         self.btn_save_list.show()
 
-    def open_search_window(self) -> None:
+    def get_children_windows(self, instances=(Project_Window,
+                                              SearchWindow, Add_Item_Window,
+                                              How_To_Use_Program_Window,
+                                              Program_Info_Window)):
         '''
-        Function to open the search window.
+        Function to get custom windows object if there any.
+
+            Parameters:
+                instances: tuple of window classes to look for.
+
+            Returns: 
+                list of window objects.
         '''
-        self.search_window.show()
+
+        children = []
+        for child in self.children():
+            if isinstance(child, instances):
+                children.append(child)
+
+        return children
 
 
 if __name__ == "__main__":
