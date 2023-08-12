@@ -2,6 +2,7 @@
 Script to run search window
 '''
 
+from .project_window import Project_Window
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5 import QtGui, QtWidgets, uic
 from PyQt5.QtCore import QUrl
@@ -66,9 +67,8 @@ class SearchWindow(QMainWindow):
         self.table = self.findChild(
             QtWidgets.QTableWidget, 'table'
         )
-        # self.table.cellClicked.connect(self.get_clicked_row)
         # project window from the parent window (from gui_app.py)
-        self.project_window = parent.project_window
+        # self.project_window = parent.project_window
 
         ''' Attaching Functions to widgets '''
 
@@ -128,34 +128,50 @@ class SearchWindow(QMainWindow):
             menu = QtWidgets.QMenu()
             menu = QtWidgets.QMenu(self)
             copy_selected_action = QtWidgets.QAction("Copy Selected")
-            add_to_project_action = QtWidgets.QAction("Add Item to Project")
 
+            # creating QActions for adding items to projects
+            add_to_project_actions = []
+            for widget in self.parent().get_children_windows(instances=(Project_Window)):
+                filename = widget.header.text().split(':')[-1]
+                filename = filename.split('.')[0]
+                action = QtWidgets.QAction(
+                    QIcon("Program_Files/Icons/document--arrow.png"),
+                    f"Add Item to Project: {filename}"
+                )
+                add_to_project_actions.append(action)
+
+            for action_index, action in enumerate(add_to_project_actions):
+                action.triggered.connect(
+                    # dummy is need since signal sends the current variable
+                    lambda dummy, action_index=action_index: self.add_to_project(
+                        row_index, action_index)
+                )
             copy_selected_action.triggered.connect(
                 lambda: copySelectedCell(
                     self,
                     self.table.selectedItems()
                 )
             )
-            add_to_project_action.triggered.connect(
-                lambda: self.get_clicked_row(row_index)
-            )
 
+            # Adding to actions to menu
             menu.addAction(copy_selected_action)
-            if self.project_window.isVisible():
-                menu.addSeparator()
-                menu.addAction(add_to_project_action)
+            menu.addSeparator()
+            for action in add_to_project_actions:
+                menu.addAction(action)
 
             menu.exec_(event.globalPos())  # showing menu
 
-    def get_clicked_row(self, index: int) -> None:
+    def add_to_project(self, row_index: int, action_index: int) -> None:
         '''
         Function to get the item from the table
 
             Parameter:
                 index: index of item, starts at 0.
         '''
+        project_windows = self.parent().get_children_windows(
+            instances=(Project_Window))[action_index]
 
-        if self.project_window.isVisible():
+        if project_windows:
             '''
             if project window is open, then send the clicked row to
             the project window.
@@ -164,13 +180,13 @@ class SearchWindow(QMainWindow):
             data = get_table_data(self)
 
             # getting the individual item and putting into a dataframe.
-            item = pd.Series([cell for cell in data.iloc[index]])
+            item = pd.Series([cell for cell in data.iloc[row_index]])
             item = pd.DataFrame(item).T
             item.columns = data.keys()
             item['Quantity'] = 1  # need this for incrementing quantities.
 
             # passing item to project window.
-            self.project_window.add_to_project(item)
+            project_windows.add_to_project(item)
 
     def clear_search_entires(self) -> None:
         '''
@@ -422,3 +438,28 @@ class SearchWindow(QMainWindow):
         Function to display the found items
         '''
         fill_table(self, found_items)
+
+    def get_children_windows(self, instances=(Project_Window)):
+        '''
+        Function to get custom windows object if there any.
+
+            Parameters:
+                instances: tuple of window classes to look for.
+
+            Returns: 
+                list of window objects.
+        '''
+
+        children = []
+        for child in self.children():
+            if isinstance(child, instances):
+                children.append(child)
+
+        return children
+
+
+def open_search_window(self) -> None:
+    '''
+    Function to open the search window.
+    '''
+    SearchWindow(self).show()
