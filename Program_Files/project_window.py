@@ -183,7 +183,6 @@ class Project_Window(QMainWindow):
         style_sorting_comboBox(self)  # styling sorting comboBox
         style_table(self)
 
-
     def closeEvent(self, event) -> None:
         '''
         Function to detect when user closes the window.
