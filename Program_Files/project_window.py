@@ -481,9 +481,8 @@ class Project_Window(QMainWindow):
                     self.header.setText(
                         f'Project: {order_name}'
                     )
+                    self.show() # needs to be before load_project to apply table styles
                     self.load_Project(filename)
-                    style_table(self)
-                    self.show()
                 else:
                     wrong_filetype_msg(self)
         else:
