@@ -322,32 +322,32 @@ background-color: rgb(255, 255, 255);</string>
             </property>
             <column>
              <property name="text">
-              <string>Part Number</string>
+              <string>1</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Manufacturer Part Number</string>
+              <string>2</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Description</string>
+              <string>3</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Customer Reference</string>
+              <string>4</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Unit Price</string>
+              <string>5</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Quantity</string>
+              <string>6</string>
              </property>
             </column>
            </widget>
@@ -511,7 +511,7 @@ background-color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>944</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">

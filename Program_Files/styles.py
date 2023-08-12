@@ -6,7 +6,6 @@ from .data_handling import labels
 
 # names for headers
 headers = labels
-# headers = [1, 2, 3, 4, 5, 6]
 
 # style for toolbar
 toolbar_styles = '''
@@ -66,7 +65,7 @@ def style_table(self) -> None:
     Function to style the table and set header names.
     '''
 
-    # making sure all the entries are strings.
+    # making sure all the headers are strings.
     for i, header in enumerate(headers):
         if type(header) != str:
             headers[i] = str(header)
@@ -79,8 +78,9 @@ def style_table(self) -> None:
     header.setStyleSheet(
         '''
         QHeaderView {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
+            font-family: times;
         }
         '''
     )
