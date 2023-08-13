@@ -660,7 +660,7 @@ class MainWindow(QMainWindow):
                 order: list of items to load into the the dictionary
         '''
         Items.drop_all_items()
-        for items, section in zip(order, Items.keys):
+        for items, section in zip(order, Items.sections):
             if len(order) > 0:
                 if not items.empty:
                     Items.data[section].add_item(items)
