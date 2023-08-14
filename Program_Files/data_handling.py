@@ -600,7 +600,7 @@ def add_order_to_Inventory(order) -> None:
                 Inventory.data[section].add_item(order[section].get_items())
                 Inventory.data[section].remove_duplicates()
     else:
-        for items, section in zip(order, Inventory.keys):
+        for items, section in zip(order, Inventory.sections):
             if not items.empty:
                 Inventory.data[section].add_item(items)
                 Inventory.data[section].remove_duplicates()
