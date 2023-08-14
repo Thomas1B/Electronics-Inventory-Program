@@ -356,7 +356,7 @@ class MainWindow(QMainWindow):
 
                 # creating QActions for adding items to projects
                 add_to_project_actions = []
-                for widget in self.get_children_windows(instances=(Project_Window)):
+                for widget in self.project_windows:
                     filename = widget.header.text().split(':')[-1]
                     filename = filename.split('.')[0]
                     action = QtWidgets.QAction(
@@ -954,8 +954,7 @@ class MainWindow(QMainWindow):
             Parameter:
                 index: index of item, starts at 0.
         '''
-        project_windows = self.get_children_windows(
-            instances=(Project_Window))[action_index]
+        project_windows = self.project_windows[action_index]
 
         if project_windows:
             '''
