@@ -11,6 +11,7 @@ import os
 labels = ['Digi-Key Part #', 'Manufacturer Part Number',
           'Description', 'Customer Reference', 'Unit Price', 'Quantity']
 
+
 '''
 creating dictionary of Category classes for the inventory.
 
@@ -266,7 +267,7 @@ class Data:
         Function to drop all items from each category in the data dictionary.
         '''
 
-        for section in self.sections():
+        for section in self.sections:
             self.data[section].drop_all_items()
 
     def check_if_empty(self) -> bool:
@@ -444,26 +445,6 @@ def sort_order(order: pd.DataFrame) -> list:
 
     # returning list of dataframe for each category.
     return [pd.DataFrame(section) for section in sections]
-
-
-# def check_if_dict_empty(dictionary: dict) -> bool:
-#     '''
-#     Function to check if an dictionary has any items.
-
-#         Parameters:
-#             dictionary: dictionary of Category classes.
-
-#         Returns:
-#             True if dictionary has any items.
-#     '''
-
-#     has_items = []
-#     for key in dictionary.keys():
-#         if dictionary[key].get_items().empty:
-#             has_items.append(False)
-#         else:
-#             has_items.append(True)
-#     return any(has_items)
 
 
 def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
