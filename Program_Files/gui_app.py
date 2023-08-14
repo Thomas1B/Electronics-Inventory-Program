@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
         ])
         hide_sorting_btns(self)
 
-        # labels in header frame.
+        # stying labels in header frame
         for label in self.header_frame.findChildren(QtWidgets.QLabel):
             label.setStyleSheet(
                 '''
