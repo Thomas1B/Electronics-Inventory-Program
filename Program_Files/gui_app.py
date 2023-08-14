@@ -83,8 +83,9 @@ class MainWindow(QMainWindow):
         self.in_edit_mode = False  # if in edit mode.
         self.new_orders_list = []
         self.new_orders_count = 0  # count how many orders have been added
+        # used keep track of acsending/decending
         self.sort_by = {key: True for key in labels}
-        self.project_windows = []
+        self.project_windows = []  # keeping track of dynamically created project windows
 
         ''' Defining Widgets'''
 
