@@ -203,6 +203,9 @@ class Project_Window(QMainWindow):
         '''
 
         if self.editted_saved:  # if editted project has been saved already.
+            if self in self.parent().project_windows:
+                index = self.parent().project_windows.index(self)
+                del self.parent().project_windows[index]
             event.accept()  # let the window close.
         # popup to warning user editted project has not been saved.
         elif not self.editted_saved and self.table.rowCount() > 0:
@@ -233,6 +236,8 @@ class Project_Window(QMainWindow):
                 case QtWidgets.QMessageBox.No:
                     # user declines to save.
                     self.editted_saved = True
+                    if self in self.parent().project_windows:
+                        self.parent().project_windows.remove(self)
                     event.accept()
                 case _:
                     # user cancels selection.
