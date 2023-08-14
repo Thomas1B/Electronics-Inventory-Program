@@ -183,6 +183,17 @@ class Project_Window(QMainWindow):
         style_sorting_comboBox(self)  # styling sorting comboBox
         style_table(self)
 
+        # labels in header frame.
+        for label in [self.header, self.sub_header]:
+            label.setStyleSheet(
+                '''
+                QLabel {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+                '''
+            )
+
     def closeEvent(self, event) -> None:
         '''
         Function to detect when user closes the window.
@@ -481,7 +492,7 @@ class Project_Window(QMainWindow):
                     self.header.setText(
                         f'Project: {order_name}'
                     )
-                    self.show() # needs to be before load_project to apply table styles
+                    self.show()  # needs to be before load_project to apply table styles
                     self.load_Project(filename)
                 else:
                     wrong_filetype_msg(self)

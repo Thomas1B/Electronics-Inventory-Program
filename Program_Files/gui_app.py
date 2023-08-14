@@ -246,6 +246,17 @@ class MainWindow(QMainWindow):
         ])
         hide_sorting_btns(self)
 
+        # labels in header frame.
+        for label in self.header_frame.findChildren(QtWidgets.QLabel):
+            label.setStyleSheet(
+                '''
+                QLabel {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+                '''
+            )
+
         self.show()  # showing window
 
     def closeEvent(self, event) -> None:
