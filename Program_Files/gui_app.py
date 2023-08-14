@@ -247,15 +247,15 @@ class MainWindow(QMainWindow):
         hide_sorting_btns(self)
 
         # stying labels in header frame
-        for label in self.header_frame.findChildren(QtWidgets.QLabel):
-            label.setStyleSheet(
-                '''
-                QLabel {
-                    font-size: 22px;
-                    font-weight: bold;
-                }
-                '''
-            )
+        # for label in self.header_frame.findChildren(QtWidgets.QLabel):
+        #     label.setStyleSheet(
+        #         '''
+        #         QLabel {
+        #             font-size: 22px;
+        #             font-weight: bold;
+        #         }
+        #         '''
+        #     )
 
         self.show()  # showing window
 
