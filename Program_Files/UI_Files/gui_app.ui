@@ -320,6 +320,9 @@ background-color: rgb(255, 255, 255);</string>
             <property name="wordWrap">
              <bool>true</bool>
             </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
             <column>
              <property name="text">
               <string>1</string>
@@ -511,7 +514,7 @@ background-color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>944</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="font">
