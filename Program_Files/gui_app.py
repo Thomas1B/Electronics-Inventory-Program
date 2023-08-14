@@ -932,11 +932,12 @@ class MainWindow(QMainWindow):
             base_path, filepath = os.path.split(save_filename)
             filename, ext = os.path.splitext(filepath)
 
-            self.project_window.setWindowTitle(f"EIP - Project {filename}")
-            text = f'New Project: {filename}{ext}'
-            self.project_window.header.setText(text)
-            self.project_window.load_Project(save_filename)
-            self.project_window.show()
+            project_window = Project_Window(self)
+            project_window.setWindowTitle(f"EIP - Project {filename}")
+            project_window.header.setText(f'Project: {filename}.{ext}')
+            project_window.load_Project(save_filename)
+            project_window.show()
+            self.project_windows.append(project_window)
 
     def get_clicked_header(self, index):
         '''

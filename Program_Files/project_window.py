@@ -374,105 +374,23 @@ class Project_Window(QMainWindow):
             If the project name exists popup appears to tell the user, otherwise
             it asks the user what filetype they want and creates the project file.
         '''
-        dialog = QtWidgets.QInputDialog(self)
-        text = 'Enter a project name and the filetype seperated by a comma.\t\n\n'
-        text += 'Example: "Temperature Gauge, CSV"\n\n'
-        text += 'Filetype options:\n\t- CSV (Comma-Seperated-Values)\n\t- XLSX (Excel)'
-        user, ok = dialog.getText(
+        save_filename, _ = QtWidgets.QFileDialog.getSaveFileName(
             self,
-            "Creating New Project",
-            text
+            'EIP - New Project Save Location',
+            'Saved_Lists/Projects',
+            'CSV (*.csv);; Excel (*.xlsx)'
         )
-        filetype = None   # obtained in try block.
-        name = None       # obtained in try block.
 
-        # User clicks 'ok', goes into try block to split user's string
-        # into a filename and filetype.
-        title = 'Electronics Inventory Program - Creating New Project'  # window title
-        if ok:
-            try:
-                # try block to split user's string into a name and filetype
-                name, filetype = user.split(',')
-                name = name.strip()
-                filetype = filetype.strip()
-            except Exception as err:
-                # popup to tell user entered information is in the wrong format.
-                user = QtWidgets.QMessageBox()
-                user.setWindowTitle(title)
-                pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxCritical")
-                icon = self.style().standardIcon(pixmapi)
-                user.setWindowIcon(icon)
+        if save_filename:
+            base_path, filepath = os.path.split(save_filename)
+            filename, ext = os.path.splitext(filepath)
 
-                text = 'You entered the information in the wrong format, try again.'
-                user.setText(text)
-                user.setIcon(QtWidgets.QMessageBox.Critical)
-                user.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                user = user.exec_()
-                return
-
-        # user enters a project name and clicks the "ok" button.
-        if ok and name and filetype:
-            # checking for correct filetype.
-            if filetype.lower() in ['csv', 'xlsx', 'excel', '.csv', '.xlsx']:
-                if filetype.lower() == 'excel':
-                    # if user enter "excel", changes filetype to '.xlsx'
-                    filetype = 'xlsx'
-                elif "." in filetype.lower():
-                    # if user enters "." in the filetype, remove it so program doesn.t crash.
-                    filetype = filetype.strip('.')
-                filepath = f'Saved_Lists/Projects/{name}.{filetype}'
-
-                if not os.path.exists(filepath):
-                    # if project doesn't exist, create it
-                    self.setWindowTitle(title)
-                    text = f'New Project: {name}.{filetype}'
-                    self.header.setText(text)
-                    self.load_Project(filepath)
-                    self.show()
-                else:
-                    # popup telling user project name already exists.
-                    user = QtWidgets.QMessageBox()
-                    user.setWindowTitle(title)
-                    pixmapi = getattr(
-                        QtWidgets.QStyle,
-                        "SP_MessageBoxCritical"
-                    )
-                    icon = self.style().standardIcon(pixmapi)
-                    user.setWindowIcon(icon)
-                    user.setIcon(QtWidgets.QMessageBox.Critical)
-                    text = f'Project name "{name}.{filetype}" already exsits!'
-                    user.setText(text)
-                    user.setStandardButtons(QtWidgets.QMessageBox.Ok)
-                    user = user.exec_()
-            else:
-                # pop to tell user they enter a wrong filetype.
-                wrong_filetype_msg(self)
-
-        # User clicks "ok", but doesn't enter a project name.
-        elif ok and not name:
-            user = QtWidgets.QMessageBox()
-            user.setWindowTitle(title)
-            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
-            icon = self.style().standardIcon(pixmapi)
-            user.setWindowIcon(icon)
-            user.setIcon(QtWidgets.QMessageBox.Warning)
-            text = 'You must enter a project name!'
-            user.setText(text)
-            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            user = user.exec_()
-
-        # User clicks "ok", but doesn't enter a filetype.
-        elif ok and not filetype:
-            user = QtWidgets.QMessageBox()
-            user.setWindowTitle(title)
-            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
-            icon = self.style().standardIcon(pixmapi)
-            user.setWindowIcon(icon)
-            user.setIcon(QtWidgets.QMessageBox.Warning)
-            text = 'You must enter a filetype!'
-            user.setText(text)
-            user.setStandardButtons(QtWidgets.QMessageBox.Ok)
-            user = user.exec_()
+            project_window = Project_Window(self)
+            project_window.setWindowTitle(f"EIP - Project {filename}")
+            project_window.header.setText(f'Project: {filename}.{ext}')
+            project_window.load_Project(save_filename)
+            project_window.show()
+            self.parent().project_windows.append(project_window)
 
     def open_project(self) -> None:
         '''
