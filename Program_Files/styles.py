@@ -2,10 +2,9 @@
 File to store shared CSS styling throughout the program.
 '''
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 from .data_handling import labels
 
-# names for headers
-headers = labels
 
 # style for toolbar
 toolbar_styles = '''
@@ -65,11 +64,8 @@ def style_table(self) -> None:
     Function to style the table and set header names.
     '''
 
-    # making sure all the headers are strings.
-    for i, header in enumerate(headers):
-        if type(header) != str:
-            headers[i] = str(header)
-    self.table.setHorizontalHeaderLabels(headers)
+    # Styling headers
+    self.table.setHorizontalHeaderLabels(labels)
 
     header = self.table.horizontalHeader()
     header.setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
@@ -77,6 +73,12 @@ def style_table(self) -> None:
 
     header.setStyleSheet(
         '''
+        QHeaderView::section {
+            background-color: lightblue;
+            padding: 5px 0px;
+            padding-left: 5px;
+        }
+
         QHeaderView {
             font-size: 16px;
             font-weight: bold;
@@ -84,7 +86,17 @@ def style_table(self) -> None:
         }
         '''
     )
+    header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
+    # styling table
+    self.table.setStyleSheet(
+        '''
+        QTableWidget {
+            background-color: white;
+            font-size: 12px;
+        }
+        '''
+    )
 
 def style_sorting_comboBox(self):
     '''
