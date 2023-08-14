@@ -98,6 +98,7 @@ def style_table(self) -> None:
         '''
     )
 
+
 def style_sorting_comboBox(self):
     '''
     Function to style the sorting combobox
