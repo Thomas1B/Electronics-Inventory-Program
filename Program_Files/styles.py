@@ -66,11 +66,9 @@ def style_table(self) -> None:
 
     # Styling headers
     self.table.setHorizontalHeaderLabels(labels)
-
     header = self.table.horizontalHeader()
     header.setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
     header.setSectionsClickable(False)
-
     header.setStyleSheet(
         '''
         QHeaderView::section {
@@ -88,12 +86,28 @@ def style_table(self) -> None:
     )
     header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-    # styling table
+    # Styling table
     self.table.setStyleSheet(
         '''
         QTableWidget {
-            background-color: white;
+            background-color: lightyellow;
             font-size: 12px;
+        }
+
+        QTableWidget::item {
+            background-color: lightyellow;
+        }
+
+        QHeaderView::section { 
+            background-color: rgb(220, 220, 220);
+            border-top, border-right: 1px solid black;
+            padding-top, padding-bottom: 5px;
+            padding-left: 10px;
+        }
+
+        QTableWidget::item:selected {
+            background-color: yellow;
+            color: black;
         }
         '''
     )
