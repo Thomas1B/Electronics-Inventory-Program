@@ -449,16 +449,22 @@ def sort_order(order: pd.DataFrame) -> list:
 
 def sort_by(self, index: int, data: pd.DataFrame) -> pd.DataFrame:
     '''
-    Function to sort a frame by a column header.
+    Function to sort a dataframe by a column header.
 
         Parameters:
             index: index of column.
-    '''
-    header = labels[index]  # column header text
+            data: Dataframe to sort.
 
-    if header.lower() == 'quantity' or 'unit price':
-        # changing datatype to fix sorting issue with strings.
+        Returns:
+            sorted DataFrame.
+    '''
+    header = labels[index]  # column header name
+
+    # condition to fix datatype sorting issues with strings.
+    if header == 'Quantity':
         data['Quantity'] = data['Quantity'].astype(int)
+    elif header == 'Unit Price':
+        data['Unit Price'] = data['Unit Price'].astype(float)
 
     if self.sort_by[header]:
         self.sort_by[header] = False
