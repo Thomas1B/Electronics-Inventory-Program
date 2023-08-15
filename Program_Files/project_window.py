@@ -183,9 +183,9 @@ class Project_Window(QMainWindow):
         )
 
         # calling styling functions
-        style_refresh_btn(self)  
-        style_sorting_comboBox(self) 
-        style_table(self) 
+        style_refresh_btn(self)
+        style_sorting_comboBox(self)
+        style_table(self)
         style_toolbar(self)
         style_menubar(self)
 
@@ -609,17 +609,14 @@ class Project_Window(QMainWindow):
         item = sort_order(item)  # sorting item.
         self.add_to_project_dict(item)  # adding to project.
         fill_table(self, self.Project.data)  # updating table.
+        self.editted_saved = False
 
     def receive_add_item_manually(self, item) -> None:
         '''
         Function to read user's input when adding an item manually.
             Triggered when btn "Add to ..." clicked.
         '''
-
-        item = sort_order(item)  # sorting item.
         self.add_to_project(item)  # adding to project.
-        fill_table(self, self.Project.data)  # updating table.
-
         self.editted_saved = False
 
     def get_clicked_header(self, index):
