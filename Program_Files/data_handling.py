@@ -237,6 +237,24 @@ class Data:
         self.sections = sections
         self.data = {section: Category(section) for section in sections}
 
+    def get_sections(self) -> list:
+        '''
+        Function to get the avaliable category.
+
+            Returns:
+                list of cateogory names.
+        '''
+        return self.sections
+
+    def get_data(self, section='all') -> pd.DataFrame:
+        '''
+        Function to get the data
+        '''
+        if section == 'all':
+            return self.to_dataframe()
+        else:
+            return self.data[section].get_items()
+
     def add_item(self, items: pd.DataFrame | list | pd.Series, section: str) -> None:
         '''
         Function to add items to the data dictionary.
@@ -505,7 +523,7 @@ def dataframe_to_dict(dataframes=[]) -> dict:
     '''
 
     new_dict = {}
-    keys = list(Inventory.keys())
+    keys = Inventory.get_sections()
     for dataframe, key in zip(dataframes, keys):
         new_dict[key] = dataframe
     return new_dict
@@ -600,88 +618,16 @@ def add_order_to_Inventory(order) -> None:
     '''
 
     if type(order) == dict:
-        for section in Inventory.keys:
+        for section in Inventory.get_sections():
             # checking if pass 'order' is empty
             if not order[section].get_items().empty:
                 Inventory.data[section].add_item(order[section].get_items())
                 Inventory.data[section].remove_duplicates()
     else:
-        for items, section in zip(order, Inventory.sections):
+        for items, section in zip(order, Inventory.get_sections()):
             if not items.empty:
                 Inventory.data[section].add_item(items)
                 Inventory.data[section].remove_duplicates()
-
-
-# def get_subtotal(dictionary: dict) -> float:
-#     '''
-#     Function to get the subtotal.
-
-#         Parameter:
-#             dictionary - dict: dictionary of category class.
-
-#         Returns:
-#             float
-#     '''
-#     subtotal = 0
-#     for section in dictionary.keys():
-#         subtotal += dictionary[section].get_subtotal()
-#     return subtotal
-
-
-# def drop_all_from_dict(dictionary: dict) -> None:
-#     '''
-#     Function to drop all items from each category in a dictionary
-
-#         Parameter:
-#             dictionary - dict: dictionary of category classes.
-#     '''
-
-#     for section in dictionary.keys:
-#         dictionary.data[section].drop_all_items()
-
-
-# def get_item_category(item: pd.DataFrame, dictionary: dict) -> str:
-#     '''
-#     Function to get the category an item belongs to.
-
-#         Parameters:
-#             item: DataFrame of item.
-#             dictionary: dictionary item is in.
-#     '''
-#     category = None
-#     for i, df in enumerate(sort_order(item)):
-#         if not df.empty:
-#             category = list(dictionary.keys)[i]
-#             break
-
-#     return category
-
-
-# def update_item(self, item: pd.DataFrame, dictionary: dict, delete=False) -> None:
-#     '''
-#     Function to update an item from a dictionary of Category classes.
-#     Triggered when item is editted (see get_editted() in project_window.py).
-
-#         Parameter:
-#             item - DataFrame: dataframe of the item.
-#             dictionary - dict: dictionary of Category classes.
-#             delete - bool: drop item (default false).
-#     '''
-
-#     # getting item category
-#     category = get_item_category(item, dictionary)
-
-#     # updating the item in the dictionary
-#     category_items = dictionary[category].get_items()
-#     for i in range(category_items.shape[0]):
-#         # checking if item's description matches any in each category.
-#         if category_items.iloc[i]['Description'] == item["Description"].iloc[0]:
-#             self.editted_save = False
-#             if delete:
-#                 dictionary[category].get_items().drop(index=i, inplace=True)
-#             else:
-#                 dictionary[category].get_items().iloc[i] = item.iloc[0]
-#             break
 
 
 if __name__ == "__main__":
