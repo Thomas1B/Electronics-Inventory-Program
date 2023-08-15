@@ -73,7 +73,6 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
         # Other Windows used in the program.
-        self.order_window = Order_Window(self)
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
@@ -692,7 +691,8 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        self.order_window.show()
+        order_window = Order_Window(self)
+        order_window.show()
 
     def open_new_orders(self) -> None:
         '''
@@ -700,8 +700,9 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        self.order_window.show()
-        self.order_window.open_order()
+        order_window = Order_Window(self)
+        order_window.show()
+        order_window.open_order()
 
     def open_past_orders(self) -> None:
         '''
@@ -709,8 +710,9 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        self.order_window.show()
-        self.order_window.open_past_order()
+        order_window = Order_Window(self)
+        order_window.show()
+        order_window.open_past_order()
 
     def open_project_lists(self) -> None:
         '''
