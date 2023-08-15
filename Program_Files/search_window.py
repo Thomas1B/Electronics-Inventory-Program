@@ -42,9 +42,8 @@ class SearchWindow(QMainWindow):
         style_central_widget(self)
         style_table(self)
 
-        if self.size().width() < 800:
-            self.resize(800, 800)
-        self.move(1000, 50)
+        self.resize(1000, 800)
+        self.move(850, 100)
 
         ''' Finding Widgets '''
 
