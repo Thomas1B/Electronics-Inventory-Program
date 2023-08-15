@@ -48,7 +48,7 @@ class Order_Window(QMainWindow):
         super(Order_Window, self).__init__(parent=parent)
         uic.loadUi('Program_Files/UI_Files/new_order_window.ui', self)
         self.setWindowIcon(QIcon('Program_files/Icons/circuit.png'))
-        self.resize(800, 600)
+        self.resize(1000, 600)
         self.move(800, 100)
 
         self.is_sheet_open = False
@@ -182,9 +182,20 @@ class Order_Window(QMainWindow):
         fill_table(self, self.Items)
 
         # updating Qlabels
-        text = f'Order: {filename.split("/")[-1]}'
+        name = filename.split("/")[-1]
+        text = f'Order: {name}'
         self.header.setText(text)
         self.header_frame.show()
+
+        # checking if order has already been added
+        past_order_path = os.path.join('Saved_Lists/Past Orders', name)
+        if os.path.exists(past_order_path):
+            print(past_order_path)
+            self.btn_add_to_inventory.setText('Order Already Added')
+            self.btn_add_to_inventory.setEnabled(False)
+        else:
+            self.btn_add_to_inventory.setText('Add to Inventory')
+            self.btn_add_to_inventory.setEnabled(True)
 
     def open_order(self) -> None:
         '''
@@ -222,7 +233,6 @@ class Order_Window(QMainWindow):
             self.custom_fill_table(filename=filename)
 
             # updating buttons
-            self.btn_add_to_inventory.setEnabled(True)
             self.command_btn_frame.show()
             self.sorting_btns_frame.show()
             self.sub_header.setText('')
