@@ -132,12 +132,6 @@ class Order_Window(QMainWindow):
         self.nav_btn_frame.hide()
         self.command_btn_frame.hide()
 
-    # def closeEvent(self, event) -> None:
-    #     '''
-    #     Function to handle close event
-    #     '''
-    #     event.accept()
-
     def custom_fill_table(self, filename: str) -> None:
         '''
         Function to fill the table.
