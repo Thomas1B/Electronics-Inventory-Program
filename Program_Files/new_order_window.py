@@ -82,6 +82,9 @@ class Order_Window(QMainWindow):
         # Attaching functions
         self.action_open_new_order.triggered.connect(self.open_order)
         self.action_open_past_orders.triggered.connect(self.open_past_order)
+        self.btn_prev.clicked.connect(self.prev_order)
+        self.btn_next.clicked.connect(self.next_order)
+
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
 
         # Calling styling functions
@@ -89,27 +92,7 @@ class Order_Window(QMainWindow):
         style_table(self)
         style_toolbar(self)
 
-        # styling
-        nav_btn_styles = '''
-        QPushButton {
-            font-size: 14px;
-            font-family: Arial;
-            background-color: white;
-            padding: 10px 15px;
-            border: 1.5px grey;
-            border-radius: 5px;
-            border-style: outset;
-        }
-
-        QPushButton:hover {
-            border: 1px solid blue;
-            background-color: #AFDCEC;
-        }
-
-        QPushButton:pressed {
-            border-style: inset;
-        }
-        '''
+        # Styling
         for btn in self.nav_btn_frame.findChildren(QtWidgets.QPushButton):
             btn.setStyleSheet(
                 '''
@@ -149,12 +132,30 @@ class Order_Window(QMainWindow):
         self.nav_btn_frame.hide()
         self.command_btn_frame.hide()
 
-    def closeEvent(self, event) -> None:
+    # def closeEvent(self, event) -> None:
+    #     '''
+    #     Function to handle close event
+    #     '''
+    #     event.accept()
+
+    def custom_fill_table(self, filename: str) -> None:
         '''
-        Function to handle close event
+        Function to fill the table.
+
+            Parameters:
+                filename: filename to 
         '''
-        self.opened_orders.clear()
-        event.accept()
+
+        self.is_sheet_open = filename
+        new_order = get_ordersheet(filename)
+        load_Items(self, new_order)
+        fill_table(self, Items)
+
+        # updating Qlabels
+        text = f'Order: {filename.split("/")[-1]}'
+        self.header.setText(text)
+        self.sub_header.setText('')
+        self.header_frame.show()
 
     def open_order(self) -> None:
         '''
@@ -189,16 +190,7 @@ class Order_Window(QMainWindow):
 
             # loading first order
             filename = self.opened_orders[0]
-            self.is_sheet_open = filename
-            new_order = get_ordersheet(filename)
-            load_Items(self, new_order)
-            fill_table(self, Items)
-
-            # updating Qlabels
-            text = f'New Order: {filename.split("/")[-1]}'
-            self.header.setText(text)
-            self.sub_header.setText('')
-            self.header_frame.show()
+            self.custom_fill_table(filename=filename)
 
             # updating buttons
             self.btn_add_to_inventory.setEnabled(True)
@@ -234,16 +226,7 @@ class Order_Window(QMainWindow):
 
                 # loading first order
                 filename = self.opened_orders[0]
-                self.is_sheet_open = filename
-                past_order = get_ordersheet(filename)
-                load_Items(self, past_order)
-                fill_table(self, Items)
-
-                # updating Qlabels
-                text = f'Past Order: {filename.split("/")[-1]}'
-                self.header.setText(text)
-                self.sub_header.setText('')
-                self.header_frame.show()
+                self.custom_fill_table(filename=filename)
 
                 # updating buttons
                 self.btn_add_to_inventory.setEnabled(False)
@@ -262,3 +245,27 @@ class Order_Window(QMainWindow):
         '''
         self.parent().add_to_inventory(self.is_sheet_open)
         self.btn_add_to_inventory.setEnabled(False)
+
+    def prev_order(self):
+        '''
+        Function to open the previous order, used when multiple files are opened.
+        '''
+        # Getting index of file in list.
+        index = self.opened_orders.index(self.is_sheet_open)
+        index -= 1  # incrementing
+
+        self.custom_fill_table(self.opened_orders[index])
+
+    def next_order(self):
+        '''
+        Function to open the next order, used when multiple files are opened.
+        '''
+        # Getting index of file in list.
+        index = self.opened_orders.index(self.is_sheet_open)
+        index += 1  # incrementing
+
+        # try block for hanlding index error
+        try:
+            self.custom_fill_table(self.opened_orders[index])
+        except IndexError:  # index goes out of bounds.
+            self.custom_fill_table(self.opened_orders[0])
