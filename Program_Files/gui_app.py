@@ -15,6 +15,7 @@ from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 from .search_window import SearchWindow, open_search_window
+from .new_order_window import New_Order_Window
 
 from .gui_handling import (
     show_btns,
@@ -45,6 +46,7 @@ from .data_handling import (
     sort_order,
     get_inventory,
     sort_by,
+    load_Items
 )
 
 
@@ -55,7 +57,6 @@ from .styles import (
     style_refresh_btn,
     style_toolbar,
     style_menubar
-
 )
 
 
@@ -72,7 +73,7 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
         # Other Windows used in the program.
-        # self.project_window = Project_Window(self)
+        self.new_order_window = New_Order_Window(self)
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
@@ -81,11 +82,10 @@ class MainWindow(QMainWindow):
         self.is_sheet_open = False  # what sheet is opened.
         self.editted_saved = True  # if inventory has been saved.
         self.in_edit_mode = False  # if in edit mode.
-        self.new_orders_list = []
-        self.new_orders_count = 0  # count how many orders have been added
-        # used keep track of acsending/decending
+        # used keep track of acsending/decending when sorting.
         self.sort_by = {key: True for key in labels}
-        self.project_windows = []  # keeping track of dynamically created project windows
+        # keeping track of dynamically created project windows.
+        self.project_windows = []
 
         ''' Defining Widgets'''
 
@@ -662,20 +662,6 @@ class MainWindow(QMainWindow):
                         count += 1
                     shutil.copytree(exporting, destination)
 
-    def load_Items(self, order: list) -> None:
-        '''
-        Function to load items into the Item dictionary.
-
-            Parameters:
-                order: list of items to load into the the dictionary
-        '''
-        Items.drop_all_items()
-        for items, section in zip(order, Items.get_sections()):
-            if len(order) > 0:
-                if not items.empty:
-                    Items.data[section].add_item(items)
-                    Items.data[section].remove_duplicates()
-
     def open_inventory(self) -> None:
         '''
         Function to open the inventory
@@ -707,51 +693,52 @@ class MainWindow(QMainWindow):
         '''
         self.btn_add_to_inventory.setEnabled(True)
         downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
-        filename, _ = QtWidgets.QFileDialog.getOpenFileNames(
+        filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
             self, 'EIP - Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx)')
 
-        filetype = None
-        if len(filename) > 1:
+        if len(filenames) > 1:
             print("Multiple Files")
-        elif filename:
-            filename = filename[0]
+            print(filenames)
+
+        # checking if orders are excel files.
+        for filename in filenames:
             filetype = filename.split('.')[-1]
+            self.opened_orders.append(filename)
 
-            if filetype:
+            # checking if excel file
+            if filetype == 'xlsx':
+                '''
+                only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
 
-                # checking if excel file
-                if filetype == 'xlsx':
-                    '''
-                    only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
+                This may change at some time...
+                '''
+                user = QtWidgets.QMessageBox.question(
+                    self,
+                    'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                    QtWidgets.QMessageBox.No
+                )
+                if user == QtWidgets.QMessageBox.No:
+                    return
 
-                    This may change at some time...
-                    '''
-                    user = QtWidgets.QMessageBox.question(
-                        self,
-                        'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
-                        QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                        QtWidgets.QMessageBox.No
-                    )
-                    if user == QtWidgets.QMessageBox.No:
-                        return
+        filename = self.opened_orders[0]
+        new_order = get_ordersheet(filename)
+        load_Items(self, new_order)
 
-                new_order = get_ordersheet(filename)
-                self.load_Items(new_order)
+        self.is_sheet_open = filename
+        text = f'Looking at new order: {filename.split("/")[-1]}'
+        self.header.setText(text)
+        self.sub_header.setText('')
+        self.header_frame.show()
 
-                self.is_sheet_open = filename
-                text = f'Looking at new order: {filename.split("/")[-1]}'
-                self.header.setText(text)
-                self.sub_header.setText('')
-                self.header_frame.show()
-
-                fill_table(self, Items)
-                hide_btns(self, [
-                    self.btn_add_item_manually,
-                    self.btn_edit_mode
-                ])
-                show_btns(self,
-                          [self.btn_add_to_inventory])
-                show_sorting_btns(self)
+        fill_table(self, Items)
+        hide_btns(self, [
+            self.btn_add_item_manually,
+            self.btn_edit_mode
+        ])
+        show_btns(self,
+                  [self.btn_add_to_inventory])
+        show_sorting_btns(self)
 
     def open_past_order(self) -> None:
         '''
@@ -774,7 +761,7 @@ class MainWindow(QMainWindow):
 
                 self.is_sheet_open = filename
                 past_order = get_ordersheet(filename)
-                self.load_Items(past_order)
+                load_Items(self, past_order)
                 fill_table(self, Items)
 
                 show_sorting_btns(self)
