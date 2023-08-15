@@ -53,7 +53,7 @@ class Order_Window(QMainWindow):
 
         self.is_sheet_open = False
         self.opened_orders = []  # names of orders that have been opened.
-        self.new_orders_list = []  # names of new orders that have been added.
+        self.new_orders_added = []  # names of new orders that have been added.
         self.new_orders_count = 0  # count how many orders have been added.
         self.Items = Data(dict_keys)
 
@@ -146,6 +146,10 @@ class Order_Window(QMainWindow):
                     font-weight: bold;
                     background-color: rgb(255, 255, 255);
                 }
+                QPushButton:hover {
+                    border: 1px solid blue;
+                    background-color: #AFDCEC;
+                }
                 '''
             )
 
@@ -156,6 +160,13 @@ class Order_Window(QMainWindow):
 
         for key in sorted(dict_keys):
             self.comboBox_section.addItem(key)
+
+    def closeEvent(self, event) -> None:
+        '''
+        Function to hanlde closing event
+        '''
+        # self.parent().order_window = None
+        event.accept()
 
     def custom_fill_table(self, filename: str) -> None:
         '''
@@ -266,6 +277,7 @@ class Order_Window(QMainWindow):
         Function to add order to inventory
         '''
         self.parent().add_to_inventory(self.is_sheet_open)
+        self.new_orders_added.append(self.is_sheet_open)
         self.btn_add_to_inventory.setEnabled(False)
 
     def prev_order(self) -> None:
