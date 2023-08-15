@@ -666,7 +666,7 @@ class MainWindow(QMainWindow):
         '''
         if os.path.exists("Saved_Lists/Inventory.xlsx") or Inventory.check_if_empty():
             hide_btns(
-                self, [self.btn_add_to_inventory, self.btn_save_list]
+                self, [self.btn_save_list]
             )
             if not self.editted_saved:
                 self.btn_save_list.show()
