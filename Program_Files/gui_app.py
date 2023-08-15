@@ -670,7 +670,7 @@ class MainWindow(QMainWindow):
                 order: list of items to load into the the dictionary
         '''
         Items.drop_all_items()
-        for items, section in zip(order, Items.sections):
+        for items, section in zip(order, Items.get_sections()):
             if len(order) > 0:
                 if not items.empty:
                     Items.data[section].add_item(items)
@@ -813,7 +813,7 @@ class MainWindow(QMainWindow):
         '''
 
         if section.lower() == 'all':
-            refresh_opensheet(self, Items.data)
+            refresh_opensheet(self, Items.get_data())
 
         else:
             items = Items.data[section].get_items()

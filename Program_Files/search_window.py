@@ -108,7 +108,7 @@ class SearchWindow(QMainWindow):
         )
 
         ''' adding Initial values to some widgets '''
-        self.comboBox_category.addItems(Inventory.sections)
+        self.comboBox_category.addItems(Inventory.get_sections())
 
         # calling styling function
         style_table(self)
