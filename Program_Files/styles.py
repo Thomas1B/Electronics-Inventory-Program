@@ -92,6 +92,7 @@ def style_table(self) -> None:
         QTableWidget {
             background-color: lightyellow;
             font-size: 12px;
+            min-width: 600px;
         }
 
         QTableWidget::item {
