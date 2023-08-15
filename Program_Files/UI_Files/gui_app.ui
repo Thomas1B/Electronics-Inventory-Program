@@ -94,7 +94,7 @@ background-color: rgb(255, 255, 255);</string>
        <item row="0" column="3">
         <widget class="QPushButton" name="btn_add_item_manually">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
