@@ -339,7 +339,7 @@ class MainWindow(QMainWindow):
                 )
                 copy_selected_action = QtWidgets.QAction(
                     QIcon("Program_Files/Icons/document.png"),
-                    "Copy Selected"
+                    "Copy Highlighted"
                 )
                 add_one_action = QtWidgets.QAction(
                     QIcon("Program_Files/Icons/plus.png"),

@@ -266,7 +266,7 @@ class Project_Window(QMainWindow):
             )
             copy_selected_action = QtWidgets.QAction(
                 QIcon("Program_Files/Icons/document.png"),
-                "Copy Selected"
+                "Copy Highlighted"
             )
             add_one_action = QtWidgets.QAction(
                 QIcon("Program_Files/Icons/plus.png"),
@@ -320,7 +320,6 @@ class Project_Window(QMainWindow):
             menu.addAction(web_search_action)
             menu.addSeparator()
             menu.addAction(copy_selected_action)
-            menu.addSeparator()
             menu.addAction(add_one_action)
             menu.addAction(remove_one_action)
             menu.addAction(delete_item_action)
