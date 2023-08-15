@@ -197,7 +197,6 @@ class Order_Window(QMainWindow):
         # checking if order has already been added
         past_order_path = os.path.join('Saved_Lists/Past Orders', name)
         if os.path.exists(past_order_path):
-            print(past_order_path)
             self.btn_add_to_inventory.setText('Order Already Added')
             self.btn_add_to_inventory.setEnabled(False)
         else:
@@ -247,7 +246,9 @@ class Order_Window(QMainWindow):
             # if more than one file is opened show nav buttons.
             if len(self.opened_orders) > 1:
                 self.nav_btn_frame.show()
-                self.update_count_label(index=0)
+                self.count = 1
+                self.update_count_label(count=self.count)
+            print(len(self.opened_orders))
 
     def open_past_order(self) -> None:
         '''
@@ -309,7 +310,10 @@ class Order_Window(QMainWindow):
         index -= 1  # incrementing
 
         self.custom_fill_table(self.opened_orders[index])
-        self.update_count_label(index=index)
+        self.count = self.count - 1
+        if self.count == 0 :
+            self.count = len(self.opened_orders)
+        self.update_count_label(count=self.count)  # updating count label
 
     def next_order(self) -> None:
         '''
@@ -326,7 +330,11 @@ class Order_Window(QMainWindow):
             index = 0
             self.custom_fill_table(self.opened_orders[index])
 
-        self.update_count_label(index=index)
+        if self.count >= len(self.opened_orders):
+            self.count = 1
+        else:
+            self.count = self.count + 1
+        self.update_count_label(count=self.count)  # updating count label
 
     def show_section(self, section: str) -> None:
         '''
@@ -341,13 +349,13 @@ class Order_Window(QMainWindow):
             fill_table(self, items)
             self.sub_header.setText(section)
 
-    def update_count_label(self, index: int) -> None:
+    def update_count_label(self, count: int) -> None:
         '''
         Function to update the label when cycling through multiple opened orders.
 
             Parameters:
-                index: index of order in opened_orders list.
+                count: count of order in opened_orders list, (must adjust +/- 1 for cycling).
         '''
-        text = f'Order {index+1}/{len(self.opened_orders)}'
+        text = f'Order {count}/{len(self.opened_orders)}'
         self.count_label.setText(text)
         self.count_label.show()
