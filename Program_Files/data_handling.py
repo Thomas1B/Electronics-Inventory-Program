@@ -249,6 +249,9 @@ class Data:
     def get_data(self, section='all') -> pd.DataFrame:
         '''
         Function to get the data
+
+            Parameters:
+                section: category name to get items from.
         '''
         if section == 'all':
             return self.to_dataframe()
