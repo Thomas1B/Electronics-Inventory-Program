@@ -637,12 +637,12 @@ def load_Items(self, order: list) -> None:
         Parameters:
             order: list of items to load into the the dictionary
     '''
-    Items.drop_all_items()
+    self.Items.drop_all_items()
     for items, section in zip(order, Items.get_sections()):
         if len(order) > 0:
             if not items.empty:
-                Items.data[section].add_item(items)
-                Items.data[section].remove_duplicates()
+                self.Items.add_item(items=items, section=section)
+                self.Items.remove_duplicates(section=section)
 
 
 if __name__ == "__main__":
