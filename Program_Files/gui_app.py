@@ -36,8 +36,8 @@ from .gui_handling import (
 )
 
 from .data_handling import (
+    Data,
     Inventory,
-    Items,
     labels,
     dict_keys,
     load_Inventory,
@@ -71,6 +71,8 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon('Program_files/Icons/circuit.png'))
         style_central_widget(self)
         self.showMaximized()
+
+        self.Items = Data(dict_keys)
 
         # Other Windows used in the program.
         self.add_item_window = Add_Item_Window(self)
@@ -216,7 +218,7 @@ class MainWindow(QMainWindow):
 
         # Sorting Buttons
         self.btn_refresh_opensheet.clicked.connect(
-            lambda: refresh_opensheet(self, Items)
+            lambda: refresh_opensheet(self, self.Items)
         )
         self.comboBox_section.currentIndexChanged.connect(
             lambda: self.show_sorted_section(
@@ -731,10 +733,10 @@ class MainWindow(QMainWindow):
         '''
 
         if section.lower() == 'all':
-            refresh_opensheet(self, Items.get_data())
+            refresh_opensheet(self, self.Items.get_data())
 
         else:
-            items = Items.data[section].get_items()
+            items = self.Items.data[section].get_items()
             if 'looking at inventory' in self.header.text().lower():
                 items = Inventory.data[section].get_items()
 
