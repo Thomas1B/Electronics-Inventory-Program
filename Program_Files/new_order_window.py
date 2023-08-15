@@ -162,6 +162,7 @@ class Order_Window(QMainWindow):
         self.sorting_btns_frame.hide()
         self.command_btn_frame.hide()
 
+        # adding category keys to comboBox
         for key in sorted(dict_keys):
             self.comboBox_section.addItem(key)
 
