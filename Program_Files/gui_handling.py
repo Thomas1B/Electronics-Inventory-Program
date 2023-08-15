@@ -231,13 +231,13 @@ def fill_table(self, dataframe: dict | pd.DataFrame | list | Data) -> None:
     header.setSectionsClickable(True)
 
 
-def refresh_opensheet(self, items: dict | Data) -> None:
+def refresh_opensheet(self, items: dict | Data | list) -> None:
     '''
     Function to refresh the last sheet that was opened.
         used for when a user is looking a specific category.
 
         Parameter:
-            items: dictionary of category items or Data Object.
+            items: dictionary of category items or Data Object, or sorted list.
 
     '''
     if 'looking at inventory' in self.header.text().lower():
