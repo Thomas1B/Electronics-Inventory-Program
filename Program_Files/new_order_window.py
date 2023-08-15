@@ -9,8 +9,8 @@ import shutil
 
 
 from .data_handling import (
+    Data,
     Inventory,
-    Items,
     labels,
     dict_keys,
     load_Inventory,
@@ -25,7 +25,8 @@ from .data_handling import (
 from .gui_handling import (
     wrong_filetype_msg,
     no_files_msg,
-    fill_table
+    fill_table,
+    refresh_opensheet
 )
 
 from .styles import (
@@ -54,6 +55,7 @@ class Order_Window(QMainWindow):
         self.opened_orders = []  # names of orders that have been opened.
         self.new_orders_list = []  # names of new orders that have been added.
         self.new_orders_count = 0  # count how many orders have been added.
+        self.Items = Data(dict_keys)
 
         # Finding widgets
         self.header_frame = self.findChild(QtWidgets.QFrame, 'header_frame')
@@ -64,6 +66,15 @@ class Order_Window(QMainWindow):
         self.nav_btn_frame = self.findChild(QtWidgets.QFrame, 'nav_btn_frame')
         self.btn_prev = self.findChild(QtWidgets.QPushButton, 'btn_prev')
         self.btn_next = self.findChild(QtWidgets.QPushButton, 'btn_next')
+
+        self.sorting_btns_frame = self.findChild(
+            QtWidgets.QFrame, 'sorting_frame')
+        self.comboBox_section = self.findChild(
+            QtWidgets.QComboBox, 'comboBox_section'
+        )
+        self.btn_refresh_opensheet = self.findChild(
+            QtWidgets.QPushButton, 'btn_refresh_opensheet'
+        )
 
         self.command_btn_frame = self.findChild(
             QtWidgets.QFrame, 'command_btn_frame')
@@ -85,12 +96,22 @@ class Order_Window(QMainWindow):
         self.btn_prev.clicked.connect(self.prev_order)
         self.btn_next.clicked.connect(self.next_order)
 
+        self.btn_refresh_opensheet.clicked.connect(
+            lambda: refresh_opensheet(self, self.Items)
+        )
+        self.comboBox_section.currentIndexChanged.connect(
+            lambda: self.show_section(
+                self.comboBox_section.currentText())
+        )
+
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
 
         # Calling styling functions
         style_central_widget(self)
         style_table(self)
         style_toolbar(self)
+        style_refresh_btn(self)
+        style_sorting_comboBox(self)
 
         # Styling
         for btn in self.nav_btn_frame.findChildren(QtWidgets.QPushButton):
@@ -130,7 +151,11 @@ class Order_Window(QMainWindow):
 
         self.header_frame.hide()
         self.nav_btn_frame.hide()
+        self.sorting_btns_frame.hide()
         self.command_btn_frame.hide()
+
+        for key in sorted(dict_keys):
+            self.comboBox_section.addItem(key)
 
     def custom_fill_table(self, filename: str) -> None:
         '''
@@ -143,12 +168,11 @@ class Order_Window(QMainWindow):
         self.is_sheet_open = filename
         new_order = get_ordersheet(filename)
         load_Items(self, new_order)
-        fill_table(self, Items)
+        fill_table(self, self.Items)
 
         # updating Qlabels
         text = f'Order: {filename.split("/")[-1]}'
         self.header.setText(text)
-        self.sub_header.setText('')
         self.header_frame.show()
 
     def open_order(self) -> None:
@@ -189,6 +213,8 @@ class Order_Window(QMainWindow):
             # updating buttons
             self.btn_add_to_inventory.setEnabled(True)
             self.command_btn_frame.show()
+            self.sorting_btns_frame.show()
+            self.sub_header.setText('')
 
             # if more than one file is opened show nav buttons.
             if len(self.opened_orders) > 1:
@@ -225,6 +251,8 @@ class Order_Window(QMainWindow):
                 # updating buttons
                 self.btn_add_to_inventory.setEnabled(False)
                 self.command_btn_frame.show()
+                self.sorting_btns_frame.show()
+                self.sub_header.setText('')
 
                 # if more than one file is opened show nav buttons.
                 if len(self.opened_orders) > 1:
@@ -240,7 +268,7 @@ class Order_Window(QMainWindow):
         self.parent().add_to_inventory(self.is_sheet_open)
         self.btn_add_to_inventory.setEnabled(False)
 
-    def prev_order(self):
+    def prev_order(self) -> None:
         '''
         Function to open the previous order, used when multiple files are opened.
         '''
@@ -250,7 +278,7 @@ class Order_Window(QMainWindow):
 
         self.custom_fill_table(self.opened_orders[index])
 
-    def next_order(self):
+    def next_order(self) -> None:
         '''
         Function to open the next order, used when multiple files are opened.
         '''
@@ -263,3 +291,16 @@ class Order_Window(QMainWindow):
             self.custom_fill_table(self.opened_orders[index])
         except IndexError:  # index goes out of bounds.
             self.custom_fill_table(self.opened_orders[0])
+
+    def show_section(self, section: str) -> None:
+        '''
+        Function to show the selected section.
+        '''
+        if section.lower() == 'all':
+            refresh_opensheet(self, self.Items)
+        else:
+            items = self.Items.get_data(section=section)
+            if items.empty:
+                self.table.setRowCount(0)
+            fill_table(self, items)
+            self.sub_header.setText(section)
