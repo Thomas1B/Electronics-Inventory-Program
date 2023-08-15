@@ -61,7 +61,8 @@ class Project_Window(QMainWindow):
         super(Project_Window, self).__init__(parent)
         uic.loadUi('Program_Files/UI_Files/project_window.ui', self)
         style_central_widget(self)
-        self.move(1050, 50)
+        self.resize(900, 600)
+        self.move(900, 50)
 
         # Items dictonary of categories
         # self.Project = {key: Category(key) for key in dict_keys}
