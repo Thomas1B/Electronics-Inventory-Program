@@ -48,8 +48,13 @@ def style_refresh_btn(self) -> None:
             border-style: outset;
         }
 
-        QPushButton:hover, QPushButton:focus {
-            border: 2px solid blue;
+        QPushButton:focus {
+            border: 1px solid blue;
+        }
+
+        QPushButton:hover {
+            border: 1px solid blue;
+            background-color: #AFDCEC;
         }
 
         QPushButton:pressed {
