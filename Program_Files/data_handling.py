@@ -630,6 +630,21 @@ def add_order_to_Inventory(order) -> None:
                 Inventory.data[section].remove_duplicates()
 
 
+def load_Items(self, order: list) -> None:
+    '''
+    Function to load items into the Item dictionary.
+
+        Parameters:
+            order: list of items to load into the the dictionary
+    '''
+    Items.drop_all_items()
+    for items, section in zip(order, Items.get_sections()):
+        if len(order) > 0:
+            if not items.empty:
+                Items.data[section].add_item(items)
+                Items.data[section].remove_duplicates()
+
+
 if __name__ == "__main__":
     print('Running check inventory file...')
     result = load_Inventory()
