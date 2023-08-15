@@ -59,6 +59,44 @@ def style_refresh_btn(self) -> None:
     )
 
 
+def style_toolbar(self) -> None:
+    '''
+    Function to style the toolbar
+    '''
+    self.findChild(QtWidgets.QToolBar, 'toolBar').setStyleSheet(
+        '''
+    QToolBar {
+        background-color: #d5f4e6;
+    }
+
+    QToolButton {
+        padding: 5px;
+        font-size: 14px;
+        font-family: Arial;
+        font-weight: bold;
+    }
+
+    QToolButton:hover {
+        border: none;
+        background-color: white;
+    }
+    '''
+    )
+
+
+def style_menubar(self) -> None:
+    '''
+    Function to style the menu bar.
+    '''
+    self.findChild(QtWidgets.QMenuBar, 'menubar').setStyleSheet(
+        '''
+    QMenuBar {
+        background-color: #80ced6;
+    }
+    '''
+    )
+
+
 def style_table(self) -> None:
     '''
     Function to style the table and set header names.
@@ -72,8 +110,8 @@ def style_table(self) -> None:
     header.setStyleSheet(
         '''
         QHeaderView::section {
-            background-color: lightblue;
-            padding: 5px 0px;
+            background-color: #80d6b3;
+            padding: 7px 0px;
             padding-left: 5px;
         }
 
@@ -109,6 +147,11 @@ def style_table(self) -> None:
         QTableWidget::item:selected {
             background-color: yellow;
             color: black;
+        }
+
+        QTableCornerButton::section {
+            background-color: rgb(220, 220, 220);
+            border: 2px solid rgb(220, 220, 220);
         }
         '''
     )

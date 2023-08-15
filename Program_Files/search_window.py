@@ -40,7 +40,6 @@ class SearchWindow(QMainWindow):
         super(SearchWindow, self).__init__(parent=parent)
         uic.loadUi('Program_Files/UI_Files/search_window.ui', self)
         style_central_widget(self)
-        style_table(self)
 
         self.resize(1000, 800)
         self.move(850, 100)
@@ -78,7 +77,11 @@ class SearchWindow(QMainWindow):
         self.search_frame.setStyleSheet(
             '''
             QComboBox {
+                background-color: white;
                 padding: 5px;
+            }
+
+            QAbstractItemView {
                 background-color: white;
             }
             '''
@@ -106,6 +109,9 @@ class SearchWindow(QMainWindow):
 
         ''' adding Initial values to some widgets '''
         self.comboBox_category.addItems(Inventory.sections)
+
+        # calling styling function
+        style_table(self)
 
     def closeEvent(self, event) -> None:
         self.comboBox_section.setCurrentIndex(0)

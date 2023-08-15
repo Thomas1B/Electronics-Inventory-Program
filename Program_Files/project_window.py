@@ -42,7 +42,9 @@ from .styles import (
     style_central_widget,
     style_table,
     style_sorting_comboBox,
-    style_refresh_btn
+    style_refresh_btn,
+    style_menubar,
+    style_toolbar
 )
 
 
@@ -179,9 +181,12 @@ class Project_Window(QMainWindow):
                 self.comboBox_section.currentText())
         )
 
-        style_refresh_btn(self)  # styling refresh btn.
-        style_sorting_comboBox(self)  # styling sorting comboBox
-        style_table(self)
+        # calling styling functions
+        style_refresh_btn(self)  
+        style_sorting_comboBox(self) 
+        style_table(self) 
+        style_toolbar(self)
+        style_menubar(self)
 
         # labels in header frame.
         for label in [self.header, self.sub_header]:

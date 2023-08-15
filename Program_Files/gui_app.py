@@ -49,11 +49,13 @@ from .data_handling import (
 
 
 from .styles import (
-    toolbar_styles,
     style_central_widget,
     style_table,
     style_sorting_comboBox,
-    style_refresh_btn
+    style_refresh_btn,
+    style_toolbar,
+    style_menubar
+
 )
 
 
@@ -66,8 +68,6 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('Program_Files/UI_Files/gui_app.ui', self)
         self.setWindowIcon(QIcon('Program_files/Icons/circuit.png'))
-        # self.findChild(QtWidgets.QWidget, 'centralwidget').setStyleSheet(
-        # central_widget_style)
         style_central_widget(self)
         self.showMaximized()
 
@@ -224,13 +224,11 @@ class MainWindow(QMainWindow):
                 self.comboBox_section.currentText())
         )
 
-        # styling refresh button
+        # calling styling functions
         style_refresh_btn(self)
-
-        style_table(self)  # styling table
-
-        # toolbar
-        self.toolbar.setStyleSheet(toolbar_styles)
+        style_table(self)
+        style_toolbar(self)
+        style_menubar(self)
 
         # adding category to sorting comboBox and styling
         style_sorting_comboBox(self)
