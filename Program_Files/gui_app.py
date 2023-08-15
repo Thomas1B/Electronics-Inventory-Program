@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
         self.Items = Data(dict_keys)
 
         # Other Windows used in the program.
+        self.order_window = None
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
@@ -303,9 +304,11 @@ class MainWindow(QMainWindow):
                     event.accept()
                 case QtWidgets.QMessageBox.No:
                     # user declines to save.
-                    past_orders = 'Saved_Lists/Past Orders'
-                    for file in self.new_orders_list:
-                        os.remove(file)
+                    if self.order_window:
+                        for file in self.order_window.new_orders_added:
+                            file = file.split('/')[-1]
+                            os.remove(f'Saved_Lists/Past Orders/{file}')
+                        self.order_window.new_orders_added.clear()
                     event.accept()
                 case _:  # Cancel
                     event.ignore()
@@ -693,8 +696,8 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        order_window = Order_Window(self)
-        order_window.show()
+        self.order_window = Order_Window(self)
+        self.order_window.show()
 
     def open_new_orders(self) -> None:
         '''
@@ -702,9 +705,9 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        order_window = Order_Window(self)
-        order_window.show()
-        order_window.open_order()
+        self.order_window = Order_Window(self)
+        self.order_window.show()
+        self.order_window.open_order()
 
     def open_past_orders(self) -> None:
         '''
@@ -712,9 +715,9 @@ class MainWindow(QMainWindow):
 
         Opens seperate window.
         '''
-        order_window = Order_Window(self)
-        order_window.show()
-        order_window.open_past_order()
+        self.order_window = Order_Window(self)
+        self.order_window.show()
+        self.order_window.open_past_order()
 
     def open_project_lists(self) -> None:
         '''
@@ -760,8 +763,9 @@ class MainWindow(QMainWindow):
             for cat in new_inventory.keys():
                 new_inventory[cat].save_toexcel(writer=writer)
 
-        if self.new_orders_list:
-            self.new_orders_list.clear()
+        if self.order_window:
+            if self.order_window.new_orders_added:
+                self.order_window.new_orders_added.clear()
 
         # displays successfully save popup
         msg = QtWidgets.QMessageBox()
@@ -806,12 +810,11 @@ class MainWindow(QMainWindow):
 
         else:  # if order has not been added.
             # copying order to past order folder.
-            shutil.copy2(self.is_sheet_open, destination_full_path)
+            shutil.copy2(filename, destination_full_path)
 
             # adding the order to the inventory
             order = get_ordersheet(destination_full_path)
             add_order_to_Inventory(order)
-            self.new_orders_list.append(destination_full_path)
             self.editted_saved = False
 
             # Successfully added popup msg.
