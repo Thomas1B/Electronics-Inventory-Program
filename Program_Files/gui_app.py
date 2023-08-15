@@ -15,7 +15,7 @@ from .info_windows import Program_Info_Window, How_To_Use_Program_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 from .search_window import SearchWindow, open_search_window
-from .new_order_window import New_Order_Window
+from .new_order_window import Order_Window
 
 from .gui_handling import (
     show_btns,
@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
         # Other Windows used in the program.
-        self.new_order_window = New_Order_Window(self)
+        self.order_window = Order_Window(self)
         self.add_item_window = Add_Item_Window(self)
         self.window_program_info = Program_Info_Window()
         self.how_to_use_window = How_To_Use_Program_Window()
@@ -111,6 +111,8 @@ class MainWindow(QMainWindow):
         self.action_search = self.findChild(
             QtWidgets.QAction, 'actionSearch'
         )
+        self.action_open_order_window = self.findChild(
+            QtWidgets.QAction, 'actionOpen_Order_Window')
         self.action_open_new_order = self.findChild(
             QtWidgets.QAction, 'actionOpen_New_Order'
         )
@@ -148,9 +150,6 @@ class MainWindow(QMainWindow):
         # Buttons
         self.btn_save_list = self.findChild(
             QtWidgets.QPushButton, 'btn_save_list'
-        )
-        self.btn_add_to_inventory = self.findChild(
-            QtWidgets.QPushButton, 'btn_add_to_inventory'
         )
         self.btn_edit_mode = self.findChild(
             QtWidgets.QPushButton, 'btn_edit_mode'
@@ -190,10 +189,12 @@ class MainWindow(QMainWindow):
         # toolbar
         self.action_search.triggered.connect(lambda: open_search_window(self))
         self.action_open_inventory.triggered.connect(self.open_inventory)
-        self.action_open_new_order.triggered.connect(self.open_new_order)
+        self.action_open_order_window.triggered.connect(
+            self.open_blank_new_order_window)
+        self.action_open_new_order.triggered.connect(self.open_new_orders)
         self.action_open_projects.triggered.connect(self.open_project_lists)
         self.action_create_project.triggered.connect(self.create_project)
-        self.action_open_past_orders.triggered.connect(self.open_past_order)
+        self.action_open_past_orders.triggered.connect(self.open_past_orders)
         self.action_export_file.triggered.connect(
             lambda: self.exporting(kind='file')
         )
@@ -209,7 +210,6 @@ class MainWindow(QMainWindow):
 
         # Command Buttons
         self.btn_save_list.clicked.connect(self.save_list)
-        self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
         self.btn_edit_mode.clicked.connect(self.edit_mode)
         self.btn_add_item_manually.clicked.connect(
             lambda: open_add_manually_window(self)
@@ -238,7 +238,6 @@ class MainWindow(QMainWindow):
         # Hidiing some buttons for initial start.
         hide_btns(self, [
             self.btn_save_list,
-            self.btn_add_to_inventory,
             self.header_frame,
             self.btn_edit_mode,
             self.btn_add_item_manually,
@@ -687,101 +686,31 @@ class MainWindow(QMainWindow):
             title = 'No Inventory'
             self.no_files_msg(title=title, header=header, text=text)
 
-    def open_new_order(self) -> None:
+    def open_blank_new_order_window(self) -> None:
+        '''
+        Function to open a blank new order window.
+
+        Opens seperate window.
+        '''
+        self.order_window.show()
+
+    def open_new_orders(self) -> None:
         '''
         Function to open a new order.
+
+        Opens seperate window.
         '''
-        self.btn_add_to_inventory.setEnabled(True)
-        downloads_path = os.path.expanduser("~" + os.sep + "Downloads")
-        filenames, _ = QtWidgets.QFileDialog.getOpenFileNames(
-            self, 'EIP - Opening New Order', downloads_path, 'CSV Files (*.csv);; Excel Files (*.xlsx)')
+        self.order_window.show()
+        self.order_window.open_order()
 
-        if len(filenames) > 1:
-            print("Multiple Files")
-            print(filenames)
-
-        # checking if orders are excel files.
-        for filename in filenames:
-            filetype = filename.split('.')[-1]
-            self.opened_orders.append(filename)
-
-            # checking if excel file
-            if filetype == 'xlsx':
-                '''
-                only needs a check for '.xlsx' files, since the program has a condition to remove the subtotal line from new order sheets.
-
-                This may change at some time...
-                '''
-                user = QtWidgets.QMessageBox.question(
-                    self,
-                    'Opening an excel file', 'Make sure to that the subtotal line is removed from the excel file, otherwise the program will crash.\n\nWould you like to continue?',
-                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                    QtWidgets.QMessageBox.No
-                )
-                if user == QtWidgets.QMessageBox.No:
-                    return
-
-        filename = self.opened_orders[0]
-        new_order = get_ordersheet(filename)
-        load_Items(self, new_order)
-
-        self.is_sheet_open = filename
-        text = f'Looking at new order: {filename.split("/")[-1]}'
-        self.header.setText(text)
-        self.sub_header.setText('')
-        self.header_frame.show()
-
-        fill_table(self, Items)
-        hide_btns(self, [
-            self.btn_add_item_manually,
-            self.btn_edit_mode
-        ])
-        show_btns(self,
-                  [self.btn_add_to_inventory])
-        show_sorting_btns(self)
-
-    def open_past_order(self) -> None:
+    def open_past_orders(self) -> None:
         '''
-        Function to open a past order
+        Function to open a past order.
+
+        Opens seperate window.
         '''
-        if len(os.listdir('Saved_Lists/Past Orders')) > 0:
-            self.sub_header.setText('')
-            filename, _ = QtWidgets.QFileDialog.getOpenFileName(
-                self,
-                'Electronics Inventory Program - Opening Past Orders',
-                'Saved_Lists/Past Orders',
-                'All Files (*) ;; CSV Files (*.csv);; Excel Files (*.xlsx)'
-            )
-            filetype = filename.split(".")[-1]
-            name = filename.split('/')[-1]
-            if filetype in ['csv', 'xlsx']:
-                self.sub_header.setText('')
-                self.header.setText(f'Past Order: {name}')
-                self.header_frame.show()
-
-                self.is_sheet_open = filename
-                past_order = get_ordersheet(filename)
-                load_Items(self, past_order)
-                fill_table(self, Items)
-
-                show_sorting_btns(self)
-                hide_btns(self, [
-                    self.btn_add_item_manually,
-                    self.btn_edit_mode,
-                    self.btn_add_to_inventory,
-                    self.btn_save_list
-                ])
-
-            elif len(filetype) == 0:
-                # no file selected
-                pass
-
-            else:
-                wrong_filetype_msg(self)
-
-        else:
-            header = 'There are no past orders to open!'
-            self.no_files_msg(title='No Past Orders', header=header)
+        self.order_window.show()
+        self.order_window.open_past_order()
 
     def open_project_lists(self) -> None:
         '''
@@ -844,21 +773,23 @@ class MainWindow(QMainWindow):
 
         self.btn_save_list.hide()
 
-    def add_to_inventory(self) -> None:
+    def add_to_inventory(self, filename: str) -> None:
         '''
         Function to add an order to inventory.
             - Triggered by add_to_inventory button.
+
+            Parameters:
+                filename: filename to order
         '''
 
         # checking if order has been added already.
         past_order_path = 'Saved_Lists/Past Orders'
-        _, file = os.path.split(self.is_sheet_open)
+        _, file = os.path.split(filename)
 
         destination_full_path = os.path.join(past_order_path, file)
 
         # if order has already been added.
         if os.path.exists(destination_full_path):
-            self.btn_add_to_inventory.setEnabled(False)
 
             popup_msg = QtWidgets.QMessageBox()
             popup_msg.setWindowTitle("EIP - Adding Order to Inventory")
@@ -965,7 +896,6 @@ class MainWindow(QMainWindow):
 
         # buttons to toggle in edit mode.
         btns = [
-            self.btn_add_to_inventory,
             self.btn_add_item_manually
         ]
 

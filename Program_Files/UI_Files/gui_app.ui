@@ -73,48 +73,6 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="2">
-        <widget class="QPushButton" name="btn_add_to_inventory">
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Add to Inventory</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../Icons/document--plus.png</normaloff>../Icons/document--plus.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="btn_add_item_manually">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="cursor">
-          <cursorShape>PointingHandCursor</cursorShape>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">font: 8pt &quot;Terminal&quot;;
-background-color: rgb(255, 255, 255);</string>
-         </property>
-         <property name="text">
-          <string>Add Item</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../Icons/plus.png</normaloff>../Icons/plus.png</iconset>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QPushButton" name="btn_save_list">
          <property name="font">
@@ -156,6 +114,30 @@ background-color: rgb(255, 255, 255);</string>
          <property name="icon">
           <iconset>
            <normaloff>../Icons/edit.png</normaloff>../Icons/edit.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="btn_add_item_manually">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font: 8pt &quot;Terminal&quot;;
+background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>Add Item</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../Icons/plus.png</normaloff>../Icons/plus.png</iconset>
          </property>
         </widget>
        </item>
@@ -568,6 +550,7 @@ background-color: rgb(255, 255, 255);</string>
     </property>
     <addaction name="actionOpen_New_Order"/>
     <addaction name="actionOpen_Past_Orders"/>
+    <addaction name="actionOpen_Order_Window"/>
    </widget>
    <addaction name="menuInfo"/>
    <addaction name="menuLinks"/>
@@ -736,6 +719,18 @@ background-color: rgb(255, 255, 255);</string>
    <property name="font">
     <font>
      <family>Terminal</family>
+    </font>
+   </property>
+  </action>
+  <action name="actionOpen_Order_Window">
+   <property name="text">
+    <string>Open Order Window</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Terminal</family>
+     <weight>50</weight>
+     <bold>false</bold>
     </font>
    </property>
   </action>
