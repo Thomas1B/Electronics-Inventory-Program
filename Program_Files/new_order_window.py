@@ -66,6 +66,7 @@ class Order_Window(QMainWindow):
         self.nav_btn_frame = self.findChild(QtWidgets.QFrame, 'nav_btn_frame')
         self.btn_prev = self.findChild(QtWidgets.QPushButton, 'btn_prev')
         self.btn_next = self.findChild(QtWidgets.QPushButton, 'btn_next')
+        self.count_label = self.findChild(QtWidgets.QLabel, 'count_label')
 
         self.sorting_btns_frame = self.findChild(
             QtWidgets.QFrame, 'sorting_frame')
@@ -114,45 +115,48 @@ class Order_Window(QMainWindow):
         style_sorting_comboBox(self)
 
         # Styling
-        for btn in self.nav_btn_frame.findChildren(QtWidgets.QPushButton):
-            btn.setStyleSheet(
-                '''
-                QPushButton {
-                    font-size: 14px;
-                    font-family: Arial;
-                    background-color: white;
-                    padding: 10px 15px;
-                    border: 1.5px grey;
-                    border-radius: 5px;
-                    border-style: outset;
-                }
+        self.nav_btn_frame.setStyleSheet(
+            '''
+            QPushButton {
+                font-size: 14px;
+                font-family: Arial;
+                background-color: white;
+                padding: 10px 15px;
+                border: 1.5px grey;
+                border-radius: 5px;
+                border-style: outset;
+            }
 
-                QPushButton:hover {
-                    border: 1px solid blue;
-                    background-color: #AFDCEC;
-                }
+            QPushButton:hover {
+                border: 1px solid blue;
+                background-color: #AFDCEC;
+            }
 
-                QPushButton:pressed {
-                    border-style: inset;
-                }
-                '''
-            )
+            QPushButton:pressed {
+                border-style: inset;
+            }
 
-        for btn in self.command_btn_frame.findChildren(QtWidgets.QPushButton):
-            btn.setStyleSheet(
-                '''
-                QPushButton {
-                    font: 10pt Arial;
-                    font-weight: bold;
-                    background-color: rgb(255, 255, 255);
-                }
-                QPushButton:hover {
-                    border: 1px solid blue;
-                    background-color: #AFDCEC;
-                }
-                '''
-            )
+            QLabel {
+                font-size: 14px Arial;
+            }
+            '''
+        )
+        self.command_btn_frame.setStyleSheet(
+            '''
+            QPushButton {
+                font: 10pt Arial;
+                font-weight: bold;
+                background-color: rgb(255, 255, 255);
+            }
+            QPushButton:hover {
+                border: 1px solid blue;
+                background-color: #AFDCEC;
+            }
+            '''
+        )
 
+        # hiding some frames for initial load.
+        self.count_label.hide()
         self.header_frame.hide()
         self.nav_btn_frame.hide()
         self.sorting_btns_frame.hide()
@@ -240,6 +244,7 @@ class Order_Window(QMainWindow):
             # if more than one file is opened show nav buttons.
             if len(self.opened_orders) > 1:
                 self.nav_btn_frame.show()
+                self.update_count_label(index=0)
 
     def open_past_order(self) -> None:
         '''
@@ -278,6 +283,8 @@ class Order_Window(QMainWindow):
                 # if more than one file is opened show nav buttons.
                 if len(self.opened_orders) > 1:
                     self.nav_btn_frame.show()
+                    self.update_count_label(index=0)
+
         else:
             header = 'There are no past orders to open!'
             no_files_msg(self, title='No Past Orders', header=header)
@@ -299,6 +306,7 @@ class Order_Window(QMainWindow):
         index -= 1  # incrementing
 
         self.custom_fill_table(self.opened_orders[index])
+        self.update_count_label(index=index)
 
     def next_order(self) -> None:
         '''
@@ -312,7 +320,10 @@ class Order_Window(QMainWindow):
         try:
             self.custom_fill_table(self.opened_orders[index])
         except IndexError:  # index goes out of bounds.
-            self.custom_fill_table(self.opened_orders[0])
+            index = 0
+            self.custom_fill_table(self.opened_orders[index])
+
+        self.update_count_label(index=index)
 
     def show_section(self, section: str) -> None:
         '''
@@ -326,3 +337,14 @@ class Order_Window(QMainWindow):
                 self.table.setRowCount(0)
             fill_table(self, items)
             self.sub_header.setText(section)
+
+    def update_count_label(self, index: int) -> None:
+        '''
+        Function to update the label when cycling through multiple opened orders.
+
+            Parameters:
+                index: index of order in opened_orders list.
+        '''
+        text = f'Order {index+1}/{len(self.opened_orders)}'
+        self.count_label.setText(text)
+        self.count_label.show()
