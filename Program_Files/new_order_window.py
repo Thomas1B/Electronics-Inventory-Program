@@ -137,17 +137,19 @@ class Order_Window(QMainWindow):
             }
 
             QLabel {
-                font-size: 14px Arial;
+                font-size: 18px Arial;
             }
             '''
         )
         self.command_btn_frame.setStyleSheet(
             '''
             QPushButton {
-                font: 10pt Arial;
+                font: 14px Arial;
                 font-weight: bold;
                 background-color: rgb(255, 255, 255);
+                padding: 5px;
             }
+
             QPushButton:hover {
                 border: 1px solid blue;
                 background-color: #AFDCEC;
