@@ -20,7 +20,6 @@ class Add_Item_Window(QMainWindow):
     Class to show adding Item manually window.
     '''
 
-
     # Signal for sending data (see function send_item_info).
     data_sent = pyqtSignal(pd.DataFrame)
 
@@ -55,12 +54,24 @@ class Add_Item_Window(QMainWindow):
             QtWidgets.QSpinBox, 'spinBox_quantity')
 
         # frames for plainTextEdit Boxes
-        self.frame2 = self.findChild(QtWidgets.QFrame, 'frame_2')
-        self.frame3 = self.findChild(QtWidgets.QFrame, 'frame_3')
-        self.frame4 = self.findChild(QtWidgets.QFrame, 'frame_4')
-        self.frame5 = self.findChild(QtWidgets.QFrame, 'frame_5')
-        self.frame6 = self.findChild(QtWidgets.QFrame, 'frame_6')
-        self.frame7 = self.findChild(QtWidgets.QFrame, 'frame_7')
+        self.entries_frame = self.findChild(QtWidgets.QFrame, 'entries_frame')
+        self.part_num_frame = self.findChild(
+            QtWidgets.QFrame, 'part_num_frame'
+        )
+        self.manu_part_num_frame = self.findChild(
+            QtWidgets.QFrame, 'manu_part_num_frame'
+        )
+        self.descrip_frame = self.findChild(QtWidgets.QFrame, 'descrip_frame')
+        self.cus_ref_frame = self.findChild(QtWidgets.QFrame, 'cus_ref_frame')
+        self.price_frame = self.findChild(QtWidgets.QFrame, 'price_frame')
+        self.quantity_frame = self.findChild(
+            QtWidgets.QFrame, 'quantity_frame'
+        )
+
+        self.entry_frames_list = [
+            self.part_num_frame, self.manu_part_num_frame, self.descrip_frame,
+            self.cus_ref_frame, self.price_frame, self.quantity_frame
+        ]
 
         ''' Attaching Functions '''
         # Menu
@@ -83,20 +94,32 @@ class Add_Item_Window(QMainWindow):
             '''
         )
 
-        # adding stylesheet to sub frames 2-7
-        frames = [self.frame2, self.frame3, self.frame4,
-                  self.frame5, self.frame6, self.frame7]
-        for frame in frames:
+        # adding stylesheet to sub frames
+        for frame in self.entry_frames_list:
             frame.setStyleSheet(
                 '''
                 QFrame {
                     background-color: rgb(236, 236, 236);
                     border: 1px solid rgb(169, 169, 169);
                     border-radius: 4px;
-                    padding: 4px;
+                    padding: 5px;
                 }
+
+                QPlainTextEdit {
+                    font-size: 14px;
+                }
+
                 QLabel {
+                    font-size: 16px;
+                    font-family: Arial;
+                    font-weight: bold;
                     border: none;
+                }
+
+                QSpinBox, QDoubleSpinBox {
+                    border: 1px solid rgb(169, 169, 169);
+                    background-color: white;
+                    padding: 5px;
                 }
                 '''
             )
