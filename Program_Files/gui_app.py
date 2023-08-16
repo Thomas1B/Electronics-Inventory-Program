@@ -763,10 +763,6 @@ class MainWindow(QMainWindow):
             for cat in new_inventory.keys():
                 new_inventory[cat].save_toexcel(writer=writer)
 
-        if self.order_window:
-            if self.order_window.new_orders_added:
-                self.order_window.new_orders_added.clear()
-
         # displays successfully save popup
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle('Inventory Saved Successfully')
@@ -779,7 +775,10 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
-        self.order_window.new_orders_added.clear()
+        if self.order_window:
+            if self.order_window.new_orders_added:
+                self.order_window.new_orders_added.clear()
+
         self.btn_save_list.hide()
 
     def add_to_inventory(self, filename: str) -> None:
@@ -817,25 +816,6 @@ class MainWindow(QMainWindow):
             order = get_ordersheet(destination_full_path)
             add_order_to_Inventory(order)
             self.editted_saved = False
-
-            # Successfully added popup msg.
-            popup_msg = QtWidgets.QMessageBox()
-            popup_msg.setWindowTitle("EIP - Adding Order to Inventory")
-            text = f'Order "{file}" was added to the inventory.\n Would you like to save?'
-            popup_msg.setText(text)
-            popup_msg.setIcon(QtWidgets.QMessageBox.Information)
-            popup_msg.setStandardButtons(
-                QtWidgets.QMessageBox.Yes |
-                QtWidgets.QMessageBox.No
-            )
-            popup_msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
-            user = popup_msg.exec_()
-
-            match user:
-                case QtWidgets.QMessageBox.Yes:
-                    self.save_list()
-                case _:
-                    pass
 
     def create_project(self) -> None:
         '''
