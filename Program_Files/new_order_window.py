@@ -81,6 +81,9 @@ class Order_Window(QMainWindow):
         self.btn_add_to_inventory = self.findChild(
             QtWidgets.QPushButton, 'btn_add_to_inventory'
         )
+        self.btn_save_inventory = self.findChild(
+            QtWidgets.QPushButton, 'btn_save_inventory'
+        )
 
         # Defining actions
         self.action_open_new_order = self.findChild(
@@ -105,6 +108,7 @@ class Order_Window(QMainWindow):
         )
 
         self.btn_add_to_inventory.clicked.connect(self.add_to_inventory)
+        self.btn_save_inventory.clicked.connect(self.save_inventory)
 
         # Calling styling functions
         style_central_widget(self)
@@ -146,7 +150,11 @@ class Order_Window(QMainWindow):
                 font: 14px Arial;
                 font-weight: bold;
                 background-color: rgb(255, 255, 255);
-                padding: 5px;
+                padding: 10px;
+                margin-left: 15px;
+                border: 1.5px grey;
+                border-radius: 5px;
+                border-style: outset;
             }
 
             QPushButton:hover {
@@ -162,6 +170,7 @@ class Order_Window(QMainWindow):
         self.nav_btn_frame.hide()
         self.sorting_btns_frame.hide()
         self.command_btn_frame.hide()
+        self.btn_save_inventory.hide()
 
         # adding category keys to comboBox
         for key in sorted(dict_keys):
@@ -171,8 +180,39 @@ class Order_Window(QMainWindow):
         '''
         Function to hanlde closing event
         '''
-        # self.parent().order_window = None
-        event.accept()
+
+        # checking if inventory has been saved before closing.
+        if self.new_orders_added:
+            user = QtWidgets.QMessageBox()
+            pixmapi = getattr(QtWidgets.QStyle, "SP_MessageBoxWarning")
+            icon = self.style().standardIcon(pixmapi)
+            user.setWindowIcon(icon)
+            user.setIcon(QtWidgets.QMessageBox.Warning)
+            user.setStandardButtons(
+                QtWidgets.QMessageBox.Yes |
+                QtWidgets.QMessageBox.No |
+                QtWidgets.QMessageBox.Cancel
+            )
+            user.setDefaultButton(QtWidgets.QMessageBox.Yes)
+            header = 'New orders have been added to the inventory!'
+            text = 'Would you like to save?'
+            user.setWindowTitle("New Orders Added")
+            user.setText(header)
+            user.setInformativeText(text)
+            user = user.exec_()
+
+            match user:
+                case QtWidgets.QMessageBox.Yes:
+                    self.save_list()
+                    event.accept()
+                case QtWidgets.QMessageBox.No:
+                    # user declines to save.
+                    event.accept()
+                case _:
+                    event.ignore()
+
+        else:
+            event.accept()
 
     def custom_fill_table(self, filename: str) -> None:
         '''
@@ -300,6 +340,7 @@ class Order_Window(QMainWindow):
         self.new_orders_added.append(self.is_sheet_open)
         self.btn_add_to_inventory.setText('Order Already Added')
         self.btn_add_to_inventory.setEnabled(False)
+        self.btn_save_inventory.show()
 
     def prev_order(self) -> None:
         '''
@@ -359,3 +400,10 @@ class Order_Window(QMainWindow):
         text = f'Order {count}/{len(self.opened_orders)}'
         self.count_label.setText(text)
         self.count_label.show()
+
+    def save_inventory(self) -> None:
+        '''
+        Function to save the inventory.
+        '''
+        self.parent().save_list()
+        self.btn_save_inventory.hide()
