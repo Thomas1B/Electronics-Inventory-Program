@@ -54,7 +54,6 @@ class Order_Window(QMainWindow):
         self.is_sheet_open = False
         self.opened_orders = []  # names of orders that have been opened.
         self.new_orders_added = []  # names of new orders that have been added.
-        self.new_orders_count = 0  # count how many orders have been added.
         self.Items = Data(dict_keys)
 
         # Finding widgets
@@ -248,7 +247,6 @@ class Order_Window(QMainWindow):
                 self.nav_btn_frame.show()
                 self.count = 1
                 self.update_count_label(count=self.count)
-            print(len(self.opened_orders))
 
     def open_past_order(self) -> None:
         '''
@@ -298,7 +296,9 @@ class Order_Window(QMainWindow):
         Function to add order to inventory
         '''
         self.parent().add_to_inventory(self.is_sheet_open)
+        self.parent().btn_save_list.show()
         self.new_orders_added.append(self.is_sheet_open)
+        self.btn_add_to_inventory.setText('Order Already Added')
         self.btn_add_to_inventory.setEnabled(False)
 
     def prev_order(self) -> None:
@@ -311,7 +311,7 @@ class Order_Window(QMainWindow):
 
         self.custom_fill_table(self.opened_orders[index])
         self.count = self.count - 1
-        if self.count == 0 :
+        if self.count == 0:
             self.count = len(self.opened_orders)
         self.update_count_label(count=self.count)  # updating count label
 
