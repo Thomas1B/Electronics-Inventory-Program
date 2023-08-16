@@ -779,6 +779,7 @@ class MainWindow(QMainWindow):
         msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
         _ = msg.exec_()
 
+        self.order_window.new_orders_added.clear()
         self.btn_save_list.hide()
 
     def add_to_inventory(self, filename: str) -> None:
