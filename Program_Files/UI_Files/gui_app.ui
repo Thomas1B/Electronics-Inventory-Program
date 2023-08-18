@@ -525,7 +525,7 @@ background-color: rgb(255, 255, 255);</string>
      <string>About</string>
     </property>
     <addaction name="actionProgram_Info"/>
-    <addaction name="actionHow_To_Use"/>
+    <addaction name="actionHelp"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -596,9 +596,9 @@ background-color: rgb(255, 255, 255);</string>
     <string>Program Info</string>
    </property>
   </action>
-  <action name="actionHow_To_Use">
+  <action name="actionHelp">
    <property name="text">
-    <string>How To Use</string>
+    <string>Help</string>
    </property>
   </action>
   <action name="actionOpen_New_Order">
