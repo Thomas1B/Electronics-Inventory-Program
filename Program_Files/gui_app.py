@@ -580,7 +580,6 @@ class MainWindow(QMainWindow):
                             destination_path = os.path.join(
                                 destination_folder, filename)
 
-                            count = 1
                             if os.path.exists(destination_path):
                                 # Pop up telling user that the file has already been imported.
                                 msg = QtWidgets.QMessageBox()
@@ -608,6 +607,7 @@ class MainWindow(QMainWindow):
                                     case _:
                                         base_path, extension = os.path.splitext(
                                             destination_path)
+                                        count = 1
                                         while os.path.exists(destination_path):
                                             destination_path = f'{base_path} ({count}){extension}'
                                             count += 1
@@ -623,8 +623,13 @@ class MainWindow(QMainWindow):
         '''
 
         destination_folder = os.path.expanduser(
-            "~" + os.sep + "Downloads\EIP Exported Files"
+            f"~{os.sep}Downloads{os.path.sep}EIP Exported Files"
         )
+
+        try:
+            os.mkdir(destination_folder)
+        except FileExistsError as err:
+            pass
 
         match kind:
             case 'file':
@@ -657,13 +662,13 @@ class MainWindow(QMainWindow):
                 )
                 if exporting:
                     filename = exporting.split('/')[-1]
-                    destination = f'{destination_folder}/{filename}'
+                    destination_path = f'{destination_folder}/{filename}'
                     count = 1
-                    base, ext = os.path.splitext(destination)
-                    while os.path.exists(destination):
-                        destination = f'{base} ({count}){ext}'
+                    base, ext = os.path.splitext(destination_path)
+                    while os.path.exists(destination_path):
+                        destination_path = f'{base} ({count}){ext}'
                         count += 1
-                    shutil.copytree(exporting, destination)
+                    shutil.copytree(exporting, destination_path)
 
     def open_inventory(self) -> None:
         '''
