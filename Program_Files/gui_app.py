@@ -487,7 +487,10 @@ class MainWindow(QMainWindow):
             kind: "file"/"dir", importing file or directory.
         '''
 
-        imported = None
+        imported = None  # dummy var
+
+        # filepath where to when opening a filedialog.
+        downloads_folder = os.path.expanduser("~/Downloads")
 
         # directory is being imported.
         match kind:
@@ -497,7 +500,7 @@ class MainWindow(QMainWindow):
                 imported = QtWidgets.QFileDialog.getExistingDirectory(
                     self,
                     "EIP - Importing",
-                    os.path.expanduser("~/Downloads")
+                    downloads_folder
                 )
 
                 if imported:  # if a directory is selected:
@@ -535,24 +538,27 @@ class MainWindow(QMainWindow):
                             msg.setDefaultButton(QtWidgets.QMessageBox.Yes)
                             user = msg.exec_()
 
-                            if user == QtWidgets.QMessageBox.Yes:
-                                # user wants to overwrite the directory
-                                shutil.rmtree(destination)
-                                shutil.copytree(imported, destination)
+                            # checking user's response
+                            match user:
+                                case QtWidgets.QMessageBox.Yes:
+                                    # user wants to overwrite the directory
+                                    shutil.rmtree(destination)
+                                    shutil.copytree(imported, destination)
 
-                            elif user == QtWidgets.QMessageBox.No:
-                                # user does not want to overwrite.
-                                # autonames file
-                                count = 1
-                                while True:
-                                    try:
-                                        shutil.copytree(imported, destination)
-                                        break
-                                    except FileExistsError:
-                                        destination = destination.split(
-                                            ' (')[0]
-                                        destination += f' ({count})'
-                                        count += 1
+                                case QtWidgets.QMessageBox.No:
+                                    # user does not want to overwrite.
+                                    # modifies file name.
+                                    count = 1
+                                    while True:
+                                        try:
+                                            shutil.copytree(
+                                                imported, destination)
+                                            break
+                                        except FileExistsError:
+                                            destination = destination.split(
+                                                ' (')[0]
+                                            destination += f' ({count})'
+                                            count += 1
 
             case 'file':
 
@@ -560,7 +566,7 @@ class MainWindow(QMainWindow):
                 imported, _ = QtWidgets.QFileDialog.getOpenFileNames(
                     self,
                     "EIP - Importing File(s)",
-                    '',
+                    downloads_folder,
                     'All Files (*);;CSV Files (*.csv);;Excel Files (*.xlsx)'
                 )
 
@@ -575,6 +581,7 @@ class MainWindow(QMainWindow):
 
                     if destination_folder:  # if a destination was selected:
 
+                        # looping through each file to check conditions, then import
                         for import_file in imported:
                             filename = os.path.basename(import_file)
                             destination_path = os.path.join(
@@ -599,12 +606,12 @@ class MainWindow(QMainWindow):
                                 msg.setDefaultButton(
                                     QtWidgets.QMessageBox.Yes)
                                 user = msg.exec_()
+
+                                # checking user's response
                                 match user:
-                                    case QtWidgets.QMessageBox.Cancel:
-                                        return
                                     case QtWidgets.QMessageBox.Yes:
                                         break
-                                    case _:
+                                    case QtWidgets.QMessageBox.No:
                                         base_path, extension = os.path.splitext(
                                             destination_path)
                                         count = 1
