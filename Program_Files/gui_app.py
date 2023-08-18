@@ -11,7 +11,7 @@ import sys
 import os
 import shutil
 
-from .info_windows import Program_Info_Window, How_To_Use_Program_Window
+from .info_windows import Program_Info_Window, Help_Window
 from .add_item_window import Add_Item_Window
 from .project_window import Project_Window
 from .search_window import SearchWindow, open_search_window
@@ -77,8 +77,8 @@ class MainWindow(QMainWindow):
         # Other Windows used in the program.
         self.order_window = None
         self.add_item_window = Add_Item_Window(self)
-        self.window_program_info = Program_Info_Window()
-        self.how_to_use_window = How_To_Use_Program_Window()
+        self.window_program_info = Program_Info_Window(self)
+        self.help_page = Help_Window(self)
 
         # variable to keep track of States:
         self.is_sheet_open = False  # what sheet is opened.
@@ -95,8 +95,8 @@ class MainWindow(QMainWindow):
         self.action_open_program_info = self.findChild(
             QtWidgets.QAction, 'actionProgram_Info'
         )
-        self.action_how_to_use = self.findChild(
-            QtWidgets.QAction, 'actionHow_To_Use'
+        self.actionHelp = self.findChild(
+            QtWidgets.QAction, 'actionHelp'
         )
         self.action_open_Digikey = self.findChild(
             QtWidgets.QAction, 'actionDigiKey'
@@ -177,7 +177,7 @@ class MainWindow(QMainWindow):
 
         # Menu
         self.action_open_program_info.triggered.connect(self.show_program_info)
-        self.action_how_to_use.triggered.connect(self.show_how_to_use)
+        self.actionHelp.triggered.connect(self.show_help_page)
         self.action_open_Digikey.triggered.connect(
             lambda: open_website(self, 'Digikey')
         )
@@ -428,11 +428,11 @@ class MainWindow(QMainWindow):
         '''
         self.window_program_info.show()
 
-    def show_how_to_use(self) -> None:
+    def show_help_page(self) -> None:
         '''
         Function to show the "how to use" window for the user.
         '''
-        self.how_to_use_window.show()
+        self.help_page.show()
 
     def no_files_msg(self, title='No Files', header="", text="") -> None:
         '''
@@ -967,7 +967,7 @@ class MainWindow(QMainWindow):
 
     def get_children_windows(self, instances=(Project_Window,
                                               SearchWindow, Add_Item_Window,
-                                              How_To_Use_Program_Window,
+                                              Help_Window,
                                               Program_Info_Window)):
         '''
         Function to get custom windows object if there any.
