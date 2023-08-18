@@ -492,9 +492,70 @@ class MainWindow(QMainWindow):
         # filepath where to when opening a filedialog.
         downloads_folder = os.path.expanduser("~/Downloads")
 
-        # directory is being imported.
-        match kind:
-            case 'dir':
+        match kind:  # match case for if a file or directory is being exported
+
+            case 'file':  # file is being exported.
+
+                # getting the selected files to import
+                imported, _ = QtWidgets.QFileDialog.getOpenFileNames(
+                    self,
+                    "EIP - Importing File(s)",
+                    downloads_folder,
+                    'All Files (*);;CSV Files (*.csv);;Excel Files (*.xlsx)'
+                )
+
+                if imported:  # if user selects files:
+
+                    # getting the destination for importing.
+                    destination_folder = QtWidgets.QFileDialog.getExistingDirectory(
+                        self,
+                        "EIP - Selecting Desination",
+                        'Saved_Lists'
+                    )
+
+                    if destination_folder:  # if a destination was selected:
+
+                        # looping through each file to check conditions, then import
+                        for import_file in imported:
+                            filename = os.path.basename(import_file)
+                            destination_path = os.path.join(
+                                destination_folder, filename)
+
+                            if os.path.exists(destination_path):
+                                # Pop up telling user that the file has already been imported.
+                                msg = QtWidgets.QMessageBox()
+                                pixmapi = getattr(QtWidgets.QStyle,
+                                                  "SP_MessageBoxWarning")
+                                icon = self.style().standardIcon(pixmapi)
+                                msg.setWindowIcon(icon)
+                                msg.setWindowTitle(
+                                    "File Already Imported")
+                                text = f'File {filename} has already been imported.\nWould you like to overwrite it?'
+                                msg.setText(text)
+                                msg.setStandardButtons(
+                                    QtWidgets.QMessageBox.Yes |
+                                    QtWidgets.QMessageBox.No |
+                                    QtWidgets.QMessageBox.Cancel
+                                )
+                                msg.setDefaultButton(
+                                    QtWidgets.QMessageBox.Yes)
+                                user = msg.exec_()
+
+                                # checking user's response
+                                match user:
+                                    case QtWidgets.QMessageBox.Yes:
+                                        break
+                                    case QtWidgets.QMessageBox.No:
+                                        base_path, extension = os.path.splitext(
+                                            destination_path)
+                                        count = 1
+                                        while os.path.exists(destination_path):
+                                            destination_path = f'{base_path} ({count}){extension}'
+                                            count += 1
+
+                            shutil.copy2(import_file, destination_path)
+
+            case 'dir':  # directory is being exported.
 
                 # getting the selected directory.
                 imported = QtWidgets.QFileDialog.getExistingDirectory(
@@ -503,7 +564,7 @@ class MainWindow(QMainWindow):
                     downloads_folder
                 )
 
-                if imported:  # if a directory is selected:
+                if imported:  # if user selects a directory:
 
                     # getting the destination directory.
                     destination = QtWidgets.QFileDialog.getExistingDirectory(
@@ -559,67 +620,6 @@ class MainWindow(QMainWindow):
                                                 ' (')[0]
                                             destination += f' ({count})'
                                             count += 1
-
-            case 'file':
-
-                # getting the selected files to import
-                imported, _ = QtWidgets.QFileDialog.getOpenFileNames(
-                    self,
-                    "EIP - Importing File(s)",
-                    downloads_folder,
-                    'All Files (*);;CSV Files (*.csv);;Excel Files (*.xlsx)'
-                )
-
-                if imported:  # if files are selected:
-
-                    # getting the destination for importing.
-                    destination_folder = QtWidgets.QFileDialog.getExistingDirectory(
-                        self,
-                        "EIP - Selecting Desination",
-                        'Saved_Lists'
-                    )
-
-                    if destination_folder:  # if a destination was selected:
-
-                        # looping through each file to check conditions, then import
-                        for import_file in imported:
-                            filename = os.path.basename(import_file)
-                            destination_path = os.path.join(
-                                destination_folder, filename)
-
-                            if os.path.exists(destination_path):
-                                # Pop up telling user that the file has already been imported.
-                                msg = QtWidgets.QMessageBox()
-                                pixmapi = getattr(QtWidgets.QStyle,
-                                                  "SP_MessageBoxWarning")
-                                icon = self.style().standardIcon(pixmapi)
-                                msg.setWindowIcon(icon)
-                                msg.setWindowTitle(
-                                    "File Already Imported")
-                                text = f'File {filename} has already been imported.\nWould you like to overwrite it?'
-                                msg.setText(text)
-                                msg.setStandardButtons(
-                                    QtWidgets.QMessageBox.Yes |
-                                    QtWidgets.QMessageBox.No |
-                                    QtWidgets.QMessageBox.Cancel
-                                )
-                                msg.setDefaultButton(
-                                    QtWidgets.QMessageBox.Yes)
-                                user = msg.exec_()
-
-                                # checking user's response
-                                match user:
-                                    case QtWidgets.QMessageBox.Yes:
-                                        break
-                                    case QtWidgets.QMessageBox.No:
-                                        base_path, extension = os.path.splitext(
-                                            destination_path)
-                                        count = 1
-                                        while os.path.exists(destination_path):
-                                            destination_path = f'{base_path} ({count}){extension}'
-                                            count += 1
-
-                            shutil.copy2(import_file, destination_path)
 
     def exporting(self, kind: str) -> None:
         '''
