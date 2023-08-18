@@ -626,20 +626,25 @@ class MainWindow(QMainWindow):
         Function to export file(s) and Folders.
 
         Parameter:
-            kind: "file"/"dir", importing file or directory.
+            kind: "file"/"dir", importing "file" or "directory".
         '''
 
         destination_folder = os.path.expanduser(
             f"~{os.sep}Downloads{os.path.sep}EIP Exported Files"
         )
 
+        # try to block make export location in the downloads folder of the computer.
         try:
             os.mkdir(destination_folder)
         except FileExistsError as err:
+            # location already exists.
             pass
 
-        match kind:
-            case 'file':
+        match kind:  # match case for if a file or directory is being exported
+
+            case 'file':  # file is being exported.
+
+                # getting filenames to export
                 files_to_export, _ = QtWidgets.QFileDialog.getOpenFileNames(
                     self,
                     "EIP - Exporting",
@@ -647,31 +652,41 @@ class MainWindow(QMainWindow):
                     "All Files (*);; CSV Files (*.csv) ;; XLSX Files (*.xlsx)"
                 )
 
-                if files_to_export:
+                if files_to_export:  # check if user selects files.
+
+                    # loop through each file to check conditions, then export.
                     for file in files_to_export:
                         filename = os.path.basename(file)
                         destination_path = os.path.join(
                             destination_folder, filename)
 
-                        # checking if file has already been exported, if so modify file name.
-                        count = 1
+                        # checking if file has already been exported, if so modify file name then export.
                         base, ext = os.path.splitext(destination_path)
+                        count = 1
                         while os.path.exists(destination_path):
                             destination_path = f'{base} ({count}){ext}'
                             count += 1
                         shutil.copy2(file, destination_path)
 
-            case 'dir':
+            case 'dir':  # folder is being exported.
+
+                # getting the directory to export
                 exporting = QtWidgets.QFileDialog.getExistingDirectory(
                     self,
                     "EIP - Exporting",
                     'Saved_Lists'
                 )
-                if exporting:
-                    filename = exporting.split('/')[-1]
-                    destination_path = f'{destination_folder}/{filename}'
-                    count = 1
+
+                if exporting:  # check if user selects a directory
+
+                    # getting the filename from the entire path, then making the destination path
+                    _, filename = os.path.split(exporting)
+                    destination_path = os.path.join(destination_folder,
+                                                    filename)
+
+                    # checking if the file has already been exported, if so modify the filename then export.
                     base, ext = os.path.splitext(destination_path)
+                    count = 1
                     while os.path.exists(destination_path):
                         destination_path = f'{base} ({count}){ext}'
                         count += 1
