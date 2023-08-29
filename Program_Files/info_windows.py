@@ -104,7 +104,7 @@ class Help_Window(QMainWindow):
         # Adding help sections to combo box, then loading initial info:
         # (Note: "general" is added by the ui file)
         help_sections = [
-            'General', 'Inventory', 'Projects', 'Orders', 'File Management', 'Add Items Manually'
+            'General', 'Inventory', 'Projects', 'Orders', 'Importing/Exporting', 'Add Items Manually'
         ]
         self.comboBox.addItems(help_sections)
         self.show_info(help_section=self.comboBox.currentText())
@@ -154,6 +154,22 @@ Commands are presented as various buttons and also drop-down menus when right-cl
 
 - Quantity is the amount of the item.
 '''
+
+            case 'orders':
+                text = '''If the order sheet is an Excel (xlsx) file, the subtotal line needs to manually removed before the program can read it. CSV files can be read either way.
+
+When a user opens an order, they will have the option to add to the inventory.
+
+When an order is added to the inventory, it is saved in a subfolder called "Past Orders"
+for user reference and making sures orders are readded by mistake.
+'''
+
+            case 'importing/exporting':
+                text = '''Importing Files:
+
+When importing files or a folder, a file window opens to the downloads folder of the user's computer to select files/folder, then a second window opens for selection the destination.
+
+All exported files are exported a sub-folder "EIP-exported" in user's downloads folder.'''
 
             case _:
                 text = 'More to come!'
