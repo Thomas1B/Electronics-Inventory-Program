@@ -27,6 +27,7 @@ dict_keys = [
     'Diodes',
     'Regulator',
     'ICs',
+    "Logic Gates",
     'Connectors',
     'Displays',
     'Buttons, Switches',
@@ -37,6 +38,9 @@ dict_keys = [
     'Fans',
     'ACDC Converters',
     'AC Transformer',
+    'Resonators, Crystals',
+    'Encoders',
+    'Relay',
     'Other'
 ]
 
@@ -395,7 +399,7 @@ def sort_order(order: pd.DataFrame) -> list:
     ics_conds = ['ics', 'ic']
     diodes_conds = ['diode']
     modules_conds = ['modules', 'module']
-    connectors_conds = ['conn', 'term']
+    connectors_conds = ['conn', 'term', 'socket', 'receptacle']
     capacitors_conds = ['cap', 'capacitor', 'capacitors']
     resistors_conds = ['res', 'resistor', 'resistors']
     leds_conds = ['leds', 'led', 'light']
@@ -403,6 +407,10 @@ def sort_order(order: pd.DataFrame) -> list:
     inductors_conds = ['inductors', 'inductor', 'ind']
     displays_conds = ['display', 'screen']
     buttons_conds = ['button', 'switch', 'tact']
+    regulator_conds = ['reg', 'regulator']
+    resonator_conds = ['crystal', 'resonator']
+    encoder_conds = ['encoder']
+    relay_conds = ['relay']
 
     # empty lists for parts to be added.
     # if adding new sections, dont forget to add
@@ -412,13 +420,16 @@ def sort_order(order: pd.DataFrame) -> list:
     transistors, diodes, ics = [], [], []
     leds, connectors, buttons = [], [], []
     displays, modules, other = [], [], []
+    regulator, logic_gates, resonators = [], [], []
+    encoders, relay = [], []
 
     # THIS NEEDS TO BE IN THE SAME ORDER AS THE INVENTORY DICTIONARY!
     # Otherwise when showing a category it will display an unintended one.
     sections = [
         resistors, capacitors, inductors, transistors,
-        diodes, ics, connectors, displays, buttons, leds,
-        audio, potentiometer, modules, fans, acdc, ac_transformer,
+        diodes, regulator, ics, logic_gates, connectors, displays, buttons, leds,
+        audio, potentiometer, modules, fans, acdc, ac_transformer, resonators, encoders,
+        relay,
         other
     ]
 
@@ -429,40 +440,71 @@ def sort_order(order: pd.DataFrame) -> list:
 
         if any(word.lower() in line for word in ac_transformer_conds):
             ac_transformer.append(order.iloc[i])
+
+        elif any(word.lower() in line for word in regulator_conds):
+            regulator.append(order.iloc[i])
+
         elif any(word.lower() in line for word in pot_conds):
             potentiometer.append(order.iloc[i])
+
         elif any(word.lower() in line for word in acdc_conds):
             acdc.append(order.iloc[i])
+
         elif any(word.lower() in line for word in fan_conds):
             fans.append(order.iloc[i])
+
         elif (
             any(word.lower() in line for word in audio_conds) or
             all(word.lower() in line for word in ['board', 'max9744'])
         ):
             audio.append(order.iloc[i])
+
         elif any(word.lower() in line for word in ics_conds):
-            ics.append(order.iloc[i])
+            if any(word.lower() in line for word in ['gate']):
+                logic_gates.append(order.iloc[i])
+            else:
+                ics.append(order.iloc[i])
+
         elif any(word.lower() in line for word in diodes_conds):
             diodes.append(order.iloc[i])
+
         elif any(word.lower() in line for word in modules_conds):
             modules.append(order.iloc[i])
+
         elif any(word.lower() in line for word in connectors_conds):
             connectors.append(order.iloc[i])
+
         elif any(word.lower() in line for word in capacitors_conds):
             capacitors.append(order.iloc[i])
+
         elif any(word.lower() in line for word in resistors_conds):
             resistors.append(order.iloc[i])
+
         elif any(word.lower() in line for word in leds_conds):
             leds.append(order.iloc[i])
+
         elif any(word.lower() in line for word in transistors_conds) and any('trans' in word for word in line):
             transistors.append(order.iloc[i])
+
         elif any(word.lower() in line for word in inductors_conds):
             inductors.append(order.iloc[i])
+
         elif any(word.lower() in line for word in displays_conds):
             displays.append(order.iloc[i])
+
         elif any(word.lower() in line for word in buttons_conds):
             buttons.append(order.iloc[i])
-        else:
+
+        elif any(word.lower() in line for word in resonator_conds):
+            resonators.append(order.iloc[i])
+
+        elif any(word.lower() in line for word in encoder_conds):
+            encoders.append(order.iloc[i])
+            
+        elif any(word.lower() in line for word in relay_conds):
+            relay.append(order.iloc[i])
+
+        else:  # left over
             other.append(order.iloc[i])
 
     # returning list of dataframe for each category.
